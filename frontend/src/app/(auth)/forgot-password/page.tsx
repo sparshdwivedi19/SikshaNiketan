@@ -32,9 +32,9 @@ export default function ForgotPasswordPage() {
             <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 size={32} className="text-green-500" />
             </div>
-            <h1 className="text-2xl font-bold font-heading text-foreground-primary mb-2">Check Your Email</h1>
-            <p className="text-foreground-secondary mb-6">
-              If an account with <strong>{email}</strong> exists, we have sent you a password reset link.
+            <h1 className="text-2xl font-bold font-heading text-[#06091a] mb-2">Check Your Email</h1>
+            <p className="text-[#374151] mb-6">
+              If an account with <strong className="text-[#06091a]">{email}</strong> exists, we have sent you a password reset link.
             </p>
             <Link href="/login">
               <Button variant="outline" className="w-full" leftIcon={<ArrowLeft size={18} />}>
@@ -45,11 +45,11 @@ export default function ForgotPasswordPage() {
         ) : (
           <>
             <div className="mb-8">
-              <Link href="/login" className="flex items-center gap-2 text-sm text-foreground-secondary hover:text-brand-600 transition-colors mb-6">
+              <Link href="/login" className="flex items-center gap-2 text-sm text-[#374151] hover:text-brand-700 transition-colors mb-6">
                 <ArrowLeft size={16} /> Back to Login
               </Link>
-              <h1 className="text-3xl font-bold font-heading text-foreground-primary mb-2">Forgot Password?</h1>
-              <p className="text-foreground-secondary">Enter your email address and we'll send you a reset link.</p>
+              <h1 className="text-3xl font-bold font-heading text-[#06091a] mb-2">Forgot Password?</h1>
+              <p className="text-[#374151]">Enter your email address and we'll send you a reset link.</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -67,9 +67,9 @@ export default function ForgotPasswordPage() {
               </Button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-foreground-secondary">
+            <p className="mt-6 text-center text-sm text-[#374151]">
               Remember your password?{" "}
-              <Link href="/login" className="text-brand-600 font-bold hover:underline">Sign in</Link>
+              <Link href="/login" className="text-brand-700 font-bold hover:underline">Sign in</Link>
             </p>
           </>
         )}

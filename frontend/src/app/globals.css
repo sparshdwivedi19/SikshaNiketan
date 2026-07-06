@@ -74,6 +74,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Global text color enforcement ──
+   Ensures ALL text defaults to near-black on light backgrounds.
+   Tailwind utility classes like text-foreground-primary,
+   text-foreground-secondary, headings, labels all inherit this. */
+h1, h2, h3, h4, h5, h6 {
+  color: #06091a;
+}
+
+label {
+  color: #1a202c;
+}
+
+p, span, li, td, th, input, select, textarea {
+  color: inherit;
+}
+
+/* Force foreground tokens to resolve clearly */
+.text-foreground-primary  { color: #06091a !important; }
+.text-foreground-secondary { color: #374151 !important; }
+
+@media (prefers-color-scheme: dark) {
+  h1, h2, h3, h4, h5, h6 { color: #f1f5ff; }
+  label { color: #cbd5e1; }
+  .text-foreground-primary  { color: #f1f5ff !important; }
+  .text-foreground-secondary { color: #94a3b8 !important; }
+}
+
 /* ── Utility: Glassmorphism ── */
 @utility glass {
   background: rgba(255, 255, 255, 0.75);

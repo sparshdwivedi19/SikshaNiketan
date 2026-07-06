@@ -24,13 +24,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full flex flex-col gap-1.5">
         {label && (
-          <label className="text-sm font-medium text-foreground-secondary ml-1">
+          <label className="text-sm font-semibold text-[#06091a] dark:text-[#cbd5e1] ml-1">
             {label}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3 text-gray-800 z-10 pointer-events-none">
+            <div className="absolute left-3 text-[#374151] dark:text-[#94a3b8] z-10 pointer-events-none">
               {leftIcon}
             </div>
           )}
@@ -60,7 +60,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           ) : rightIcon ? (
-            <div className="absolute right-3 text-gray-800 z-10 pointer-events-none">
+            <div className="absolute right-3 text-[#374151] dark:text-[#94a3b8] z-10 pointer-events-none">
               {rightIcon}
             </div>
           ) : null}

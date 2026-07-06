@@ -57,8 +57,8 @@ export default function LoginPage() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold font-heading text-foreground-primary mb-2">Welcome Back</h2>
-        <p className="text-foreground-secondary">Enter your credentials to access your account.</p>
+        <h2 className="text-3xl font-bold font-heading text-[#06091a] mb-2">Welcome Back</h2>
+        <p className="text-[#374151]">Enter your credentials to access your account.</p>
       </div>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-5">
@@ -98,9 +98,9 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-foreground-secondary">
+      <div className="mt-8 text-center text-sm text-[#374151]">
         Don't have an account?{" "}
-        <Link href="/register" className="text-brand-600 font-bold hover:underline">
+        <Link href="/register" className="text-brand-700 font-bold hover:underline">
           Sign up now
         </Link>
       </div>

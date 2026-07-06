@@ -63,8 +63,8 @@ export default function RegisterPage() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold font-heading text-foreground-primary mb-2">Create Account</h2>
-        <p className="text-foreground-secondary">Join Shiksha Niketan and start your journey.</p>
+        <h2 className="text-3xl font-bold font-heading text-[#06091a] mb-2">Create Account</h2>
+        <p className="text-[#374151]">Join Shiksha Niketan and start your journey.</p>
       </div>
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
@@ -119,16 +119,16 @@ export default function RegisterPage() {
         />
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-foreground-primary">Register As</label>
+          <label className="text-sm font-semibold text-[#06091a]">Register As</label>
           <select 
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-background-secondary px-3 py-2 text-sm text-gray-900 dark:text-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-[#06091a] dark:text-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 font-medium"
           >
-            <option className="text-gray-900 dark:text-gray-100" value="student">Student</option>
-            <option className="text-gray-900 dark:text-gray-100" value="faculty">Faculty / Instructor</option>
-            <option className="text-gray-900 dark:text-gray-100" value="parent">Parent</option>
+            <option value="student">Student</option>
+            <option value="faculty">Faculty / Instructor</option>
+            <option value="parent">Parent</option>
           </select>
         </div>
 
@@ -137,9 +137,9 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-foreground-secondary">
+      <div className="mt-8 text-center text-sm text-[#374151]">
         Already have an account?{" "}
-        <Link href="/login" className="text-brand-600 font-bold hover:underline">
+        <Link href="/login" className="text-brand-700 font-bold hover:underline">
           Log in
         </Link>
       </div>
