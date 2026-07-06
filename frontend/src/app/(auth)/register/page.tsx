@@ -63,8 +63,8 @@ export default function RegisterPage() {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold font-heading text-[#06091a] mb-2">Create Account</h2>
-        <p className="text-[#374151]">Join Shiksha Niketan and start your journey.</p>
+        <h2 className="text-3xl font-bold font-heading text-foreground-primary mb-2">Create Account</h2>
+        <p className="text-foreground-secondary">Join Shiksha Niketan and start your journey.</p>
       </div>
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
@@ -119,12 +119,12 @@ export default function RegisterPage() {
         />
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold text-[#06091a]">Register As</label>
+          <label className="text-sm font-semibold text-foreground-primary">Register As</label>
           <select 
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-[#06091a] dark:text-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 font-medium"
+            className="flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-foreground-primary dark:text-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 font-medium"
           >
             <option value="student">Student</option>
             <option value="faculty">Faculty / Instructor</option>
@@ -137,7 +137,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-[#374151]">
+      <div className="mt-8 text-center text-sm text-foreground-secondary">
         Already have an account?{" "}
         <Link href="/login" className="text-brand-700 font-bold hover:underline">
           Log in

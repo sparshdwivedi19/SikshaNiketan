@@ -2,38 +2,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @theme {
-  /* ── Brand: Deep Navy Blue ── */
-  --color-brand-50:  #f0f4ff;
-  --color-brand-100: #dce8ff;
-  --color-brand-200: #b8d0ff;
-  --color-brand-300: #85afff;
-  --color-brand-400: #4d87ff;
-  --color-brand-500: #1a5fff;
-  --color-brand-600: #1249d6;
-  --color-brand-700: #0e36a8;
-  --color-brand-800: #0c2880;
-  --color-brand-900: #0a1f66;
-  --color-brand-950: #060e35;
+  /* ── Brand: Modern Indigo ── */
+  --color-brand-50:  #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
 
-  /* ── Accent: Pastel Yellow / Warm Gold ── */
-  --color-accent-50:  #fffdf0;
-  --color-accent-100: #fff9cc;
-  --color-accent-200: #fff08a;
-  --color-accent-300: #ffe44d;
-  --color-accent-400: #ffd412;
-  --color-accent-500: #f5c400;
-  --color-accent-600: #d4a800;
-  --color-accent-700: #a07d00;
+  /* ── Accent: Vibrant Sky Blue ── */
+  --color-accent-50:  #f0f9ff;
+  --color-accent-100: #e0f2fe;
+  --color-accent-200: #bae6fd;
+  --color-accent-300: #7dd3fc;
+  --color-accent-400: #38bdf8;
+  --color-accent-500: #0ea5e9;
+  --color-accent-600: #0284c7;
+  --color-accent-700: #0369a1;
 
-  /* ── Backgrounds: Soft Cream for light mode ── */
-  --color-background-primary:   #fafaf7;
-  --color-background-secondary: #f5f4ef;
+  /* ── Backgrounds: Pure White & Slate ── */
+  --color-background-primary:   #f8fafc;
+  --color-background-secondary: #f1f5f9;
   --color-surface:              #ffffff;
-  --color-surface-hover:        #f0eee6;
+  --color-surface-hover:        #f1f5f9;
 
-  /* ── Text ── */
-  --color-foreground-primary:   #06091a;  /* near-black navy — maximum readability */
-  --color-foreground-secondary: #374151;  /* dark gray */
+  /* ── Text: Crisp Slate/Black ── */
+  --color-foreground-primary:   #0f172a;  /* Very dark slate */
+  --color-foreground-secondary: #475569;  /* Muted slate */
 
   /* ── Typography ── */
   --font-sans:    'Inter', system-ui, sans-serif;
@@ -54,15 +54,20 @@
 
 /* ── CSS Variables for body-level use ── */
 :root {
-  --background: #fafaf7;
-  --foreground: #06091a;  /* matches foreground-primary */
+  --background: #f8fafc;
+  --foreground: #0f172a;  /* matches foreground-primary */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0c1a3b;
-    --foreground: #f0f4ff;
+    --foreground: #f1f5f9;
   }
+}
+
+.dark {
+  --background: #0c1a3b;
+  --foreground: #f1f5f9;
 }
 
 /* ── Base Styles ── */
@@ -74,16 +79,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Global text color enforcement ──
-   Ensures ALL text defaults to near-black on light backgrounds.
-   Tailwind utility classes like text-foreground-primary,
-   text-foreground-secondary, headings, labels all inherit this. */
+/* ── Global text color enforcement ── */
 h1, h2, h3, h4, h5, h6 {
-  color: #06091a;
+  color: #0f172a;
 }
 
 label {
-  color: #1a202c;
+  color: #1e293b;
 }
 
 p, span, li, td, th, input, select, textarea {
@@ -91,14 +93,27 @@ p, span, li, td, th, input, select, textarea {
 }
 
 /* Force foreground tokens to resolve clearly */
-.text-foreground-primary  { color: #06091a !important; }
-.text-foreground-secondary { color: #374151 !important; }
+.text-foreground-primary  { color: #0f172a !important; }
+.text-foreground-secondary { color: #475569 !important; }
 
 @media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, h5, h6 { color: #f1f5ff; }
   label { color: #cbd5e1; }
   .text-foreground-primary  { color: #f1f5ff !important; }
   .text-foreground-secondary { color: #94a3b8 !important; }
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #f1f5ff;
+}
+.dark label {
+  color: #cbd5e1;
+}
+.dark .text-foreground-primary {
+  color: #f1f5ff !important;
+}
+.dark .text-foreground-secondary {
+  color: #94a3b8 !important;
 }
 
 /* ── Utility: Glassmorphism ── */
