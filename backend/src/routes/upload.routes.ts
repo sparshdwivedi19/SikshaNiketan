@@ -119,7 +119,7 @@ router.post(
       if (isCloudinaryConfigured) {
         fileUrl = await streamUploadToCloudinary(req.file.buffer, "image");
       } else {
-        fileUrl = `/uploads/videos/${req.file.filename}`;
+        fileUrl = `/uploads/images/${req.file.filename}`;
       }
       
       res.status(200).json({ status: "success", url: fileUrl });

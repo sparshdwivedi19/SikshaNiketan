@@ -27,7 +27,10 @@ const courseSchema = new Schema<ICourse>(
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     description: { type: String, required: true },
-    thumbnail: { type: String, required: true },
+    thumbnail: { 
+      type: String, 
+      default: "https://images.unsplash.com/photo-1610484826967-09c5720778c7?auto=format&fit=crop&q=80&w=800"
+    },
     category: { type: String, required: true },
     level: { type: String, required: true },
     price: { type: Number, required: true },

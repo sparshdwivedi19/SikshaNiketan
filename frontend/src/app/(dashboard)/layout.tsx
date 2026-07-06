@@ -43,13 +43,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Link
         href={href}
         onClick={() => setSidebarOpen(false)}
-        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
           isActive
-            ? "bg-brand-50 dark:bg-brand-900/20 text-brand-600 font-semibold"
-            : "text-foreground-secondary hover:bg-surface-hover hover:text-foreground-primary"
+            ? "bg-brand-800 text-white font-semibold shadow-sm"
+            : "text-foreground-secondary hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-700 dark:hover:text-brand-300"
         }`}
       >
-        {icon}
+        <span className={isActive ? "text-accent-300" : "opacity-60"}>{icon}</span>
         {label}
       </Link>
     );
@@ -93,45 +93,45 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const activeNav = isAdmin ? adminNav : isInstructor ? instructorNav : isParent ? parentNav : studentNav;
 
   const Sidebar = () => (
-    <aside className="w-64 bg-surface border-r border-gray-200 dark:border-gray-800 flex flex-col h-full">
-      <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white shrink-0">
-            <GraduationCap size={20} />
+    <aside className="w-64 bg-brand-950 dark:bg-brand-950 border-r border-brand-900 flex flex-col h-full">
+      <div className="p-5 border-b border-brand-900/50 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-accent-300 flex items-center justify-center text-brand-900 shrink-0">
+            <GraduationCap size={18} />
           </div>
-          <span className="text-xl font-bold font-heading">
-            Shiksha<span className="text-brand-500">Niketan</span>
+          <span className="text-base font-bold font-heading text-white">
+            Shiksha<span className="text-accent-300">Niketan</span>
           </span>
         </Link>
         <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
-          <X size={20} className="text-foreground-secondary" />
+          <X size={20} className="text-brand-400" />
         </button>
       </div>
 
       {/* User Info */}
-      <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-800">
+      <div className="px-4 py-3 border-b border-brand-900/50">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 font-bold text-sm shrink-0">
-            {user?.name?.charAt(0) || "?"}
+          <div className="w-9 h-9 rounded-full bg-accent-300 flex items-center justify-center text-brand-900 font-bold text-sm shrink-0">
+            {user?.name?.charAt(0).toUpperCase() || "?"}
           </div>
           <div className="min-w-0">
-            <p className="font-semibold text-sm text-foreground-primary truncate">{user?.name || "User"}</p>
-            <p className="text-xs text-foreground-secondary capitalize">{user?.role || "User"}</p>
+            <p className="font-semibold text-sm text-white truncate">{user?.name || "User"}</p>
+            <p className="text-xs text-brand-400 capitalize">{user?.role || "User"}</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 flex flex-col gap-1 overflow-y-auto">
+      <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
         {activeNav}
       </nav>
 
-      <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+      <div className="p-3 border-t border-brand-900/50">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-left text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors font-medium"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl w-full text-left text-red-400 hover:bg-red-900/20 transition-colors text-sm font-medium"
         >
-          <LogOut size={18} />
-          Logout
+          <LogOut size={17} />
+          Sign Out
         </button>
       </div>
     </aside>
@@ -157,15 +157,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-surface">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <Menu size={22} className="text-foreground-secondary" />
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-brand-950">
+          <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg hover:bg-brand-900 text-white">
+            <Menu size={22} />
           </button>
-          <span className="font-bold font-heading text-foreground-primary">
-            Shiksha<span className="text-brand-500">Niketan</span>
+          <span className="font-bold font-heading text-white">
+            Shiksha<span className="text-accent-300">Niketan</span>
           </span>
-          <div className="w-9 h-9 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 font-bold text-sm">
-            {user?.name?.charAt(0) || "?"}
+          <div className="w-8 h-8 rounded-full bg-accent-300 flex items-center justify-center text-brand-900 font-bold text-sm">
+            {user?.name?.charAt(0).toUpperCase() || "?"}
           </div>
         </div>
 

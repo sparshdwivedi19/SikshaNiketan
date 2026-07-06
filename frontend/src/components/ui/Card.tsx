@@ -22,13 +22,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     },
     ref
   ) => {
-    const baseStyles = "rounded-2xl overflow-hidden transition-all duration-300";
+    const baseStyles = "rounded-2xl overflow-hidden transition-all duration-200";
 
     const variants = {
-      default: "bg-surface shadow-sm border border-gray-100 dark:border-gray-800",
+      default: "bg-white dark:bg-surface border border-gray-100 dark:border-brand-900/60 shadow-[0_1px_4px_rgba(13,27,62,0.06),0_4px_16px_rgba(13,27,62,0.04)]",
       glass: "glass shadow-xl",
       glassDark: "glass-dark shadow-xl",
-      outline: "bg-transparent border-2 border-gray-200 dark:border-gray-800",
+      outline: "bg-transparent border-2 border-brand-100 dark:border-brand-800",
     };
 
     const paddings = {

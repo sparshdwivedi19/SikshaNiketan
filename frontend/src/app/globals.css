@@ -1,103 +1,140 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 @theme {
-  /* Primary: Dark Blue / Rich Navy */
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #2563eb;
-  --color-brand-600: #1d4ed8;
-  --color-brand-700: #1e3a8a; /* Deep navy */
-  --color-brand-800: #172554;
-  --color-brand-900: #0a1128;
-  --color-brand-950: #050b1a;
+  /* ── Brand: Deep Navy Blue ── */
+  --color-brand-50:  #f0f4ff;
+  --color-brand-100: #dce8ff;
+  --color-brand-200: #b8d0ff;
+  --color-brand-300: #85afff;
+  --color-brand-400: #4d87ff;
+  --color-brand-500: #1a5fff;
+  --color-brand-600: #1249d6;
+  --color-brand-700: #0e36a8;
+  --color-brand-800: #0c2880;
+  --color-brand-900: #0a1f66;
+  --color-brand-950: #060e35;
 
-  /* Secondary/Accent: Pastel Yellow / Warm Gold */
-  --color-accent-500: #fde047; /* Pastel yellow */
-  --color-accent-600: #eab308; /* Darker yellow for text/contrast */
+  /* ── Accent: Pastel Yellow / Warm Gold ── */
+  --color-accent-50:  #fffdf0;
+  --color-accent-100: #fff9cc;
+  --color-accent-200: #fff08a;
+  --color-accent-300: #ffe44d;
+  --color-accent-400: #ffd412;
+  --color-accent-500: #f5c400;
+  --color-accent-600: #d4a800;
+  --color-accent-700: #a07d00;
 
-  /* Backgrounds: Soft Cream/Yellow for light mode */
-  --color-background-primary: #fdfbf7;
-  --color-background-secondary: #fefce8;
-  --color-surface: #ffffff;
-  --color-surface-hover: #fef9c3; /* yellow-50 */
-  --color-foreground-primary: #0f172a; /* Slate 900 */
-  --color-foreground-secondary: #334155; /* Slate 700 */
+  /* ── Backgrounds: Soft Cream for light mode ── */
+  --color-background-primary:   #fafaf7;
+  --color-background-secondary: #f5f4ef;
+  --color-surface:              #ffffff;
+  --color-surface-hover:        #f0eee6;
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* ── Text ── */
+  --color-foreground-primary:   #0d1b3e;
+  --color-foreground-secondary: #4a5568;
+
+  /* ── Typography ── */
+  --font-sans:    'Inter', system-ui, sans-serif;
   --font-heading: 'Outfit', system-ui, sans-serif;
 }
 
-@utility glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+/* ── Dark mode overrides ── */
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background-primary:   #0c1a3b;
+    --color-background-secondary: #0f2050;
+    --color-surface:              #142566;
+    --color-surface-hover:        #1a2f7a;
+    --color-foreground-primary:   #f0f4ff;
+    --color-foreground-secondary: #a0b4d4;
+  }
 }
 
-@utility glass-dark {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-@utility text-gradient {
-  background: linear-gradient(to right, var(--color-brand-600), var(--color-brand-400));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
+/* ── CSS Variables for body-level use ── */
 :root {
-  --background: #fdfbf7;
-  --foreground: #0f172a;
+  --background: #fafaf7;
+  --foreground: #0d1b3e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a1128;
-    --foreground: #f8fafc;
-  }
-
-  @theme {
-    --color-background-primary: #0a1128;
-    --color-background-secondary: #121b38;
-    --color-surface: #172554;
-    --color-surface-hover: #1e3a8a;
-    --color-foreground-primary: #f8fafc;
-    --color-foreground-secondary: #cbd5e1;
+    --background: #0c1a3b;
+    --foreground: #f0f4ff;
   }
 }
 
+/* ── Base Styles ── */
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ── Utility: Glassmorphism ── */
+@utility glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+@utility glass-dark {
+  background: rgba(10, 31, 102, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* ── Utility: Gradient Text ── */
+@utility text-gradient {
+  background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-brand-400) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility text-gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent-600) 0%, var(--color-accent-400) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Utility: Premium card shadow ── */
+@utility card-shadow {
+  box-shadow: 0 1px 3px rgba(13, 27, 62, 0.06), 0 4px 16px rgba(13, 27, 62, 0.04);
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-brand-300);
-  border-radius: 4px;
+  background: var(--color-brand-200);
+  border-radius: 999px;
 }
 @media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-brand-800);
-  }
+  ::-webkit-scrollbar-thumb { background: var(--color-brand-800); }
 }
 
-/* Hide native Edge password reveal icon */
+/* ── Smooth animations ── */
+.animate-in {
+  animation: fadeIn 0.25s ease-out both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Hide Edge password reveal ── */
 input::-ms-reveal,
-input::-ms-clear {
-  display: none;
+input::-ms-clear { display: none; }
+
+/* ── Focus ring ── */
+*:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 2px;
 }

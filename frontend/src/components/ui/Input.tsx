@@ -37,13 +37,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             type={isPassword ? (showPassword ? "text" : "password") : type}
             className={cn(
-              "flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-black dark:text-white font-medium transition-all",
+              "flex h-11 w-full rounded-xl border border-gray-200 dark:border-brand-800/60 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-foreground-primary font-medium transition-all",
               "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-              "placeholder:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-transparent",
-              "disabled:cursor-not-allowed disabled:opacity-50",
+              "placeholder:text-gray-400 dark:placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-brand-400 dark:focus-visible:border-brand-500",
+              "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-50",
               leftIcon && "pl-10",
               (rightIcon || isPassword) && "pr-10",
-              error && "border-red-500 focus-visible:ring-red-500",
+              error && "border-red-500 focus-visible:ring-red-500 bg-red-50/30",
               isPassword && !showPassword && "tracking-widest text-base",
               className
             )}

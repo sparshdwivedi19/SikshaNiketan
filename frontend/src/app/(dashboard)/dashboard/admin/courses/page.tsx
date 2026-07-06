@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import Link from "next/link";
 
-import axios from "axios";
+import api from "@/utils/api";
 
 interface Course {
   _id: string;
@@ -32,7 +32,7 @@ export default function AllCoursesPage() {
   React.useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/v1/courses", { withCredentials: true });
+        const response = await api.get("/courses");
         if (response.data.status === "success") {
           setCourses(response.data.courses);
         }

@@ -51,6 +51,39 @@ export const getAdminStats = async (req: AuthRequest, res: Response): Promise<vo
     const activeStudentsResult = await Enrollment.distinct("user");
     const activeStudents = activeStudentsResult.length;
 
+    // Monthly enrollment trends — last 6 months
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1);
+    sixMonthsAgo.setHours(0, 0, 0, 0);
+
+    const monthlyEnrollments = await Enrollment.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo } } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+    ]);
+
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const enrollmentTrend = monthlyEnrollments.map((m) => ({
+      month: monthNames[m._id.month - 1],
+      enrollments: m.count,
+    }));
+
+    // Popular courses (top 5 by enrollmentCount)
+    const popularCourses = await Course.find({ isPublished: true })
+      .sort({ enrollmentCount: -1 })
+      .limit(5)
+      .select("title enrollmentCount ratings thumbnail")
+      .populate("instructor", "name");
+
     res.status(200).json({
       status: "success",
       stats: {
@@ -65,7 +98,9 @@ export const getAdminStats = async (req: AuthRequest, res: Response): Promise<vo
         totalRevenue,
         latestEnrollments,
         pendingPayments,
-        activeStudents
+        activeStudents,
+        enrollmentTrend,
+        popularCourses,
       },
     });
   } catch (error: any) {
