@@ -125,8 +125,8 @@ export default function StudentCoursesPage() {
                   </span>
                 </div>
 
-                <Link href={`/courses/${enrollment.course.slug}`}>
-                  <Button className="w-full" variant={enrollment.progress > 0 ? "default" : "outline"}>
+                <Link href={`/dashboard/student/courses/${enrollment.course.slug}/learn`}>
+                  <Button className="w-full" variant={enrollment.progress > 0 ? "primary" : "outline"}>
                     {enrollment.progress > 0 ? "Continue Learning" : "Start Course"}
                   </Button>
                 </Link>

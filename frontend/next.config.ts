@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // @ts-expect-error type incompatibility in this version
   eslint: {
     ignoreDuringBuilds: true,
   },

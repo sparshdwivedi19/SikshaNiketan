@@ -58,7 +58,7 @@ export default function ParentTeachersPage() {
               </div>
               <Button
                 size="sm"
-                variant={selectedTeacher === teacher.id ? "default" : "outline"}
+                variant={selectedTeacher === teacher.id ? "primary" : "outline"}
                 onClick={() => setSelectedTeacher(selectedTeacher === teacher.id ? null : teacher.id)}
                 leftIcon={<MessageSquare size={14} />}
               >

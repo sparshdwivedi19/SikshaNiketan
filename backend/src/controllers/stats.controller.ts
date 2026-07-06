@@ -2,6 +2,7 @@ import { Response } from "express";
 import { User, UserRole } from "../models/User";
 import { Course } from "../models/Course";
 import { Enrollment } from "../models/Enrollment";
+import { Transaction } from "../models/Transaction";
 import { AuthRequest } from "../middleware/auth.middleware";
 
 // GET /api/v1/stats/admin — Platform-wide stats for admin dashboard
@@ -29,6 +30,27 @@ export const getAdminStats = async (req: AuthRequest, res: Response): Promise<vo
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const recentUsers = await User.countDocuments({ createdAt: { $gte: thirtyDaysAgo } });
 
+    // Aggregate Revenue
+    const revenueResult = await Transaction.aggregate([
+      { $match: { status: "success" } },
+      { $group: { _id: null, totalRevenue: { $sum: "$amount" } } }
+    ]);
+    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+
+    // Latest Enrollments
+    const latestEnrollments = await Enrollment.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate("user", "name email avatar")
+      .populate("course", "title price");
+
+    // Pending Payments
+    const pendingPayments = await Transaction.countDocuments({ status: "pending" });
+
+    // Active Students (Students with at least one enrollment)
+    const activeStudentsResult = await Enrollment.distinct("user");
+    const activeStudents = activeStudentsResult.length;
+
     res.status(200).json({
       status: "success",
       stats: {
@@ -40,6 +62,10 @@ export const getAdminStats = async (req: AuthRequest, res: Response): Promise<vo
         publishedCourses,
         totalEnrollments,
         recentUsers,
+        totalRevenue,
+        latestEnrollments,
+        pendingPayments,
+        activeStudents
       },
     });
   } catch (error: any) {

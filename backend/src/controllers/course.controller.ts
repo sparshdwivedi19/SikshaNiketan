@@ -48,8 +48,9 @@ export const getCourseBySlug = async (req: Request, res: Response): Promise<void
 // POST /api/v1/courses — Create a new course
 export const createCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    // Auto-assign instructor to the logged-in user if not admin
-    if (req.user?.role !== "admin" && !req.body.instructor) {
+    // Auto-assign instructor to the logged-in user if not provided in request
+    // This fixes the "instructor is required" error for Admins creating courses directly
+    if (!req.body.instructor) {
       req.body.instructor = req.user!.id;
     }
 

@@ -10,6 +10,11 @@ export interface ILesson extends Document {
   order: number;
   isPreview: boolean;
   resources: { title: string; url: string }[];
+  quizQuestions?: {
+    question: string;
+    options: string[];
+    correctOptionIndex: number;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,6 +35,13 @@ const lessonSchema = new Schema<ILesson>(
         url: { type: String },
       },
     ],
+    quizQuestions: [
+      {
+        question: { type: String, required: true },
+        options: [{ type: String, required: true }],
+        correctOptionIndex: { type: Number, required: true }
+      }
+    ]
   },
   { timestamps: true }
 );

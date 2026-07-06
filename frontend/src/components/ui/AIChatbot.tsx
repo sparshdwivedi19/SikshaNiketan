@@ -8,11 +8,13 @@ import { cn } from "@/utils/cn";
 
 export const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const chatOptions: any = {
     initialMessages: [
       { id: "1", role: "assistant", content: "Hi! I'm your Shiksha Niketan AI Mentor. Need help with a concept, or want me to create a practice question for you?" }
     ]
-  });
+  };
+  const chat = useChat(chatOptions) as any;
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = chat;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export const AIChatbot = () => {
 
             {/* Chat History */}
             <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-4 bg-background-secondary custom-scrollbar">
-              {messages.map((msg) => (
+              {messages.map((msg: any) => (
                 <div key={msg.id} className={cn("flex gap-2 max-w-[85%]", msg.role === "user" ? "self-end flex-row-reverse" : "self-start")}>
                   <div className={cn("w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white", msg.role === "user" ? "bg-gray-800" : "bg-brand-500")}>
                     {msg.role === "user" ? <User size={14} /> : <Bot size={14} />}
@@ -59,7 +61,7 @@ export const AIChatbot = () => {
                       ? "bg-brand-600 text-white rounded-tr-none" 
                       : "bg-surface text-foreground-primary rounded-tl-none border border-gray-100 dark:border-gray-800"
                   )}>
-                    {msg.content}
+                    {(msg as any).content}
                   </div>
                 </div>
               ))}

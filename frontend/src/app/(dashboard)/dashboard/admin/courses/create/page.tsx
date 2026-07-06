@@ -18,6 +18,7 @@ interface Lesson {
   ext: string;
   videoUrl?: string;
   isUploading?: boolean;
+  quizQuestions?: { question: string; options: string[]; correctOptionIndex: number }[];
 }
 
 interface Module {
@@ -30,6 +31,10 @@ export default function CreateCourse() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("basic");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Quiz Builder State
+  const [quizModal, setQuizModal] = useState<{ open: boolean, moduleId: number | null, lessonId: number | null }>({ open: false, moduleId: null, lessonId: null });
+  const [editingQuestions, setEditingQuestions] = useState<{ question: string; options: string[]; correctOptionIndex: number }[]>([]);
   
   // Basic Info State
   const [courseData, setCourseData] = useState({
@@ -68,9 +73,10 @@ export default function CreateCourse() {
             id: Date.now(),
             title: customTitle || (type === 'Video' ? `New Video Lesson` : `New Quiz`),
             type: type,
-            size: customSize || (type === 'Video' ? '0 mins' : '10 Questions'),
+            size: customSize || (type === 'Video' ? '0 mins' : '0 Questions'),
             ext: type === 'Video' ? 'MP4 Video' : 'Interactive Quiz',
-            videoUrl: videoUrl
+            videoUrl: videoUrl,
+            quizQuestions: type === 'Quiz' ? [] : undefined
           }]
         };
       }
@@ -353,6 +359,14 @@ export default function CreateCourse() {
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-800 hover:text-red-500 shrink-0 ml-2" onClick={() => handleDeleteLesson(module.id, lesson.id)} disabled={lesson.isUploading}>
                         <Trash2 size={14} />
                       </Button>
+                      {lesson.type === 'Quiz' && (
+                        <Button variant="outline" size="sm" className="h-6 text-xs ml-2" onClick={() => {
+                          setEditingQuestions(lesson.quizQuestions || []);
+                          setQuizModal({ open: true, moduleId: module.id, lessonId: lesson.id });
+                        }}>
+                          Edit Quiz
+                        </Button>
+                      )}
                     </div>
                   ))}
                   {module.lessons.length === 0 && (
@@ -399,6 +413,71 @@ export default function CreateCourse() {
             </div>
           </div>
         </Card>
+      )}
+
+      {/* Simple Quiz Builder Modal */}
+      {quizModal.open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-background-secondary rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h3 className="font-bold text-lg mb-4">Edit Quiz Questions</h3>
+            
+            <div className="space-y-6">
+              {editingQuestions.map((q, qIndex) => (
+                <div key={qIndex} className="p-4 border rounded-lg space-y-3 relative">
+                  <Button variant="ghost" size="sm" className="absolute top-2 right-2 text-red-500" onClick={() => setEditingQuestions(prev => prev.filter((_, i) => i !== qIndex))}><Trash2 size={16} /></Button>
+                  <Input label={`Question ${qIndex + 1}`} value={q.question} onChange={e => {
+                    const newQ = [...editingQuestions];
+                    newQ[qIndex].question = e.target.value;
+                    setEditingQuestions(newQ);
+                  }} />
+                  <div className="grid grid-cols-2 gap-2">
+                    {q.options.map((opt, oIndex) => (
+                      <div key={oIndex} className="flex items-center gap-2">
+                        <input type="radio" name={`correct-${qIndex}`} checked={q.correctOptionIndex === oIndex} onChange={() => {
+                          const newQ = [...editingQuestions];
+                          newQ[qIndex].correctOptionIndex = oIndex;
+                          setEditingQuestions(newQ);
+                        }} />
+                        <Input placeholder={`Option ${oIndex + 1}`} value={opt} onChange={e => {
+                          const newQ = [...editingQuestions];
+                          newQ[qIndex].options[oIndex] = e.target.value;
+                          setEditingQuestions(newQ);
+                        }} className="flex-1" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button variant="outline" className="w-full mt-4" onClick={() => setEditingQuestions(prev => [...prev, { question: "", options: ["", "", "", ""], correctOptionIndex: 0 }])}>
+              <Plus size={16} className="mr-2" /> Add Question
+            </Button>
+
+            <div className="flex justify-end gap-3 mt-8">
+              <Button variant="outline" onClick={() => setQuizModal({ open: false, moduleId: null, lessonId: null })}>Cancel</Button>
+              <Button onClick={() => {
+                // Save back to lessons
+                setModules(prev => prev.map(m => {
+                  if (m.id === quizModal.moduleId) {
+                    return {
+                      ...m,
+                      lessons: m.lessons.map(l => {
+                        if (l.id === quizModal.lessonId) {
+                          return { ...l, quizQuestions: editingQuestions, size: `${editingQuestions.length} Questions` };
+                        }
+                        return l;
+                      })
+                    };
+                  }
+                  return m;
+                }));
+                setQuizModal({ open: false, moduleId: null, lessonId: null });
+                toast.success("Quiz saved");
+              }}>Save Quiz</Button>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>

@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router, Response } from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { protect, requireRole } from "../middleware/auth.middleware";
-import { AuthRequest } from "../middleware/auth.middleware";
+import { v2 as cloudinary } from "cloudinary";
+import { protect, requireRole, AuthRequest } from "../middleware/auth.middleware";
 
 const router = Router();
 
@@ -13,18 +13,29 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+// Cloudinary configuration
+if (process.env.CLOUDINARY_CLOUD_NAME) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
+
+// Storage Strategy: Use Memory Storage if Cloudinary is enabled, else Disk Storage
+const isCloudinaryConfigured = !!(process.env.CLOUDINARY_URL || process.env.CLOUDINARY_CLOUD_NAME);
+
+const diskStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
-  filename: function (req, file, cb) {
-    // Generate a unique filename
+  filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
   },
 });
+
+const storage = isCloudinaryConfigured ? multer.memoryStorage() : diskStorage;
 
 const videoUpload = multer({
   storage: storage,
@@ -50,29 +61,41 @@ const imageUpload = multer({
   },
 });
 
+// Helper to upload to Cloudinary via stream
+const streamUploadToCloudinary = (buffer: Buffer, resourceType: "video" | "image" | "auto" = "auto"): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: resourceType, folder: "shiksha-uploads" },
+      (error, result) => {
+        if (error || !result) return reject(error || new Error("Upload failed"));
+        resolve(result.secure_url);
+      }
+    );
+    uploadStream.end(buffer);
+  });
+};
+
 // POST /api/v1/upload/video
 router.post(
   "/video",
   protect,
   requireRole("faculty", "admin"),
   videoUpload.single("video"),
-  (req: AuthRequest, res: Response): void => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       if (!req.file) {
         res.status(400).json({ status: "error", message: "No file uploaded." });
         return;
       }
       
-      // Construct the URL to access the file
-      // In production, this would be an S3 URL
-      const fileUrl = `/uploads/videos/${req.file.filename}`;
+      let fileUrl = "";
+      if (isCloudinaryConfigured) {
+        fileUrl = await streamUploadToCloudinary(req.file.buffer, "video");
+      } else {
+        fileUrl = `/uploads/videos/${req.file.filename}`;
+      }
       
-      res.status(200).json({
-        status: "success",
-        url: fileUrl,
-        size: req.file.size,
-        filename: req.file.originalname
-      });
+      res.status(200).json({ status: "success", url: fileUrl });
     } catch (error: any) {
       res.status(500).json({ status: "error", message: error.message });
     }
@@ -85,19 +108,21 @@ router.post(
   protect,
   requireRole("faculty", "admin"),
   imageUpload.single("image"),
-  (req: AuthRequest, res: Response): void => {
+  async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       if (!req.file) {
         res.status(400).json({ status: "error", message: "No file uploaded." });
         return;
       }
       
-      const fileUrl = `/uploads/videos/${req.file.filename}`; // reusing the same folder for MVP
+      let fileUrl = "";
+      if (isCloudinaryConfigured) {
+        fileUrl = await streamUploadToCloudinary(req.file.buffer, "image");
+      } else {
+        fileUrl = `/uploads/videos/${req.file.filename}`;
+      }
       
-      res.status(200).json({
-        status: "success",
-        url: fileUrl,
-      });
+      res.status(200).json({ status: "success", url: fileUrl });
     } catch (error: any) {
       res.status(500).json({ status: "error", message: error.message });
     }

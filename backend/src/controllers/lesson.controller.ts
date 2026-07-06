@@ -35,6 +35,7 @@ export const saveCurriculum = async (req: AuthRequest, res: Response): Promise<v
           type: lesson.type.toLowerCase() === "video" ? "video" : "quiz",
           videoUrl: lesson.videoUrl, // this will be the URL returned from /upload/video
           duration: lesson.size || "0 mins", // reusing the size field from frontend as duration for MVP
+          quizQuestions: lesson.quizQuestions || [],
           order: globalOrder++,
         });
       }

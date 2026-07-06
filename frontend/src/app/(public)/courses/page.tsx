@@ -114,7 +114,7 @@ export default function CoursesPage() {
             />
           </div>
           <Button
-            variant={showFilters ? "default" : "outline"}
+            variant={showFilters ? "primary" : "outline"}
             onClick={() => setShowFilters(!showFilters)}
             rightIcon={<Filter size={18} />}
           >

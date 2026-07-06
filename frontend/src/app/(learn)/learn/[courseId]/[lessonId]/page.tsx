@@ -5,7 +5,17 @@ import { PlayCircle, CheckCircle2, Lock, FileText, MessageSquare, ChevronDown, C
 import { Button } from "@/components/ui/Button";
 
 // Dummy data for LMS
-const dummyCurriculum = [
+const dummyCurriculum: Array<{
+  module: string;
+  lessons: Array<{
+    id: string;
+    title: string;
+    duration: string;
+    type: "video" | "pdf";
+    isCompleted?: boolean;
+    isLocked?: boolean;
+  }>
+}> = [
   {
     module: "Module 1: Mechanics Foundation",
     lessons: [

@@ -28,6 +28,15 @@ interface AdminStats {
   publishedCourses: number;
   totalEnrollments: number;
   recentUsers: number;
+  totalRevenue: number;
+  activeStudents: number;
+  pendingPayments: number;
+  latestEnrollments: Array<{
+    _id: string;
+    user: { name: string; email: string };
+    course: { title: string; price: number };
+    createdAt: string;
+  }>;
 }
 
 export default function AdminDashboard() {
@@ -78,26 +87,26 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-5 border-l-4 border-l-brand-500">
-          <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <Users size={16} className="text-brand-500" /> Total Users
+          <div className="flex items-center justify-between text-foreground-secondary font-medium text-sm mb-2">
+            <div className="flex items-center gap-2"><IndianRupee size={16} className="text-brand-500" /> Total Revenue</div>
           </div>
           <div className="text-3xl font-bold text-foreground-primary mb-1">
-            {isLoading ? "—" : (stats?.totalUsers || 0).toLocaleString()}
+            {isLoading ? "—" : `₹${(stats?.totalRevenue || 0).toLocaleString()}`}
           </div>
-          <div className="text-xs text-green-500 font-medium">
-            +{isLoading ? "—" : stats?.recentUsers || 0} this month
+          <div className="text-xs text-foreground-secondary font-medium">
+            {isLoading ? "—" : stats?.pendingPayments || 0} pending payments
           </div>
         </Card>
 
         <Card className="p-5 border-l-4 border-l-purple-500">
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <Users size={16} className="text-purple-500" /> Students
+            <Users size={16} className="text-purple-500" /> Active Students
           </div>
           <div className="text-3xl font-bold text-foreground-primary mb-1">
-            {isLoading ? "—" : (stats?.totalStudents || 0).toLocaleString()}
+            {isLoading ? "—" : (stats?.activeStudents || 0).toLocaleString()}
           </div>
-          <div className="text-xs text-foreground-secondary font-medium">
-            {isLoading ? "—" : stats?.totalParents || 0} Parents • {isLoading ? "—" : stats?.totalFaculty || 0} Faculty
+          <div className="text-xs text-green-500 font-medium">
+            +{isLoading ? "—" : stats?.recentUsers || 0} total users this month
           </div>
         </Card>
 
@@ -162,33 +171,23 @@ export default function AdminDashboard() {
           </Card>
 
           <Card className="p-6">
-            <h3 className="text-xl font-bold font-heading text-foreground-primary mb-4">Live Stats</h3>
+            <h3 className="text-xl font-bold font-heading text-foreground-primary mb-4">Latest Enrollments</h3>
             <div className="space-y-4">
               {isLoading ? (
                 <div className="animate-pulse space-y-3">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-5 bg-gray-200 dark:bg-gray-700 rounded" />
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="h-10 bg-gray-200 dark:bg-gray-700 rounded" />
                   ))}
                 </div>
+              ) : stats?.latestEnrollments && stats.latestEnrollments.length > 0 ? (
+                stats.latestEnrollments.map((enr) => (
+                  <div key={enr._id} className="flex flex-col gap-1 text-sm border-b border-gray-100 dark:border-gray-800 pb-2 last:border-0">
+                    <span className="font-bold text-foreground-primary truncate">{enr.user?.name || "Unknown"}</span>
+                    <span className="text-foreground-secondary text-xs truncate">Enrolled in: {enr.course?.title || "Unknown Course"}</span>
+                  </div>
+                ))
               ) : (
-                <>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground-secondary">Total Users</span>
-                    <span className="font-bold">{stats?.totalUsers || 0}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground-secondary">Active Students</span>
-                    <span className="font-bold">{stats?.totalStudents || 0}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground-secondary">Published Courses</span>
-                    <span className="font-bold">{stats?.publishedCourses || 0}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-foreground-secondary">Total Enrollments</span>
-                    <span className="font-bold text-brand-600">{stats?.totalEnrollments || 0}</span>
-                  </div>
-                </>
+                <div className="text-sm text-foreground-secondary">No recent enrollments.</div>
               )}
             </div>
           </Card>

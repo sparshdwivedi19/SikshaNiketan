@@ -21,6 +21,7 @@ interface Course {
   isPublished: boolean;
   studentsCount?: number;
   rating?: number;
+  thumbnail?: string;
 }
 
 export default function AllCoursesPage() {
