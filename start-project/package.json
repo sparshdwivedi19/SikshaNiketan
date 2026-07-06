@@ -1,0 +1,19 @@
+{
+  "name": "start-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd ../frontend && npm run dev",
+    "dev:backend": "cd ../backend && npm run dev",
+    "install:all": "npm install && cd ../frontend && npm install && cd ../backend && npm install",
+    "build:all": "cd ../frontend && npm run build && cd ../backend && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
