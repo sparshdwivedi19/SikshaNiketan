@@ -128,13 +128,13 @@ export default function CoursePlayerPage() {
                   >
                     <div className="mt-0.5">
                       {lesson.isLocked ? (
-                        <Lock size={16} className="text-gray-400" />
+                        <Lock size={16} className="text-gray-800" />
                       ) : lesson.isCompleted ? (
                         <CheckCircle2 size={16} className="text-brand-500" />
                       ) : lesson.type === "video" ? (
-                        <PlayCircle size={16} className={lesson.id === "l2" ? "text-brand-600" : "text-gray-400"} />
+                        <PlayCircle size={16} className={lesson.id === "l2" ? "text-brand-600" : "text-gray-800"} />
                       ) : (
-                        <FileText size={16} className="text-gray-400" />
+                        <FileText size={16} className="text-gray-800" />
                       )}
                     </div>
                     <div className="flex-1 flex flex-col">

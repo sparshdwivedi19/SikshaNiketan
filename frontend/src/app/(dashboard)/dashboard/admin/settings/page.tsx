@@ -173,7 +173,7 @@ export default function AdminSettingsPage() {
                     <p className="font-medium text-foreground-primary">{item.label}</p>
                     <p className="text-sm text-foreground-secondary mt-0.5">{item.description}</p>
                   </div>
-                  <span className={`px-2 py-1 text-xs font-bold rounded-md ${item.enabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                  <span className={`px-2 py-1 text-xs font-bold rounded-md ${item.enabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-900"}`}>
                     {item.enabled ? "ON" : "OFF"}
                   </span>
                 </div>

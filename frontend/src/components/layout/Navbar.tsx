@@ -77,7 +77,7 @@ export const Navbar = () => {
                   href={link.path}
                   className={cn(
                     "text-sm font-medium transition-colors hover:text-brand-400",
-                    isActive ? "text-brand-400" : "text-gray-300"
+                    isActive ? "text-brand-400" : "text-gray-700"
                   )}
                 >
                   {link.name}
@@ -92,7 +92,7 @@ export const Navbar = () => {
             {isAuthenticated && user ? (
               <>
                 <Link href={getDashboardPath(user.role)}>
-                  <Button variant="ghost" className="text-gray-300 hover:bg-white/10 gap-2" leftIcon={<LayoutDashboard size={16} />}>
+                  <Button variant="ghost" className="text-gray-700 hover:bg-white/10 gap-2" leftIcon={<LayoutDashboard size={16} />}>
                     Dashboard
                   </Button>
                 </Link>
@@ -102,7 +102,7 @@ export const Navbar = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="text-gray-400 hover:text-red-400 transition-colors p-1"
+                    className="text-gray-800 hover:text-red-400 transition-colors p-1"
                     title="Logout"
                   >
                     <LogOut size={16} />
@@ -112,7 +112,7 @@ export const Navbar = () => {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" className="text-gray-400 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10">
+                  <Button variant="ghost" className="text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/10">
                     Log in
                   </Button>
                 </Link>

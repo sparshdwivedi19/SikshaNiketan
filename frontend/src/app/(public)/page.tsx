@@ -52,19 +52,19 @@ export default function HomePage() {
         <div className="glass-dark dark:glass rounded-3xl p-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white dark:text-foreground-primary">
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold font-heading">50K+</h3>
-            <p className="text-sm text-gray-300 dark:text-foreground-secondary font-medium">Active Students</p>
+            <p className="text-sm text-gray-700 dark:text-foreground-secondary font-medium">Active Students</p>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold font-heading">100+</h3>
-            <p className="text-sm text-gray-300 dark:text-foreground-secondary font-medium">Expert Faculties</p>
+            <p className="text-sm text-gray-700 dark:text-foreground-secondary font-medium">Expert Faculties</p>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold font-heading">99.9</h3>
-            <p className="text-sm text-gray-300 dark:text-foreground-secondary font-medium">Top Percentile</p>
+            <p className="text-sm text-gray-700 dark:text-foreground-secondary font-medium">Top Percentile</p>
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold font-heading">4.9/5</h3>
-            <p className="text-sm text-gray-300 dark:text-foreground-secondary font-medium">Average Rating</p>
+            <p className="text-sm text-gray-700 dark:text-foreground-secondary font-medium">Average Rating</p>
           </div>
         </div>
       </section>

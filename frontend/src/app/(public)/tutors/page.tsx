@@ -34,7 +34,7 @@ export default function TutorsPage() {
       <div className="flex justify-center mb-12">
         <div className="flex w-full max-w-3xl bg-white dark:bg-background-secondary rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-2">
           <div className="flex-1 flex items-center px-4 border-r border-gray-200 dark:border-gray-700">
-            <Search className="text-gray-400 mr-2" size={20} />
+            <Search className="text-gray-800 mr-2" size={20} />
             <input 
               type="text" 
               placeholder="Subject or Grade" 
@@ -44,7 +44,7 @@ export default function TutorsPage() {
             />
           </div>
           <div className="flex-1 flex items-center px-4">
-            <MapPin className="text-gray-400 mr-2" size={20} />
+            <MapPin className="text-gray-800 mr-2" size={20} />
             <input 
               type="text" 
               placeholder="Location or Online" 

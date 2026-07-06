@@ -85,7 +85,7 @@ export default function InstructorCourses() {
       <Card className="p-0 overflow-hidden">
         <div className="p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/20 flex gap-4">
           <div className="relative max-w-sm w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-800" size={18} />
             <input
               type="text"
               placeholder="Search courses..."

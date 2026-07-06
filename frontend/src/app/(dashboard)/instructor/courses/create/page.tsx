@@ -285,7 +285,7 @@ export default function CreateCourse() {
             <Card className="p-6">
               <h3 className="font-bold text-lg mb-4">Course Thumbnail</h3>
               <div className="aspect-video w-full rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center text-foreground-secondary hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer">
-                <Upload size={32} className="mb-2 text-gray-400" />
+                <Upload size={32} className="mb-2 text-gray-800" />
                 <span className="text-sm font-medium">Click to upload image</span>
                 <span className="text-xs mt-1">1920x1080 recommended</span>
               </div>
@@ -306,7 +306,7 @@ export default function CreateCourse() {
               <div key={module.id} className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="bg-gray-50 dark:bg-gray-800/50 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 font-bold">
                   <div className="flex items-center gap-3 w-full md:w-auto">
-                    <GripVertical size={18} className="text-gray-400 cursor-move shrink-0" />
+                    <GripVertical size={18} className="text-gray-800 cursor-move shrink-0" />
                     <input 
                       type="text" 
                       value={module.title}
@@ -333,7 +333,7 @@ export default function CreateCourse() {
                   {module.lessons.map((lesson, idx) => (
                     <div key={lesson.id} className={`flex items-center justify-between p-3 border rounded-lg shadow-sm animate-in fade-in duration-200 ${lesson.isUploading ? "border-brand-300 bg-brand-50/50" : "border-gray-100 dark:border-gray-800 bg-white dark:bg-background-secondary"}`}>
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <GripVertical size={16} className="text-gray-300 cursor-move shrink-0" />
+                        <GripVertical size={16} className="text-gray-700 cursor-move shrink-0" />
                         <span className="text-sm font-medium truncate">{idx + 1}. {lesson.title}</span>
                         
                         <div className="flex items-center gap-2 shrink-0">
@@ -350,7 +350,7 @@ export default function CreateCourse() {
                           <span className="text-xs text-foreground-secondary hidden sm:inline-block">{lesson.size}</span>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-400 hover:text-red-500 shrink-0 ml-2" onClick={() => handleDeleteLesson(module.id, lesson.id)} disabled={lesson.isUploading}>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-800 hover:text-red-500 shrink-0 ml-2" onClick={() => handleDeleteLesson(module.id, lesson.id)} disabled={lesson.isUploading}>
                         <Trash2 size={14} />
                       </Button>
                     </div>

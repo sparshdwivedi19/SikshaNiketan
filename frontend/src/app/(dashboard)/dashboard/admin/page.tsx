@@ -148,15 +148,15 @@ export default function AdminDashboard() {
             <div className="space-y-2">
               <Link href="/dashboard/admin/users" className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-900/20 text-foreground-primary transition-all active:scale-[0.98] group">
                 <span className="font-medium text-sm group-hover:text-brand-600 transition-colors">Manage Users</span>
-                <ChevronRight size={16} className="text-gray-400 group-hover:text-brand-600 transition-colors" />
+                <ChevronRight size={16} className="text-gray-800 group-hover:text-brand-600 transition-colors" />
               </Link>
               <Link href="/dashboard/admin/courses" className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-900/20 text-foreground-primary transition-all active:scale-[0.98] group">
                 <span className="font-medium text-sm group-hover:text-brand-600 transition-colors">Manage Courses</span>
-                <ChevronRight size={16} className="text-gray-400 group-hover:text-brand-600 transition-colors" />
+                <ChevronRight size={16} className="text-gray-800 group-hover:text-brand-600 transition-colors" />
               </Link>
               <Link href="/dashboard/admin/settings" className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-brand-50 dark:hover:bg-brand-900/20 text-foreground-primary transition-all active:scale-[0.98] group">
                 <span className="font-medium text-sm group-hover:text-brand-600 transition-colors">System Settings</span>
-                <ChevronRight size={16} className="text-gray-400 group-hover:text-brand-600 transition-colors" />
+                <ChevronRight size={16} className="text-gray-800 group-hover:text-brand-600 transition-colors" />
               </Link>
             </div>
           </Card>

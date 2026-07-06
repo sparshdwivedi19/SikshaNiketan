@@ -30,7 +30,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3 text-gray-400 z-10 pointer-events-none">
+            <div className="absolute left-3 text-gray-800 z-10 pointer-events-none">
               {leftIcon}
             </div>
           )}
@@ -39,7 +39,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "flex h-11 w-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary px-3 py-2 text-sm text-black dark:text-white font-medium transition-all",
               "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-              "placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-transparent",
+              "placeholder:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-transparent",
               "disabled:cursor-not-allowed disabled:opacity-50",
               leftIcon && "pl-10",
               (rightIcon || isPassword) && "pr-10",
@@ -54,13 +54,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={togglePassword}
-              className="absolute right-3 text-gray-400 hover:text-gray-600 focus:outline-none z-10 cursor-pointer"
+              className="absolute right-3 text-gray-800 hover:text-gray-600 focus:outline-none z-10 cursor-pointer"
               tabIndex={-1}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           ) : rightIcon ? (
-            <div className="absolute right-3 text-gray-400 z-10 pointer-events-none">
+            <div className="absolute right-3 text-gray-800 z-10 pointer-events-none">
               {rightIcon}
             </div>
           ) : null}

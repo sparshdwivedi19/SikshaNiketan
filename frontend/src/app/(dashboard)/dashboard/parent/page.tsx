@@ -67,7 +67,7 @@ export default function ParentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
             <GraduationCap size={16} className="text-purple-500" /> Batch Rank
           </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">12<span className="text-lg text-gray-400">/350</span></div>
+          <div className="text-3xl font-bold text-foreground-primary mb-1">12<span className="text-lg text-gray-800">/350</span></div>
           <div className="text-xs text-foreground-secondary font-medium">Top 5%</div>
         </Card>
 
@@ -111,7 +111,7 @@ export default function ParentDashboard() {
               </p>
               <div className="flex items-center justify-between mt-2">
                 <span className="text-xs font-bold text-brand-700 dark:text-brand-400">- Mr. Sharma (Physics)</span>
-                <span className="text-xs text-gray-500">2 days ago</span>
+                <span className="text-xs text-gray-900">2 days ago</span>
               </div>
             </div>
             <Button className="w-full mt-4" variant="outline" rightIcon={<MessageCircle size={16} />}>Message Teacher</Button>

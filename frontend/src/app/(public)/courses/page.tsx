@@ -104,7 +104,7 @@ export default function CoursesPage() {
 
         <div className="flex gap-4 w-full md:w-auto">
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-800" size={18} />
             <input
               type="text"
               value={searchQuery}
@@ -274,7 +274,7 @@ export default function CoursesPage() {
           ) : (
             <div className="py-20 flex flex-col items-center justify-center text-center">
               <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-full mb-4">
-                <Search className="text-gray-400" size={32} />
+                <Search className="text-gray-800" size={32} />
               </div>
               <h2 className="text-2xl font-bold text-foreground-primary mb-2">No courses found</h2>
               <p className="text-foreground-secondary max-w-md">Try adjusting your filters or search terms.</p>

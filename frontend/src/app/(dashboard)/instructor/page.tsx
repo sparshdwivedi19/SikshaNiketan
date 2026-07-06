@@ -157,7 +157,7 @@ export default function InstructorDashboard() {
                 <Link href={`/courses/${course.slug}`} key={course._id}>
                   <div className="group flex items-start gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700 cursor-pointer">
                     <div className="w-16 h-12 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center shrink-0">
-                      <PlayCircle className="text-gray-400 group-hover:text-brand-500 transition-colors" />
+                      <PlayCircle className="text-gray-800 group-hover:text-brand-500 transition-colors" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-sm text-foreground-primary group-hover:text-brand-600 transition-colors line-clamp-1">{course.title}</h4>
@@ -173,7 +173,7 @@ export default function InstructorDashboard() {
               ))
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                <BookOpen size={32} className="text-gray-300 mb-3" />
+                <BookOpen size={32} className="text-gray-700 mb-3" />
                 <p className="text-sm text-foreground-secondary">No courses yet.</p>
                 <Link href="/instructor/courses/create" className="mt-3">
                   <Button variant="outline" size="sm">Create First Course</Button>

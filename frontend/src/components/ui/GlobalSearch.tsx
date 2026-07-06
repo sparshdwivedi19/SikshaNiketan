@@ -49,7 +49,7 @@ export const GlobalSearch = () => {
     <div className="relative hidden md:block w-full max-w-sm" ref={wrapperRef}>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-4 w-4 text-gray-400" />
+          <Search className="h-4 w-4 text-gray-800" />
         </div>
         <input
           type="text"
@@ -87,7 +87,7 @@ export const GlobalSearch = () => {
                           <span className="text-xs text-foreground-secondary">{result.type}</span>
                         </div>
                       </div>
-                      <ChevronRight size={16} className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <ChevronRight size={16} className="text-gray-800 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
                   </li>
                 ))}
