@@ -32,8 +32,8 @@
   --color-surface-hover:        #f0eee6;
 
   /* ── Text ── */
-  --color-foreground-primary:   #0d1b3e;
-  --color-foreground-secondary: #4a5568;
+  --color-foreground-primary:   #06091a;  /* near-black navy — maximum readability */
+  --color-foreground-secondary: #374151;  /* dark gray */
 
   /* ── Typography ── */
   --font-sans:    'Inter', system-ui, sans-serif;
@@ -47,15 +47,15 @@
     --color-background-secondary: #0f2050;
     --color-surface:              #142566;
     --color-surface-hover:        #1a2f7a;
-    --color-foreground-primary:   #f0f4ff;
-    --color-foreground-secondary: #a0b4d4;
+    --color-foreground-primary:   #f1f5ff;  /* bright near-white */
+    --color-foreground-secondary: #94a3b8;  /* muted slate */
   }
 }
 
 /* ── CSS Variables for body-level use ── */
 :root {
   --background: #fafaf7;
-  --foreground: #0d1b3e;
+  --foreground: #06091a;  /* matches foreground-primary */
 }
 
 @media (prefers-color-scheme: dark) {
