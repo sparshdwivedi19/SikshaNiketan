@@ -55,19 +55,33 @@
 /* ── CSS Variables for body-level use ── */
 :root {
   --background: #f8fafc;
-  --foreground: #0f172a;  /* matches foreground-primary */
+  --foreground: #0f172a;
 }
 
+/* ── Dark Mode Variables (OS Preference) ── */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0c1a3b;
     --foreground: #f1f5f9;
+    --color-background-primary: #0c1a3b;
+    --color-background-secondary: #0f2050;
+    --color-surface: #142566;
+    --color-surface-hover: #1a2f7a;
+    --color-foreground-primary: #f1f5ff;
+    --color-foreground-secondary: #94a3b8;
   }
 }
 
-.dark {
+/* ── Dark Mode Variables (Manual Toggle via .dark class) ── */
+.dark, [data-theme="dark"] {
   --background: #0c1a3b;
   --foreground: #f1f5f9;
+  --color-background-primary: #0c1a3b;
+  --color-background-secondary: #0f2050;
+  --color-surface: #142566;
+  --color-surface-hover: #1a2f7a;
+  --color-foreground-primary: #f1f5ff;
+  --color-foreground-secondary: #94a3b8;
 }
 
 /* ── Base Styles ── */
@@ -77,43 +91,6 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* ── Global text color enforcement ── */
-h1, h2, h3, h4, h5, h6 {
-  color: #0f172a;
-}
-
-label {
-  color: #1e293b;
-}
-
-p, span, li, td, th, input, select, textarea {
-  color: inherit;
-}
-
-/* Force foreground tokens to resolve clearly */
-.text-foreground-primary  { color: #0f172a !important; }
-.text-foreground-secondary { color: #475569 !important; }
-
-@media (prefers-color-scheme: dark) {
-  h1, h2, h3, h4, h5, h6 { color: #f1f5ff; }
-  label { color: #cbd5e1; }
-  .text-foreground-primary  { color: #f1f5ff !important; }
-  .text-foreground-secondary { color: #94a3b8 !important; }
-}
-
-.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-  color: #f1f5ff;
-}
-.dark label {
-  color: #cbd5e1;
-}
-.dark .text-foreground-primary {
-  color: #f1f5ff !important;
-}
-.dark .text-foreground-secondary {
-  color: #94a3b8 !important;
 }
 
 /* ── Utility: Glassmorphism ── */
