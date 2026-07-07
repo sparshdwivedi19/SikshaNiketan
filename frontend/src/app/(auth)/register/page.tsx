@@ -132,7 +132,7 @@ export default function RegisterPage() {
           </select>
         </div>
 
-        <Button type="submit" size="lg" className="w-full mt-2" isLoading={isLoading} rightIcon={!isLoading && <ArrowRight size={18} />}>
+        <Button type="submit" size="lg" className="w-full mt-2 text-[#312e81]" isLoading={isLoading} rightIcon={!isLoading && <ArrowRight size={18} />}>
           Create Account
         </Button>
       </form>

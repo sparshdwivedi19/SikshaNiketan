@@ -5,7 +5,8 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { BookOpen, Clock, Users, ArrowRight, Play, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import api from "@/utils/api";
+import api, { API_BASE_URL } from "@/utils/api";
+import Image from "next/image";
 
 interface Enrollment {
   _id: string;
@@ -34,7 +35,7 @@ export default function StudentCoursesPage() {
       try {
         const response = await api.get("/enrollments/my");
         if (response.data.status === "success") {
-          setEnrollments(response.data.enrollments);
+          setEnrollments(response.data.enrollments.filter((e: any) => e.course));
         }
       } catch (error) {
         console.error("Failed to fetch enrollments:", error);
@@ -74,10 +75,19 @@ export default function StudentCoursesPage() {
         </div>
       ) : enrollments.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {enrollments.map((enrollment) => (
+          {enrollments.filter(e => e.course).map((enrollment) => (
             <Card key={enrollment._id} className="group overflow-hidden hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-300 transform hover:-translate-y-1">
               <div className="aspect-video bg-gray-100 dark:bg-gray-800 relative flex items-center justify-center">
-                <BookOpen size={48} className="text-brand-500 opacity-20 group-hover:scale-110 transition-transform duration-500" />
+                {enrollment.course.thumbnail ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={enrollment.course.thumbnail.startsWith('http') ? enrollment.course.thumbnail : `${API_BASE_URL}${enrollment.course.thumbnail}`}
+                    alt={enrollment.course.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <BookOpen size={48} className="text-brand-500 opacity-20 group-hover:scale-110 transition-transform duration-500" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 <button className="absolute inset-0 flex items-center justify-center">
                   <div className="w-14 h-14 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">

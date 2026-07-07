@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Save, ArrowLeft, Upload, Plus, GripVertical, Trash2, CheckCircle } from "lucide-react";
+import { Save, ArrowLeft, Upload, Plus, GripVertical, Trash2, CheckCircle, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import api from "@/utils/api";
+import Image from "next/image";
 
 interface Lesson {
   id: number;
@@ -30,6 +31,13 @@ export default function CreateCourse() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("basic");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const thumbnailInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Thumbnail State
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [isUploadingThumb, setIsUploadingThumb] = useState(false);
+  const [uploadedThumbnailUrl, setUploadedThumbnailUrl] = useState<string>("");
   
   // Basic Info State
   const [courseData, setCourseData] = useState({
@@ -57,6 +65,43 @@ export default function CreateCourse() {
       lessons: []
     }]);
     toast.success("New module added.");
+  };
+
+  const handleThumbnailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file (JPG, PNG, etc.)");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be smaller than 5MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => setThumbnailPreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+    setThumbnailFile(file);
+
+    setIsUploadingThumb(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await api.post("/upload/image", formData);
+      if (res.data.status === "success") {
+        setUploadedThumbnailUrl(res.data.url);
+        toast.success("Thumbnail uploaded!");
+      }
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Thumbnail upload failed");
+      setThumbnailPreview(null);
+      setThumbnailFile(null);
+    } finally {
+      setIsUploadingThumb(false);
+      e.target.value = "";
+    }
   };
 
   const handleAddLesson = (moduleId: number, type: 'Video' | 'Quiz', customTitle?: string, customSize?: string, videoUrl?: string) => {
@@ -108,10 +153,7 @@ export default function CreateCourse() {
       const formData = new FormData();
       formData.append("video", file);
 
-      // In production, this would upload to S3. For MVP, uploads locally.
-      const response = await api.post("/upload/video", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      const response = await api.post("/upload/video", formData);
 
       if (response.data.status === "success") {
         // Update the temporary lesson with success state and video URL
@@ -154,8 +196,12 @@ export default function CreateCourse() {
   };
 
   const handlePublish = async () => {
-    if (!courseData.title || !courseData.description || !courseData.price) {
-      toast.error("Please fill in all basic course details (Title, Description, Price).");
+    if (!courseData.title || !courseData.description) {
+      toast.error("Please fill in all basic course details (Title and Description).");
+      return;
+    }
+    if (courseData.price === "" || Number(courseData.price) < 0) {
+      toast.error("Please set a valid course price (0 for free).");
       return;
     }
 
@@ -166,7 +212,7 @@ export default function CreateCourse() {
         title: courseData.title,
         slug: courseData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
         description: courseData.description,
-        thumbnail: "https://images.unsplash.com/photo-1610484826967-09c5720778c7?auto=format&fit=crop&q=80&w=800", // placeholder
+        thumbnail: uploadedThumbnailUrl || undefined,
         category: courseData.category,
         level: courseData.level,
         price: Number(courseData.price),
@@ -283,12 +329,70 @@ export default function CreateCourse() {
           </div>
           <div className="space-y-6">
             <Card className="p-6">
-              <h3 className="font-bold text-lg mb-4">Course Thumbnail</h3>
-              <div className="aspect-video w-full rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center text-foreground-secondary hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer">
-                <Upload size={32} className="mb-2 text-gray-800" />
-                <span className="text-sm font-medium">Click to upload image</span>
-                <span className="text-xs mt-1">1920x1080 recommended</span>
+              <h3 className="font-bold text-lg mb-1">Course Thumbnail</h3>
+              <p className="text-xs text-foreground-secondary mb-4">Recommended: 1280×720px (JPG or PNG, max 5MB)</p>
+
+              <input
+                ref={thumbnailInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleThumbnailChange}
+              />
+
+              <div
+                className={`aspect-video w-full rounded-xl border-2 overflow-hidden cursor-pointer transition-all ${
+                  thumbnailPreview
+                    ? "border-brand-400"
+                    : "border-dashed border-gray-300 dark:border-gray-700 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/10"
+                }`}
+                onClick={() => thumbnailInputRef.current?.click()}
+              >
+                {thumbnailPreview ? (
+                  <div className="relative w-full h-full group">
+                    <Image src={thumbnailPreview} alt="Thumbnail preview" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white text-sm font-medium">Click to change</span>
+                    </div>
+                    {isUploadingThumb && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
+                    {uploadedThumbnailUrl && !isUploadingThumb && (
+                      <div className="absolute top-2 right-2 bg-green-500 rounded-full p-1">
+                        <CheckCircle size={14} className="text-white" />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full p-4 text-center">
+                    {isUploadingThumb ? (
+                      <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin mb-2" />
+                    ) : (
+                      <Upload size={32} className="mb-2 text-gray-800" />
+                    )}
+                    <span className="text-sm font-medium">
+                      {isUploadingThumb ? "Uploading..." : "Click to upload image"}
+                    </span>
+                    <span className="text-xs mt-1">1920x1080 recommended</span>
+                  </div>
+                )}
               </div>
+
+              {thumbnailFile && !isUploadingThumb && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setThumbnailPreview(null);
+                    setThumbnailFile(null);
+                    setUploadedThumbnailUrl("");
+                  }}
+                  className="mt-2 text-xs text-red-500 hover:underline w-full text-center"
+                >
+                  Remove thumbnail
+                </button>
+              )}
             </Card>
           </div>
         </div>

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Search, Filter, BookOpen, Star, Users, IndianRupee } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import api from "@/utils/api";
+import api, { API_BASE_URL } from "@/utils/api";
+import Image from "next/image";
 
 interface Course {
   _id: string;
@@ -221,7 +222,16 @@ export default function CoursesPage() {
                         {course.ratings?.avg?.toFixed(1) || "New"}
                       </div>
                       <div className="w-full h-full flex items-center justify-center text-brand-500">
-                        <BookOpen size={48} className="opacity-20 group-hover:scale-110 transition-transform duration-500" />
+                        {course.thumbnail ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={course.thumbnail.startsWith('http') ? course.thumbnail : `${API_BASE_URL}${course.thumbnail}`}
+                            alt={course.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <BookOpen size={48} className="opacity-20 group-hover:scale-110 transition-transform duration-500" />
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col gap-3 p-4 flex-1">

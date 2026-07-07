@@ -8,19 +8,9 @@ import { Star, MapPin, Search } from "lucide-react";
 export default function TutorsPage() {
   const [subjectQuery, setSubjectQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
-  const dummyTutors = [
-    { id: 1, name: "Arjun Sharma", subject: "Mathematics", location: "Noida", rating: 4.9, rate: "₹500/hr" },
-    { id: 2, name: "Priya Singh", subject: "Physics", location: "Online", rating: 4.8, rate: "₹600/hr" },
-    { id: 3, name: "Rahul Verma", subject: "Chemistry", location: "Delhi", rating: 4.7, rate: "₹450/hr" },
-  ];
+  const dummyTutors: any[] = []; // Removed dummy data for production
 
-  const filteredTutors = dummyTutors.filter(tutor => {
-    const matchesSubject = tutor.subject.toLowerCase().includes(subjectQuery.toLowerCase()) || 
-                           tutor.name.toLowerCase().includes(subjectQuery.toLowerCase());
-    const matchesLocation = tutor.location.toLowerCase().includes(locationQuery.toLowerCase());
-    
-    return matchesSubject && matchesLocation;
-  });
+  const filteredTutors = dummyTutors;
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-12">
@@ -53,7 +43,7 @@ export default function TutorsPage() {
               onChange={(e) => setLocationQuery(e.target.value)}
             />
           </div>
-          <Button>Search</Button>
+          <Button className="text-[#312e81]">Search</Button>
         </div>
       </div>
 

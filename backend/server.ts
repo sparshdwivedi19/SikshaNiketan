@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -12,15 +13,22 @@ import enrollmentRoutes from "./src/routes/enrollment.routes";
 import statsRoutes from "./src/routes/stats.routes";
 import doubtRoutes from "./src/routes/doubt.routes";
 import uploadRoutes from "./src/routes/upload.routes";
+import testRoutes from "./src/routes/test.routes";
 
 dotenv.config();
 
 const app = express();
 
 // Security Middleware
-app.use(helmet());
+const frontendOrigin = process.env.FRONTEND_URL || "http://localhost:3000";
+const backendOrigin = `http://localhost:${process.env.PORT || 5000}`;
+
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  contentSecurityPolicy: false, // Managed by the frontend (Next.js)
+}));
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: frontendOrigin,
   credentials: true,
 }));
 app.use(express.json({ limit: "10mb" }));
@@ -49,8 +57,17 @@ app.use(generalLimiter);
 // Database Connection
 connectDB();
 
-// Serve static files from the 'public' directory
-app.use(express.static("public"));
+// Serve static files (uploaded thumbnails & videos)
+// /uploads/images/<file> → public/uploads/images/<file>
+// /uploads/videos/<file> → public/uploads/videos/<file>
+app.use("/uploads", (_req: Request, res: Response, next: express.NextFunction) => {
+  res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL || "http://localhost:3000");
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  next();
+}, express.static(path.join(process.cwd(), "public", "uploads")));
+
+// Also serve everything else in /public as a fallback
+app.use(express.static(path.join(process.cwd(), "public")));
 
 // Routes
 app.use("/api/v1/auth", authLimiter, authRoutes);
@@ -60,6 +77,7 @@ app.use("/api/v1/enrollments", enrollmentRoutes);
 app.use("/api/v1/stats", statsRoutes);
 app.use("/api/v1/doubts", doubtRoutes);
 app.use("/api/v1/upload", uploadRoutes);
+app.use("/api/v1/tests", testRoutes);
 
 // Health Check
 app.get("/api/v1/health", (req: Request, res: Response) => {

@@ -34,7 +34,7 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/courses">
-              <Button size="lg" className="w-full sm:w-auto" rightIcon={<ArrowRight size={20} />}>
+              <Button size="lg" className="w-full sm:w-auto text-[#321e81]" rightIcon={<ArrowRight size={20} />}>
                 Explore Courses
               </Button>
             </Link>

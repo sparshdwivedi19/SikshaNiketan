@@ -7,14 +7,24 @@ import { protect, requireRole, AuthRequest } from "../middleware/auth.middleware
 
 const router = Router();
 
-// Ensure upload directories exist
-const uploadDir = path.join(process.cwd(), "public", "uploads", "videos");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// ─────────────────────────────────────────────────────────
+// Ensure upload directories exist (local dev only)
+// ─────────────────────────────────────────────────────────
+const videosDir = path.join(process.cwd(), "public", "uploads", "videos");
+const imagesDir = path.join(process.cwd(), "public", "uploads", "images");
 
-// Cloudinary configuration
-if (process.env.CLOUDINARY_CLOUD_NAME) {
+if (!fs.existsSync(videosDir)) fs.mkdirSync(videosDir, { recursive: true });
+if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
+
+// ─────────────────────────────────────────────────────────
+// Cloudinary configuration (used in production / Vercel)
+// ─────────────────────────────────────────────────────────
+const isCloudinaryConfigured = !!(
+  process.env.CLOUDINARY_URL ||
+  process.env.CLOUDINARY_CLOUD_NAME
+);
+
+if (isCloudinaryConfigured) {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -22,60 +32,79 @@ if (process.env.CLOUDINARY_CLOUD_NAME) {
   });
 }
 
-// Storage Strategy: Use Memory Storage if Cloudinary is enabled, else Disk Storage
-const isCloudinaryConfigured = !!(process.env.CLOUDINARY_URL || process.env.CLOUDINARY_CLOUD_NAME);
-
-const diskStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+// ─────────────────────────────────────────────────────────
+// Disk storage — separate destinations per media type
+// ─────────────────────────────────────────────────────────
+const videoDiskStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, videosDir),
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `video-${uniqueSuffix}${path.extname(file.originalname)}`);
   },
 });
 
-const storage = isCloudinaryConfigured ? multer.memoryStorage() : diskStorage;
+const imageDiskStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, imagesDir),
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, `image-${uniqueSuffix}${path.extname(file.originalname)}`);
+  },
+});
 
+// When Cloudinary is configured, buffer files in memory; else write to disk
+const videoStorage = isCloudinaryConfigured ? multer.memoryStorage() : videoDiskStorage;
+const imageStorage = isCloudinaryConfigured ? multer.memoryStorage() : imageDiskStorage;
+
+// ─────────────────────────────────────────────────────────
+// Multer instances
+// ─────────────────────────────────────────────────────────
 const videoUpload = multer({
-  storage: storage,
-  limits: { fileSize: 100 * 1024 * 1024 }, // 100MB limit for MVP
-  fileFilter: (req, file, cb) => {
+  storage: videoStorage,
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB
+  fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("video/")) {
       cb(null, true);
     } else {
-      cb(new Error("Not a video! Please upload only videos."));
+      cb(new Error("Only video files are allowed."));
     }
   },
 });
 
 const imageUpload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
+  storage: imageStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error("Not an image! Please upload only images."));
+      cb(new Error("Only image files are allowed."));
     }
   },
 });
 
-// Helper to upload to Cloudinary via stream
-const streamUploadToCloudinary = (buffer: Buffer, resourceType: "video" | "image" | "auto" = "auto"): Promise<string> => {
+// ─────────────────────────────────────────────────────────
+// Helper: stream buffer → Cloudinary
+// ─────────────────────────────────────────────────────────
+const streamToCloudinary = (
+  buffer: Buffer,
+  resourceType: "video" | "image" | "auto" = "auto",
+  folder = "shiksha-uploads"
+): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { resource_type: resourceType, folder: "shiksha-uploads" },
+    const stream = cloudinary.uploader.upload_stream(
+      { resource_type: resourceType, folder },
       (error, result) => {
-        if (error || !result) return reject(error || new Error("Upload failed"));
+        if (error || !result) return reject(error ?? new Error("Cloudinary upload failed"));
         resolve(result.secure_url);
       }
     );
-    uploadStream.end(buffer);
+    stream.end(buffer);
   });
 };
 
+// ─────────────────────────────────────────────────────────
 // POST /api/v1/upload/video
+// ─────────────────────────────────────────────────────────
 router.post(
   "/video",
   protect,
@@ -84,25 +113,31 @@ router.post(
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       if (!req.file) {
-        res.status(400).json({ status: "error", message: "No file uploaded." });
+        res.status(400).json({ status: "error", message: "No video file received." });
         return;
       }
-      
-      let fileUrl = "";
+
+      let fileUrl: string;
+
       if (isCloudinaryConfigured) {
-        fileUrl = await streamUploadToCloudinary(req.file.buffer, "video");
+        // Production: upload to Cloudinary, returns a CDN URL
+        fileUrl = await streamToCloudinary(req.file.buffer, "video");
       } else {
+        // Local dev: file is already on disk, return relative path
         fileUrl = `/uploads/videos/${req.file.filename}`;
       }
-      
+
       res.status(200).json({ status: "success", url: fileUrl });
     } catch (error: any) {
-      res.status(500).json({ status: "error", message: error.message });
+      console.error("[Upload Video Error]", error);
+      res.status(500).json({ status: "error", message: error.message ?? "Video upload failed." });
     }
   }
 );
 
+// ─────────────────────────────────────────────────────────
 // POST /api/v1/upload/image
+// ─────────────────────────────────────────────────────────
 router.post(
   "/image",
   protect,
@@ -111,20 +146,24 @@ router.post(
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       if (!req.file) {
-        res.status(400).json({ status: "error", message: "No file uploaded." });
+        res.status(400).json({ status: "error", message: "No image file received." });
         return;
       }
-      
-      let fileUrl = "";
+
+      let fileUrl: string;
+
       if (isCloudinaryConfigured) {
-        fileUrl = await streamUploadToCloudinary(req.file.buffer, "image");
+        // Production: upload to Cloudinary
+        fileUrl = await streamToCloudinary(req.file.buffer, "image");
       } else {
+        // Local dev: file is already on disk, return relative path
         fileUrl = `/uploads/images/${req.file.filename}`;
       }
-      
+
       res.status(200).json({ status: "success", url: fileUrl });
     } catch (error: any) {
-      res.status(500).json({ status: "error", message: error.message });
+      console.error("[Upload Image Error]", error);
+      res.status(500).json({ status: "error", message: error.message ?? "Image upload failed." });
     }
   }
 );

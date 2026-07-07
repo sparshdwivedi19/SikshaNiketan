@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeft, PlayCircle, FileText, HelpCircle, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
-import api from "@/utils/api";
+import api, { API_BASE_URL } from "@/utils/api";
 import { toast } from "react-hot-toast";
 
 interface Lesson {
@@ -127,74 +127,47 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
         <Card className="w-full flex-1 bg-black overflow-hidden flex flex-col rounded-xl shadow-lg border border-gray-200 dark:border-gray-800">
           {activeLesson.type === "video" && activeLesson.videoUrl && (
             <video 
-              src={activeLesson.videoUrl} 
+              key={activeLesson._id}
+              src={activeLesson.videoUrl.startsWith('http') ? activeLesson.videoUrl : `${API_BASE_URL}${activeLesson.videoUrl}`} 
               controls 
               className="w-full h-full object-contain"
               autoPlay
-            />
+              crossOrigin="anonymous"
+              preload="metadata"
+            >
+              Your browser does not support the video tag.
+            </video>
           )}
 
           {activeLesson.type === "quiz" && (
-            <div className="w-full h-full bg-white dark:bg-background-secondary p-8 overflow-y-auto">
-              <div className="max-w-2xl mx-auto">
-                <div className="flex items-center justify-between mb-8 border-b pb-4">
-                  <h2 className="text-xl font-bold flex items-center gap-2"><HelpCircle className="text-brand-500" /> Quiz: {activeLesson.title}</h2>
-                  <span className="bg-brand-50 text-brand-600 px-3 py-1 rounded-full text-sm font-medium">
-                    {activeLesson.quizQuestions?.length || 0} Questions
-                  </span>
+            <div className="w-full h-full bg-white dark:bg-background-secondary p-8 flex flex-col items-center justify-center text-center">
+              <HelpCircle size={64} className="text-brand-500 mb-6" />
+              <h2 className="text-3xl font-bold mb-4">Quiz: {activeLesson.title}</h2>
+              <p className="text-foreground-secondary mb-8 max-w-md">
+                This lesson contains a Computer-Based Test (CBT). Click the button below to start your test session in a focused environment.
+              </p>
+              {activeLesson.testId ? (
+                <Link href={`/test/${activeLesson.testId}`} target="_blank">
+                  <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-brand-500/20 hover:scale-105 transition-transform">
+                    Start Test Now
+                  </Button>
+                </Link>
+              ) : (
+                <div className="bg-orange-50 text-orange-600 p-4 rounded-xl border border-orange-200">
+                  <p className="font-bold">Test not yet configured.</p>
+                  <p className="text-sm">The instructor has not added questions for this test yet.</p>
                 </div>
+              )}
+            </div>
+          )}
 
-                {!activeLesson.quizQuestions || activeLesson.quizQuestions.length === 0 ? (
-                  <p className="text-foreground-secondary text-center py-10">No questions available for this quiz.</p>
-                ) : (
-                  <div className="space-y-8">
-                    {activeLesson.quizQuestions.map((q, qIndex) => (
-                      <div key={qIndex} className="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
-                        <p className="font-medium text-foreground-primary mb-4">{qIndex + 1}. {q.question}</p>
-                        <div className="space-y-3">
-                          {q.options.map((opt, optIndex) => {
-                            const isSelected = selectedOptions[qIndex] === optIndex;
-                            let btnClass = "w-full text-left p-4 rounded-xl border transition-all ";
-                            
-                            if (quizSubmitted) {
-                              const isCorrect = q.correctOptionIndex === optIndex;
-                              if (isCorrect) btnClass += "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-700";
-                              else if (isSelected && !isCorrect) btnClass += "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-700";
-                              else btnClass += "border-gray-200 dark:border-gray-700 opacity-50";
-                            } else {
-                              btnClass += isSelected ? "border-brand-500 bg-brand-50 dark:bg-brand-900/20 text-brand-700" : "border-gray-200 dark:border-gray-700 hover:border-brand-300";
-                            }
-
-                            return (
-                              <button 
-                                key={optIndex} 
-                                disabled={quizSubmitted}
-                                className={btnClass}
-                                onClick={() => setSelectedOptions(prev => ({ ...prev, [qIndex]: optIndex }))}
-                              >
-                                {opt}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-
-                    <div className="pt-6 border-t flex items-center justify-between">
-                      {quizSubmitted ? (
-                        <div className="flex items-center gap-3">
-                          <CheckCircle className="text-green-500" size={24} />
-                          <span className="font-bold text-lg">Score: {quizScore} / {activeLesson.quizQuestions.length}</span>
-                        </div>
-                      ) : (
-                        <Button onClick={handleQuizSubmit} className="ml-auto" disabled={Object.keys(selectedOptions).length < activeLesson.quizQuestions.length}>
-                          Submit Quiz
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
+          {activeLesson.type === "video" && !activeLesson.videoUrl && (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-gray-400 p-8 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.277A1 1 0 0121 8.617V15.38a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+              </svg>
+              <h3 className="text-lg font-semibold text-white mb-2">Video Not Available</h3>
+              <p className="text-sm">The video for this lesson hasn&apos;t been uploaded yet.</p>
             </div>
           )}
 

@@ -13,35 +13,37 @@ import {
   ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar 
 } from "recharts";
 
-// Dummy Data
-const performanceData = [
-  { name: 'Mon', score: 40 }, { name: 'Tue', score: 55 }, { name: 'Wed', score: 45 },
-  { name: 'Thu', score: 70 }, { name: 'Fri', score: 65 }, { name: 'Sat', score: 85 }, { name: 'Sun', score: 90 },
-];
-
-const skillsData = [
-  { subject: 'Physics', A: 120, fullMark: 150 },
-  { subject: 'Maths', A: 98, fullMark: 150 },
-  { subject: 'Chemistry', A: 140, fullMark: 150 },
-  { subject: 'Logic', A: 110, fullMark: 150 },
-  { subject: 'Speed', A: 85, fullMark: 150 },
-];
-
-const leaderboard = [
-  { rank: 1, name: "Rahul V.", xp: 12450, isUser: false },
-  { rank: 2, name: "Sneha P.", xp: 11200, isUser: false },
-  { rank: 3, name: "Amit K.", xp: 10850, isUser: false },
-  { rank: 4, name: "You", xp: 10500, isUser: true },
-  { rank: 5, name: "Priya S.", xp: 9900, isUser: false },
-];
+// Cleaned for production: No dummy data. 
+// Features will render clean empty states if data isn't fetched from real APIs.
+const performanceData: any[] = [];
+const skillsData: any[] = [];
+const fallbackLeaderboard: any[] = [];
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
   const [mounted, setMounted] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await api.get("/stats/leaderboard");
+        if (res.data.status === "success") {
+          const formatted = res.data.leaderboard.map((u: any, idx: number) => ({
+            rank: idx + 1,
+            name: u.name,
+            xp: u.enrollmentCount * 100, // example conversion for now
+            isUser: u.name === user?.name
+          }));
+          setLeaderboard(formatted);
+        }
+      } catch (e) {
+        // ignore for now
+      }
+    };
+    fetchLeaderboard();
+  }, [user]);
 
   if (!mounted) return null; // Prevents hydration mismatch with recharts
 
@@ -57,12 +59,12 @@ export default function StudentDashboard() {
           <p className="text-foreground-secondary">Here is your AI-driven learning overview for today.</p>
         </div>
         <div className="flex items-center gap-3 bg-surface p-2 pr-4 rounded-full border border-gray-200 dark:border-gray-800 shadow-sm">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-400 font-bold">
             <Flame size={20} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-foreground-primary leading-tight">14 Day Streak!</span>
-            <span className="text-xs text-foreground-secondary leading-tight">Keep it up 🔥</span>
+            <span className="text-sm font-bold text-foreground-primary leading-tight">0 Day Streak</span>
+            <span className="text-xs text-foreground-secondary leading-tight">Start learning today!</span>
           </div>
         </div>
       </div>
@@ -76,8 +78,8 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-1">
             <Trophy size={16} className="text-brand-500" /> Total XP
           </div>
-          <div className="text-3xl font-bold font-heading text-foreground-primary">10,500</div>
-          <div className="text-xs text-green-500 font-medium">+450 this week</div>
+          <div className="text-3xl font-bold font-heading text-foreground-primary">0</div>
+          <div className="text-xs text-foreground-secondary font-medium">Start earning XP!</div>
         </Card>
         
         <Card className="p-5 flex flex-col gap-2 relative overflow-hidden group">
@@ -87,8 +89,8 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-1">
             <Target size={16} className="text-purple-500" /> Tests Completed
           </div>
-          <div className="text-3xl font-bold font-heading text-foreground-primary">24</div>
-          <div className="text-xs text-foreground-secondary font-medium">Top 15% in batch</div>
+          <div className="text-3xl font-bold font-heading text-foreground-primary">0</div>
+          <div className="text-xs text-foreground-secondary font-medium">No tests taken yet</div>
         </Card>
 
         <Card className="p-5 flex flex-col gap-2 relative overflow-hidden group">
@@ -98,8 +100,8 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-1">
             <BookOpen size={16} className="text-blue-500" /> Lessons Watched
           </div>
-          <div className="text-3xl font-bold font-heading text-foreground-primary">142</div>
-          <div className="text-xs text-foreground-secondary font-medium">3 in progress</div>
+          <div className="text-3xl font-bold font-heading text-foreground-primary">0</div>
+          <div className="text-xs text-foreground-secondary font-medium">Explore your courses</div>
         </Card>
 
         <Card className="p-5 flex flex-col gap-2 relative overflow-hidden group">
@@ -107,10 +109,10 @@ export default function StudentDashboard() {
             <Clock size={100} />
           </div>
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-1">
-            <Clock size={16} className="text-green-500" /> Study Time
+            <Clock size={16} className="text-orange-500" /> Learning Time
           </div>
-          <div className="text-3xl font-bold font-heading text-foreground-primary">48h</div>
-          <div className="text-xs text-green-500 font-medium">+5h this week</div>
+          <div className="text-3xl font-bold font-heading text-foreground-primary">0h</div>
+          <div className="text-xs text-foreground-secondary font-medium">This week</div>
         </Card>
       </div>
 
@@ -184,33 +186,37 @@ export default function StudentDashboard() {
         <div className="flex flex-col gap-8">
           
           <Card className="p-6">
-            <h3 className="text-xl font-bold font-heading flex items-center justify-between text-foreground-primary mb-6">
-              <span className="flex items-center gap-2"><Medal className="text-amber-500" /> Leaderboard</span>
-              <span className="text-xs font-normal text-brand-600 bg-brand-50 px-2 py-1 rounded-md">Batch A</span>
+            <h3 className="font-bold text-lg mb-4 text-foreground-primary flex items-center gap-2">
+              <Medal className="text-brand-500" size={20} /> Batch Leaderboard
             </h3>
-            
-            <div className="flex flex-col gap-3">
-              {leaderboard.map((user, idx) => (
+            <div className="flex-1 flex flex-col gap-3 justify-center">
+              {leaderboard.length > 0 ? leaderboard.map((user, idx) => (
                 <div 
                   key={idx} 
-                  className={`flex items-center justify-between p-3 rounded-xl transition-colors ${
-                    user.isUser ? "bg-brand-50 dark:bg-brand-900/20 border border-brand-100 dark:border-brand-800" : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className={`flex items-center p-3 rounded-xl border ${
+                    user.isUser ? "bg-brand-50 dark:bg-brand-900/20 border-brand-200 dark:border-brand-800" : "bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-800"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-6 text-center font-bold text-sm ${idx < 3 ? "text-amber-500" : "text-gray-800"}`}>
-                      #{user.rank}
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center font-bold text-xs">
-                      {user.name.charAt(0)}
-                    </div>
-                    <span className={`font-semibold text-sm ${user.isUser ? "text-brand-700 dark:text-brand-400" : "text-foreground-primary"}`}>
-                      {user.name}
-                    </span>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm mr-3
+                    ${idx === 0 ? "bg-yellow-100 text-yellow-600" : 
+                      idx === 1 ? "bg-gray-200 text-gray-600" : 
+                      idx === 2 ? "bg-orange-100 text-orange-600" : 
+                      "bg-gray-100 dark:bg-gray-800 text-gray-500"}`}
+                  >
+                    #{user.rank}
                   </div>
-                  <div className="text-sm font-bold text-foreground-secondary">{user.xp} XP</div>
+                  <div className="flex-1 font-medium text-sm text-foreground-primary">
+                    {user.name} {user.isUser && "(You)"}
+                  </div>
+                  <div className="font-bold text-sm text-brand-600">
+                    {user.xp} XP
+                  </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center py-6 text-foreground-secondary text-sm">
+                  No ranking data available yet.
+                </div>
+              )}
             </div>
             <Button variant="ghost" className="w-full mt-4 text-brand-600" rightIcon={<ChevronRight size={16} />}>
               View Full Rankings

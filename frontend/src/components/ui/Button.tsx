@@ -35,16 +35,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variants = {
       // Deep navy primary button
       primary:
-        "bg-brand-800 text-white hover:bg-brand-900 active:bg-brand-950 shadow-sm hover:shadow-md",
+        "bg-brand-800 text-[#312e81] hover:bg-accent-400 active:bg-brand-950 shadow-sm hover:shadow-md",
       // Soft accent — pastel yellow with dark text
       accent:
-        "bg-accent-300 text-brand-900 hover:bg-accent-400 active:bg-accent-500 shadow-sm font-semibold",
+        "bg-accent-300 text-white hover:bg-brand-900 active:bg-accent-500 shadow-sm font-semibold",
       // Subtle tinted secondary
       secondary:
         "bg-brand-50 text-brand-800 hover:bg-brand-100 active:bg-brand-200 border border-brand-100",
       // Bordered outline
       outline:
-        "border-2 border-brand-700 bg-transparent hover:bg-brand-50 dark:hover:bg-brand-900/20 text-brand-800 dark:text-brand-200 dark:border-brand-600",
+        "border-2 border-brand-700 bg-transparent hover:bg-brand-50 dark:hover:bg-brand-900/20 text-brand-900 dark:text-brand-200 dark:border-brand-600",
       // Ghost — minimal
       ghost:
         "bg-transparent hover:bg-brand-50 dark:hover:bg-brand-900/20 text-brand-700 dark:text-brand-300",

@@ -9,7 +9,7 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import Link from "next/link";
 
-import api from "@/utils/api";
+import api, { API_BASE_URL } from "@/utils/api";
 
 interface Course {
   _id: string;
@@ -50,12 +50,25 @@ export default function AllCoursesPage() {
     (course.instructor && course.instructor.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleAction = (action: string, courseTitle: string) => {
-    if (action === "delete") {
-      toast.error(`Deleted course: ${courseTitle}`);
-    } else {
-      toast.success(`${action} action triggered for ${courseTitle}.`);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDelete = async (courseId: string, courseTitle: string) => {
+    if (!confirm(`Are you sure you want to delete "${courseTitle}"? This cannot be undone.`)) return;
+    
+    setDeletingId(courseId);
+    try {
+      await api.delete(`/courses/${courseId}`);
+      setCourses(courses.filter(c => c._id !== courseId));
+      toast.success(`"${courseTitle}" has been deleted.`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to delete course.");
+    } finally {
+      setDeletingId(null);
     }
+  };
+
+  const handleAction = (action: string, courseTitle: string) => {
+    toast.success(`${action} action triggered for ${courseTitle}.`);
   };
 
   return (
@@ -98,11 +111,11 @@ export default function AllCoursesPage() {
           filteredCourses.map((course) => (
             <div key={course._id} className="group flex flex-col bg-white dark:bg-background-secondary border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-300 transform hover:-translate-y-1">
               <div className="relative aspect-video bg-gray-100 dark:bg-gray-800">
-                <Image
-                  src={course.thumbnail || `https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop`}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={course.thumbnail ? (course.thumbnail.startsWith('http') ? course.thumbnail : `${API_BASE_URL}${course.thumbnail}`) : `https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&h=400&fit=crop`}
                   alt={course.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 <div className="absolute top-3 left-3 flex gap-2">
@@ -135,8 +148,14 @@ export default function AllCoursesPage() {
 
               <div className="px-5 pb-5 pt-0 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button variant="outline" size="sm" className="flex-1" leftIcon={<Edit2 size={14} />} onClick={() => handleAction("edit", course.title)}>Edit</Button>
-                <Button variant="outline" size="sm" className="w-10 p-0 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500" onClick={() => handleAction("delete", course.title)}>
-                  <Trash2 size={14} />
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-10 p-0 text-red-500 hover:text-white hover:bg-red-500 hover:border-red-500" 
+                  isLoading={deletingId === course._id}
+                  onClick={() => handleDelete(course._id, course.title)}
+                >
+                  {deletingId !== course._id && <Trash2 size={14} />}
                 </Button>
               </div>
             </div>

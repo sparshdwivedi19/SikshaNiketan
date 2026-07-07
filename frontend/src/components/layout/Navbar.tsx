@@ -63,8 +63,9 @@ export const Navbar = () => {
               <GraduationCap size={20} />
             </div>
             <div className="hidden sm:block">
-              <span className="text-lg font-bold font-heading tracking-tight text-white">
-                Shiksha<span className="text-accent-300">Niketan</span>
+              <span className="text-lg font-bold font-heading tracking-tight">
+                <span className="text-white">Shiksha</span>
+                <span className="text-accent-300">Niketan</span>
               </span>
             </div>
           </Link>
@@ -80,8 +81,8 @@ export const Navbar = () => {
                   className={cn(
                     "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150",
                     isActive
-                      ? "bg-white/10 text-accent-300"
-                      : "text-white/75 hover:text-white hover:bg-white/8"
+                      ? "bg-white/10 text-[#f5f5f5]"
+                      : "text-[#f5f5f5] hover:text-white hover:bg-white/8"
                   )}
                 >
                   {link.name}
@@ -124,7 +125,7 @@ export const Navbar = () => {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 border-0">
+                  <Button variant="ghost" size="sm" className="bg-[#fdfd95] text-brand-900 hover:text-brand-900 hover:bg-[#fdfd95] border-0">
                     Log in
                   </Button>
                 </Link>

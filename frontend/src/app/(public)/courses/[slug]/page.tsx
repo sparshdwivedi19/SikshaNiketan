@@ -6,9 +6,10 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Star, Users, Clock, BookOpen, CheckCircle2, ArrowRight, Lock } from "lucide-react";
 import { toast } from "react-hot-toast";
-import api from "@/utils/api";
+import api, { API_BASE_URL } from "@/utils/api";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Course {
   _id: string;
@@ -185,8 +186,17 @@ export default function CourseDetailPage() {
         {/* Right — Enroll Card */}
         <div>
           <Card className="p-6 sticky top-24 shadow-xl shadow-brand-500/10">
-            <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden">
-              <BookOpen size={48} className="text-brand-500 opacity-30" />
+            <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
+              {course.thumbnail ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={course.thumbnail.startsWith('http') ? course.thumbnail : `${API_BASE_URL}${course.thumbnail}`}
+                  alt={course.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <BookOpen size={48} className="text-brand-500 opacity-30" />
+              )}
             </div>
 
             <div className="mb-6">
@@ -206,7 +216,7 @@ export default function CourseDetailPage() {
             </div>
 
             <Button
-              className="w-full mb-3 py-6 text-base"
+              className="w-full mb-3 py-6 text-base text-[#312e81]"
               onClick={handleEnroll}
               isLoading={isEnrolling}
               rightIcon={!isEnrolling && <ArrowRight size={18} />}

@@ -88,9 +88,7 @@ export default function CreateCourse() {
     try {
       const formData = new FormData();
       formData.append("image", file);
-      const res = await api.post("/upload/image", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await api.post("/upload/image", formData);
       if (res.data.status === "success") {
         setUploadedThumbnailUrl(res.data.url);
         toast.success("Thumbnail uploaded!");
@@ -162,9 +160,7 @@ export default function CreateCourse() {
     try {
       const formData = new FormData();
       formData.append("video", file);
-      const response = await api.post("/upload/video", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      const response = await api.post("/upload/video", formData);
 
       if (response.data.status === "success") {
         setModules(prev => prev.map(m => {
@@ -209,7 +205,7 @@ export default function CreateCourse() {
   const handlePublish = async () => {
     if (!courseData.title.trim()) { toast.error("Course title is required."); setActiveTab("basic"); return; }
     if (!courseData.description.trim()) { toast.error("Course description is required."); setActiveTab("basic"); return; }
-    if (!courseData.price || Number(courseData.price) <= 0) { toast.error("Please set a valid course price."); setActiveTab("pricing"); return; }
+    if (courseData.price === "" || Number(courseData.price) < 0) { toast.error("Please set a valid course price (0 for free)."); setActiveTab("pricing"); return; }
     if (isUploadingThumb) { toast.error("Please wait for thumbnail upload to complete."); return; }
 
     setIsSubmitting(true);

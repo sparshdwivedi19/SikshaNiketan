@@ -37,6 +37,10 @@ interface AdminStats {
     course: { title: string; price: number };
     createdAt: string;
   }>;
+  enrollmentTrend?: Array<{
+    month: string;
+    enrollments: number;
+  }>;
 }
 
 export default function AdminDashboard() {
@@ -80,7 +84,7 @@ export default function AdminDashboard() {
             Refresh Stats
           </Button>
           <Link href="/dashboard/admin/settings">
-            <Button>System Settings</Button>
+            <Button className="text-[#312e81]">System Settings</Button>
           </Link>
         </div>
       </div>
@@ -136,18 +140,13 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold font-heading text-foreground-primary flex items-center gap-2">
-              <BarChart3 className="text-brand-500" size={20} /> Platform Growth
-            </h3>
-            <select className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm rounded-lg px-3 py-1.5 focus:outline-none">
-              <option>Year to Date</option>
-              <option>Last 12 Months</option>
-            </select>
+        <Card className="col-span-2 md:col-span-2 p-5 h-80 flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold font-heading text-foreground-primary">Platform Growth & Revenue</h3>
+            <span className="text-xs font-medium bg-brand-50 text-brand-600 px-2 py-1 rounded">Last 6 Months</span>
           </div>
-          <div className="h-80 w-full pt-4">
-            <RevenueChart />
+          <div className="flex-1 w-full relative">
+            <RevenueChart data={stats?.enrollmentTrend?.map(t => ({ name: t.month, value: t.enrollments })) || []} />
           </div>
         </Card>
 

@@ -51,13 +51,10 @@ export default function InstructorDashboard() {
       const response = await api.get("/stats/instructor");
       if (response.data.status === "success") {
         setStats(response.data.stats);
-        // Update chart data with real revenue spread evenly for demo
-        if (response.data.stats.totalRevenue > 0) {
-          const monthlyRev = response.data.stats.totalRevenue / 6;
-          revenueData.forEach((d, i) => {
-            d.revenue = Math.round(monthlyRev * (0.5 + i * 0.1));
-          });
-        }
+        // We leave revenueData empty until a real transactional trend API is added for instructors.
+        revenueData.forEach(d => {
+          d.revenue = 0;
+        });
       }
     } catch (error) {
       console.error("Failed to fetch instructor stats:", error);

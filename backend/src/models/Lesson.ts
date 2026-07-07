@@ -15,6 +15,7 @@ export interface ILesson extends Document {
     options: string[];
     correctOptionIndex: number;
   }[];
+  testId?: mongoose.Types.ObjectId; // Reference to the full CourseTest model
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,7 +42,8 @@ const lessonSchema = new Schema<ILesson>(
         options: [{ type: String, required: true }],
         correctOptionIndex: { type: Number, required: true }
       }
-    ]
+    ],
+    testId: { type: Schema.Types.ObjectId, ref: "CourseTest" }
   },
   { timestamps: true }
 );

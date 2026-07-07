@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         onClick={() => setSidebarOpen(false)}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
           isActive
-            ? "bg-brand-800 text-white font-semibold shadow-sm"
+            ? "bg-brand-800 text-[#312e81] font-semibold shadow-sm"
             : "text-foreground-secondary hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-700 dark:hover:text-brand-300"
         }`}
       >
@@ -61,6 +61,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <NavLink href="/dashboard/admin/users" icon={<Users size={18} />} label="User Management" />
       <NavLink href="/dashboard/admin/courses" icon={<Video size={18} />} label="All Courses" />
       <NavLink href="/dashboard/admin/settings" icon={<Settings size={18} />} label="System Settings" />
+      <NavLink href="/dashboard/admin/tests" icon={<FileText size={18} />} label="Test Management" />
     </>
   );
 
@@ -69,6 +70,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <NavLink href="/instructor" exact icon={<LayoutDashboard size={18} />} label="Analytics" />
       <NavLink href="/instructor/courses" icon={<Video size={18} />} label="My Courses" />
       <NavLink href="/instructor/students" icon={<Users size={18} />} label="Students" />
+      <NavLink href="/instructor/tests" icon={<FileText size={18} />} label="Test Management" />
     </>
   );
 
