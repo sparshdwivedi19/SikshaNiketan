@@ -3,22 +3,34 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Mail, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Mail, ArrowLeft, CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import api from "@/utils/api";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setIsSubmitting(true);
+    setError("");
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      await api.post("/auth/forgot-password", { email });
+      setSubmitted(true);
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setSubmitted(true);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -48,7 +60,7 @@ export default function ForgotPasswordPage() {
             <p className="text-slate-300 text-sm font-medium">Enter your registered email address to receive a recovery link.</p>
           </div>
 
-          <form onSubmit={handleReset} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {error && (
               <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-2">
                 <ShieldCheck size={16} className="shrink-0" />
@@ -74,8 +86,8 @@ export default function ForgotPasswordPage() {
               size="lg"
               variant="primary"
               className="w-full h-12 rounded-xl mt-2 font-bold text-base"
-              isLoading={isLoading}
-              rightIcon={!isLoading && <ArrowRight size={18} />}
+              isLoading={isSubmitting}
+              rightIcon={!isSubmitting && <ArrowRight size={18} />}
             >
               Send Recovery Link
             </Button>
