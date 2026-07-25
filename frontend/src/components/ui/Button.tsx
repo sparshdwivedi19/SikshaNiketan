@@ -44,10 +44,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60 font-medium",
       // Glass outline
       outline:
-        "border border-indigo-500/40 bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 font-medium backdrop-blur-md",
+        "border border-indigo-500/40 bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-200 font-medium backdrop-blur-md",
       // Ghost
       ghost:
-        "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium",
+        "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-800 dark:text-slate-200 font-medium",
       // Danger
       danger:
         "bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-[0_4px_16px_rgba(225,29,72,0.35)] hover:brightness-110 font-semibold",

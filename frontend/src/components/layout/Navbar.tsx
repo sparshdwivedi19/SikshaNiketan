@@ -74,7 +74,7 @@ export const Navbar = () => {
               <span className="text-xl font-black font-heading tracking-tight text-white flex items-center gap-1">
                 Shiksha<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Niketan</span>
               </span>
-              <span className="text-[10px] text-indigo-300/70 uppercase tracking-widest font-semibold -mt-1 hidden sm:block">
+              <span className="text-[10px] text-indigo-300 font-semibold uppercase tracking-widest -mt-1 hidden sm:block">
                 EdTech Platform
               </span>
             </div>
@@ -90,7 +90,7 @@ export const Navbar = () => {
                   href={link.path}
                   className={cn(
                     "relative px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200",
-                    isActive ? "text-white" : "text-slate-300 hover:text-white"
+                    isActive ? "text-white" : "text-slate-200 hover:text-white"
                   )}
                 >
                   {isActive && (

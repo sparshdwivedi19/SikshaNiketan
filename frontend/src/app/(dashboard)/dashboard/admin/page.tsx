@@ -86,7 +86,7 @@ export default function AdminDashboard() {
             <h1 className="text-3xl md:text-5xl font-black font-heading text-white">
               Platform Executive Dashboard
             </h1>
-            <p className="text-slate-400 text-sm mt-1 font-medium">Real-time metrics, revenue analytics, and system administration.</p>
+            <p className="text-slate-300 text-sm mt-1 font-medium">Real-time metrics, revenue analytics, and system administration.</p>
           </div>
 
           <div className="flex gap-3">
@@ -109,11 +109,11 @@ export default function AdminDashboard() {
           ].map((s, i) => (
             <motion.div key={i} whileHover={{ y: -4 }} className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-xl">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{s.label}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300">{s.label}</span>
                 <div className="p-2 rounded-xl bg-slate-950/80 border border-white/10">{s.icon}</div>
               </div>
               <h3 className="text-2xl md:text-3xl font-black text-white">{s.val}</h3>
-              <p className="text-xs text-slate-400 font-medium mt-1">{s.sub}</p>
+              <p className="text-xs text-slate-300 font-medium mt-1">{s.sub}</p>
             </motion.div>
           ))}
         </div>

@@ -51,7 +51,7 @@ export default function StudentDashboard() {
             <h1 className="text-3xl md:text-5xl font-black font-heading text-white">
               Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">{user?.name?.split(" ")[0] || "Student"}</span> 👋
             </h1>
-            <p className="text-slate-400 text-sm mt-1 font-medium">Your personalized AI learning overview and upcoming CBT tests for today.</p>
+            <p className="text-slate-300 text-sm mt-1 font-medium">Your personalized AI learning overview and upcoming CBT tests for today.</p>
           </div>
 
           <div className="flex items-center gap-4 bg-slate-950/80 p-3 px-5 rounded-2xl border border-white/10 shrink-0">
@@ -79,11 +79,11 @@ export default function StudentDashboard() {
               className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-xl"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{s.label}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300">{s.label}</span>
                 <div className="p-2 rounded-xl bg-slate-950/80 border border-white/10">{s.icon}</div>
               </div>
               <h3 className="text-2xl md:text-3xl font-black text-white">{s.val}</h3>
-              <p className="text-xs text-slate-400 font-medium mt-1">{s.sub}</p>
+              <p className="text-xs text-slate-300 font-medium mt-1">{s.sub}</p>
             </motion.div>
           ))}
         </div>
@@ -97,7 +97,7 @@ export default function StudentDashboard() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="text-xl font-black text-white">CBT Exam Accuracy Trend</h3>
-                  <p className="text-xs text-slate-400 font-medium">Weekly score percentage progression across physics & math</p>
+                  <p className="text-xs text-slate-300 font-medium">Weekly score percentage progression across physics & math</p>
                 </div>
                 <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                   +14% Improvement

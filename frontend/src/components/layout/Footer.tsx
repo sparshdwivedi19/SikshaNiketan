@@ -25,7 +25,7 @@ export const Footer = () => {
               </span>
             </Link>
 
-            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-slate-300 text-sm leading-relaxed max-w-sm">
               India's premier EdTech ecosystem empowering students with AI-driven learning paths, interactive CBT exam engine, top-tier faculty, and 1-on-1 home tutoring.
             </p>
 
@@ -39,7 +39,7 @@ export const Footer = () => {
               <div className="flex gap-2 max-w-sm">
                 <Input
                   placeholder="Enter your email"
-                  className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-11 rounded-xl focus:border-indigo-500"
+                  className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-11 rounded-xl focus:border-indigo-500"
                 />
                 <Button variant="primary" className="h-11 shrink-0 rounded-xl px-5" rightIcon={<ArrowRight size={16} />}>
                   Join
@@ -51,23 +51,23 @@ export const Footer = () => {
           {/* Quick Links */}
           <div>
             <h3 className="font-heading font-bold text-base mb-6 text-white uppercase tracking-wider">Courses & Prep</h3>
-            <ul className="flex flex-col gap-3.5 text-sm">
-              <li><Link href="/courses" className="hover:text-indigo-400 transition-colors">JEE Main & Advanced</Link></li>
-              <li><Link href="/courses" className="hover:text-indigo-400 transition-colors">NEET Medical Prep</Link></li>
-              <li><Link href="/courses" className="hover:text-indigo-400 transition-colors">Foundation (Class 6-10)</Link></li>
-              <li><Link href="/scholarship" className="hover:text-indigo-400 transition-colors">Scholarship Portal</Link></li>
-              <li><Link href="/tutors" className="hover:text-indigo-400 transition-colors">Home Tutors</Link></li>
+            <ul className="flex flex-col gap-3.5 text-sm text-slate-300">
+              <li><Link href="/courses" className="hover:text-white transition-colors">JEE Main & Advanced</Link></li>
+              <li><Link href="/courses" className="hover:text-white transition-colors">NEET Medical Prep</Link></li>
+              <li><Link href="/courses" className="hover:text-white transition-colors">Foundation (Class 6-10)</Link></li>
+              <li><Link href="/scholarship" className="hover:text-white transition-colors">Scholarship Portal</Link></li>
+              <li><Link href="/tutors" className="hover:text-white transition-colors">Home Tutors</Link></li>
             </ul>
           </div>
 
           {/* Platform & Company */}
           <div>
             <h3 className="font-heading font-bold text-base mb-6 text-white uppercase tracking-wider">Company</h3>
-            <ul className="flex flex-col gap-3.5 text-sm">
-              <li><Link href="/about" className="hover:text-indigo-400 transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-indigo-400 transition-colors">Contact Support</Link></li>
-              <li><Link href="/scholarship" className="hover:text-indigo-400 transition-colors">Scholarship Exam</Link></li>
-              <li><Link href="/tutors" className="hover:text-indigo-400 transition-colors">Become a Tutor</Link></li>
+            <ul className="flex flex-col gap-3.5 text-sm text-slate-300">
+              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Support</Link></li>
+              <li><Link href="/scholarship" className="hover:text-white transition-colors">Scholarship Exam</Link></li>
+              <li><Link href="/tutors" className="hover:text-white transition-colors">Become a Tutor</Link></li>
             </ul>
           </div>
 
@@ -75,15 +75,15 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-bold text-base mb-6 text-white uppercase tracking-wider">Headquarters</h3>
             <ul className="flex flex-col gap-4 text-sm">
-              <li className="flex items-start gap-3 text-slate-400">
+              <li className="flex items-start gap-3 text-slate-300">
                 <MapPin size={18} className="text-indigo-400 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">Knowledge Park III, Greater Noida, UP 201310</span>
               </li>
-              <li className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors">
+              <li className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
                 <Phone size={18} className="text-indigo-400 shrink-0" />
                 <a href="tel:+919876543210">+91 98765 43210</a>
               </li>
-              <li className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors">
+              <li className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
                 <Mail size={18} className="text-indigo-400 shrink-0" />
                 <a href="mailto:support@shikshaniketan.com">support@shikshaniketan.com</a>
               </li>
@@ -98,7 +98,7 @@ export const Footer = () => {
                 <a
                   key={i}
                   href={social.href}
-                  className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-600/10 hover:-translate-y-1 transition-all"
+                  className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:border-indigo-500/50 hover:bg-indigo-600/10 hover:-translate-y-1 transition-all"
                 >
                   {social.icon}
                 </a>
@@ -108,15 +108,15 @@ export const Footer = () => {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-slate-800/80 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="border-t border-slate-800/80 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <ShieldCheck size={16} className="text-emerald-400" />
             <p>© {new Date().getFullYear()} Shiksha Niketan. All rights reserved.</p>
           </div>
           <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms of Service</Link>
-            <Link href="/contact" className="hover:text-slate-300 transition-colors">Help Center</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/contact" className="hover:text-white transition-colors">Help Center</Link>
           </div>
         </div>
       </div>

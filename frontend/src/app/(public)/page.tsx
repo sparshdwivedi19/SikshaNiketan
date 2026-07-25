@@ -178,7 +178,7 @@ export default function HomePage() {
                     </div>
                   ))}
                 </div>
-                <div className="text-xs text-slate-400 font-medium">
+                <div className="text-xs text-slate-300 font-medium">
                   <p className="font-bold text-white text-sm flex items-center gap-1.5">
                     150,000+ Active Aspirants <Star size={14} className="text-amber-400 fill-amber-400" /> 4.9/5
                   </p>
@@ -205,7 +205,7 @@ export default function HomePage() {
                     <div className="w-3 h-3 rounded-full bg-amber-500" />
                     <div className="w-3 h-3 rounded-full bg-emerald-500" />
                   </div>
-                  <div className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+                  <div className="text-xs font-mono text-slate-300 flex items-center gap-1.5">
                     <ShieldCheck size={14} className="text-emerald-400" />
                     <span>CBT Test Engine v4.2</span>
                   </div>
@@ -223,14 +223,14 @@ export default function HomePage() {
                       <div>
                         <span className="text-[10px] uppercase font-bold text-rose-400 tracking-wider">LIVE NOW</span>
                         <h4 className="font-bold text-sm text-white">Rotational Dynamics — Advanced Problem Solving</h4>
-                        <p className="text-xs text-slate-400">Dr. H.C. Verma Alumni • 2.4k watching</p>
+                        <p className="text-xs text-slate-300">Dr. H.C. Verma Alumni • 2.4k watching</p>
                       </div>
                     </div>
                   </div>
 
                   {/* AI Assistant Chat Preview */}
                   <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-3">
-                    <div className="flex items-center justify-between text-xs text-slate-400 font-semibold">
+                    <div className="flex items-center justify-between text-xs text-slate-300 font-semibold">
                       <span className="flex items-center gap-1.5 text-cyan-400">
                         <BrainCircuit size={16} /> Shiksha AI Learning Assistant
                       </span>
@@ -247,7 +247,7 @@ export default function HomePage() {
                   {/* Test Performance Gauge */}
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-white/10">
-                      <span className="text-xs text-slate-400 block mb-1">Predicted JEE Rank</span>
+                      <span className="text-xs text-slate-300 block mb-1">Predicted JEE Rank</span>
                       <div className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
                         AIR 248
                       </div>
@@ -256,7 +256,7 @@ export default function HomePage() {
                       </span>
                     </div>
                     <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-white/10">
-                      <span className="text-xs text-slate-400 block mb-1">CBT Accuracy</span>
+                      <span className="text-xs text-slate-300 block mb-1">CBT Accuracy</span>
                       <div className="text-2xl font-black text-white">
                         94.8%
                       </div>
@@ -308,7 +308,7 @@ export default function HomePage() {
                   {stat.icon}
                 </div>
                 <h3 className="text-3xl md:text-4xl font-black text-white font-heading">{stat.num}</h3>
-                <p className="text-xs md:text-sm text-slate-400 font-medium mt-1">{stat.label}</p>
+                <p className="text-xs md:text-sm text-slate-300 font-medium mt-1">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -327,7 +327,7 @@ export default function HomePage() {
             <h2 className="text-3xl md:text-5xl font-black font-heading tracking-tight text-white mt-4 mb-4">
               Designed for Top Ranks & Deep Conceptual Mastery
             </h2>
-            <p className="text-slate-400 text-base md:text-lg">
+            <p className="text-slate-300 text-base md:text-lg font-medium">
               Everything you need to surpass competition, backed by cutting-edge technology and battle-tested pedagogy.
             </p>
           </div>
@@ -367,7 +367,7 @@ export default function HomePage() {
               <h3 className="text-xl md:text-2xl font-black text-white mt-2 mb-3">
                 Real CBT Exam Simulator
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 Practice in exact NTA-style CBT test software with real-time rank prediction, time-per-question analysis, and weak area alerts.
               </p>
             </div>
@@ -381,7 +381,7 @@ export default function HomePage() {
               <h3 className="text-xl md:text-2xl font-black text-white mt-2 mb-3">
                 1-on-1 Home Tutors Portal
               </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 Book verified expert home tutors in your city for personalized 1-on-1 guidance, customized pace, and dedicated homework support.
               </p>
             </div>
@@ -395,7 +395,7 @@ export default function HomePage() {
               <h3 className="text-2xl md:text-3xl font-black text-white mt-2 mb-4">
                 National Talent & Scholarship Test (SNAT 2026)
               </h3>
-              <p className="text-slate-300 text-sm md:text-base max-w-xl leading-relaxed">
+              <p className="text-slate-200 text-sm md:text-base max-w-xl leading-relaxed font-medium">
                 Unlock up to 100% tuition fee waivers and cash rewards based on your merit in our online scholarship test.
               </p>
               <div className="mt-6">
@@ -434,7 +434,7 @@ export default function HomePage() {
                   className={`px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wider transition-all ${
                     activeTab === tab
                       ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-neon-indigo"
-                      : "text-slate-400 hover:text-white"
+                      : "text-slate-300 hover:text-white"
                   }`}
                 >
                   {tab}
@@ -461,16 +461,16 @@ export default function HomePage() {
                     <div className="flex items-center gap-1 text-xs text-amber-400 font-bold bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20">
                       <Star size={14} className="fill-amber-400" />
                       <span>{course.rating}</span>
-                      <span className="text-slate-500">({course.enrolled})</span>
+                      <span className="text-slate-400">({course.enrolled})</span>
                     </div>
                   </div>
 
                   <h3 className="text-xl md:text-2xl font-black text-white group-hover:text-indigo-300 transition-colors mb-2">
                     {course.title}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium mb-6">Targeting: {course.target}</p>
+                  <p className="text-xs text-slate-300 font-medium mb-6">Targeting: {course.target}</p>
 
-                  <div className="flex items-center gap-4 text-xs text-slate-300 font-semibold pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-4 text-xs text-slate-200 font-semibold pt-4 border-t border-white/5">
                     <span className="flex items-center gap-1.5">
                       <CheckCircle2 size={16} className="text-emerald-400" /> Live Interactive Classes
                     </span>
@@ -483,7 +483,7 @@ export default function HomePage() {
                 <div className="p-6 bg-slate-950/60 border-t border-white/10 flex items-center justify-between">
                   <div>
                     <span className="text-2xl font-black text-white">{course.price}</span>
-                    <span className="text-xs text-slate-500 line-through ml-2 font-medium">{course.originalPrice}</span>
+                    <span className="text-xs text-slate-400 line-through ml-2 font-medium">{course.originalPrice}</span>
                   </div>
                   <Link href="/courses">
                     <Button variant="primary" size="sm" rightIcon={<ArrowRight size={16} />}>
@@ -509,7 +509,7 @@ export default function HomePage() {
             <h2 className="text-3xl md:text-5xl font-black font-heading tracking-tight text-white mt-4 mb-4">
               Real Results. Real Champions.
             </h2>
-            <p className="text-slate-400 text-base">
+            <p className="text-slate-300 text-base font-medium">
               Hear from our top rankers who achieved their dream IIT and AIIMS admissions with Shiksha Niketan.
             </p>
           </div>

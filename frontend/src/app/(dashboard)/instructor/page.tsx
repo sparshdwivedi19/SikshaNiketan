@@ -76,7 +76,7 @@ export default function InstructorDashboard() {
             <h1 className="text-3xl md:text-5xl font-black font-heading text-white">
               Instructor Command Center
             </h1>
-            <p className="text-slate-400 text-sm mt-1 font-medium">Manage your active batches, student doubt queues, and course content.</p>
+            <p className="text-slate-300 text-sm mt-1 font-medium">Manage your active batches, student doubt queues, and course content.</p>
           </div>
 
           <Link href="/instructor/courses/create">
@@ -96,7 +96,7 @@ export default function InstructorDashboard() {
           ].map((m, i) => (
             <motion.div key={i} whileHover={{ y: -4 }} className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-xl">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{m.label}</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300">{m.label}</span>
                 <div className="p-2 rounded-xl bg-slate-950/80 border border-white/10">{m.icon}</div>
               </div>
               <h3 className="text-2xl md:text-3xl font-black text-white">{m.val}</h3>

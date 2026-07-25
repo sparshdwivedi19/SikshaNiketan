@@ -103,13 +103,13 @@ export default function CoursesPage() {
         {/* Filter & Search Bar */}
         <div className="max-w-4xl mx-auto mb-12 flex flex-col md:flex-row items-center gap-4 bg-slate-900/80 p-3 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl">
           <div className="relative flex-1 w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
             <input
               type="text"
               placeholder="Search courses by topic, faculty, or exam..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-12 pr-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="w-full bg-slate-950/60 border border-slate-800 rounded-xl pl-12 pr-4 py-3 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
@@ -121,7 +121,7 @@ export default function CoursesPage() {
                 className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                   activeCategory === cat
                     ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-neon-indigo"
-                    : "bg-slate-950/60 text-slate-400 border border-slate-800 hover:text-white"
+                    : "bg-slate-950/60 text-slate-300 border border-slate-800 hover:text-white"
                 }`}
               >
                 {cat}
@@ -192,7 +192,7 @@ export default function CoursesPage() {
                     <h3 className="text-xl font-black text-white group-hover:text-indigo-300 transition-colors line-clamp-2 mb-2">
                       {course.title}
                     </h3>
-                    <p className="text-xs text-slate-400 font-medium mb-4 flex items-center gap-2">
+                    <p className="text-xs text-slate-300 font-medium mb-4 flex items-center gap-2">
                       <span>Instructor: {course.instructor?.name || "Senior Faculty"}</span>
                     </p>
                   </div>
@@ -203,7 +203,7 @@ export default function CoursesPage() {
                         {course.discountPrice || course.price ? `₹${(course.discountPrice || course.price).toLocaleString()}` : "Free"}
                       </span>
                       {course.discountPrice && course.price > course.discountPrice && (
-                        <span className="text-xs text-slate-500 line-through ml-2">₹{course.price.toLocaleString()}</span>
+                        <span className="text-xs text-slate-400 line-through ml-2">₹{course.price.toLocaleString()}</span>
                       )}
                     </div>
 

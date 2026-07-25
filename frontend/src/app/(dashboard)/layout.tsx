@@ -23,12 +23,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const isParent = pathname.includes("/parent");
   const isAdmin = pathname.includes("/admin");
 
-  // Redirect to login if not authenticated (after hydration)
+  // Redirect to login if not authenticated or redirect to proper role dashboard
   useEffect(() => {
     if (!isAuthenticated) {
       router.replace("/login");
+      return;
     }
-  }, [isAuthenticated, router]);
+
+    if (user?.role) {
+      const role = user.role;
+      const isFacultyUser = role === "faculty" || role === "instructor" || role === "tutor";
+
+      // Auto-redirect faculty from student dashboard routes to instructor dashboard
+      if (isFacultyUser && pathname.startsWith("/dashboard/student")) {
+        router.replace("/instructor");
+      } else if (role === "admin" && (pathname.startsWith("/dashboard/student") || pathname.startsWith("/dashboard/parent"))) {
+        router.replace("/dashboard/admin");
+      } else if (role === "parent" && (pathname.startsWith("/dashboard/student") || pathname.startsWith("/instructor") || pathname.startsWith("/dashboard/admin"))) {
+        router.replace("/dashboard/parent");
+      } else if (role === "student" && (pathname.startsWith("/instructor") || pathname.startsWith("/dashboard/admin") || pathname.startsWith("/dashboard/parent"))) {
+        router.replace("/dashboard/student");
+      }
+    }
+  }, [isAuthenticated, user, pathname, router]);
 
   if (!isAuthenticated) return null;
 
@@ -47,7 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group overflow-hidden ${
           isActive
             ? "text-[#312e81] font-semibold"
-            : "text-brand-200 hover:text-white"
+            : "text-slate-200 hover:text-white"
         }`}
       >
         {isActive && (
@@ -58,7 +75,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         )}
-        <span className={`relative z-10 transition-colors ${isActive ? "text-accent-600" : "opacity-60 group-hover:opacity-100"}`}>{icon}</span>
+        <span className={`relative z-10 transition-colors ${isActive ? "text-accent-600" : "opacity-75 group-hover:opacity-100"}`}>{icon}</span>
         <span className="relative z-10">{label}</span>
       </Link>
     );
@@ -115,7 +132,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </span>
         </Link>
         <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
-          <X size={20} className="text-brand-400" />
+          <X size={20} className="text-slate-300 hover:text-white" />
         </button>
       </div>
 
@@ -127,7 +144,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div className="min-w-0">
             <p className="font-semibold text-sm text-white truncate">{user?.name || "User"}</p>
-            <p className="text-xs text-brand-400 capitalize">{user?.role || "User"}</p>
+            <p className="text-xs text-indigo-300 font-semibold capitalize">{user?.role || "User"}</p>
           </div>
         </div>
       </div>

@@ -45,7 +45,17 @@ export default function RegisterPage() {
 
       if (response.data.status === "success") {
         login(response.data.user, response.data.token);
-        router.push("/dashboard/student");
+        
+        const userRole = response.data.user.role;
+        if (userRole === "instructor" || userRole === "faculty" || userRole === "tutor") {
+          router.push("/instructor");
+        } else if (userRole === "admin") {
+          router.push("/dashboard/admin");
+        } else if (userRole === "parent") {
+          router.push("/dashboard/parent");
+        } else {
+          router.push("/dashboard/student");
+        }
       }
     } catch (err: any) {
       console.error("Registration Error:", err);
@@ -65,7 +75,7 @@ export default function RegisterPage() {
     <div className="w-full text-white">
       <div className="mb-6">
         <h2 className="text-3xl font-black font-heading text-white mb-1.5">Create Account</h2>
-        <p className="text-slate-400 text-sm font-medium">Join 150,000+ aspirants on Shiksha Niketan.</p>
+        <p className="text-slate-300 text-sm font-medium">Join 150,000+ aspirants on Shiksha Niketan.</p>
       </div>
 
       <form onSubmit={handleRegister} className="flex flex-col gap-4">
@@ -78,7 +88,7 @@ export default function RegisterPage() {
 
         {/* Role Selector Tabs */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">I am joining as a</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">I am joining as a</label>
           <div className="grid grid-cols-3 gap-2">
             {[
               { id: "student", label: "Student", icon: <GraduationCap size={16} /> },
@@ -92,7 +102,7 @@ export default function RegisterPage() {
                 className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs font-bold transition-all ${
                   formData.role === r.id
                     ? "bg-indigo-600/30 border-indigo-500 text-white shadow-neon-indigo/20"
-                    : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-white"
+                    : "bg-slate-900/60 border-slate-800 text-slate-300 hover:text-white"
                 }`}
               >
                 {r.icon}
@@ -103,7 +113,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Full Name</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Full Name</label>
           <Input
             name="name"
             type="text"
@@ -111,13 +121,13 @@ export default function RegisterPage() {
             value={formData.name}
             onChange={handleChange}
             leftIcon={<UserIcon size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-11 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-11 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Email Address</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Email Address</label>
           <Input
             name="email"
             type="email"
@@ -125,13 +135,13 @@ export default function RegisterPage() {
             value={formData.email}
             onChange={handleChange}
             leftIcon={<Mail size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-11 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-11 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Phone Number</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Phone Number</label>
           <Input
             name="phone"
             type="tel"
@@ -139,13 +149,13 @@ export default function RegisterPage() {
             value={formData.phone}
             onChange={handleChange}
             leftIcon={<Phone size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-11 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-11 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Password</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Password</label>
           <Input
             name="password"
             type="password"
@@ -153,7 +163,7 @@ export default function RegisterPage() {
             value={formData.password}
             onChange={handleChange}
             leftIcon={<Lock size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-11 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-11 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
@@ -170,7 +180,7 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <div className="mt-6 pt-5 border-t border-white/10 text-center text-sm text-slate-400 font-medium">
+      <div className="mt-6 pt-5 border-t border-white/10 text-center text-sm text-slate-300 font-medium">
         Already have an account?{" "}
         <Link href="/login" className="text-indigo-400 font-bold hover:underline">
           Sign In

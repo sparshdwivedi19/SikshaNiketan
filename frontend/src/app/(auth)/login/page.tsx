@@ -58,7 +58,7 @@ export default function LoginPage() {
     <div className="w-full text-white">
       <div className="mb-8">
         <h2 className="text-3xl font-black font-heading text-white mb-2">Welcome Back</h2>
-        <p className="text-slate-400 text-sm font-medium">Enter your credentials to access your portal.</p>
+        <p className="text-slate-300 text-sm font-medium">Enter your credentials to access your portal.</p>
       </div>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-5">
@@ -70,21 +70,21 @@ export default function LoginPage() {
         )}
 
         <div className="space-y-1.5">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Email Address</label>
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Email Address</label>
           <Input
             type="email"
             placeholder="student@shikshaniketan.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             leftIcon={<Mail size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-12 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-12 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Password</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-200">Password</label>
             <Link href="/forgot-password" className="text-xs text-indigo-400 font-semibold hover:underline">
               Forgot password?
             </Link>
@@ -95,7 +95,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             leftIcon={<Lock size={18} className="text-indigo-400" />}
-            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-12 rounded-xl focus:border-indigo-500"
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-400 h-12 rounded-xl focus:border-indigo-500"
             required
           />
         </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm text-slate-400 font-medium">
+      <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm text-slate-300 font-medium">
         New to Shiksha Niketan?{" "}
         <Link href="/register" className="text-indigo-400 font-bold hover:underline">
           Create Account

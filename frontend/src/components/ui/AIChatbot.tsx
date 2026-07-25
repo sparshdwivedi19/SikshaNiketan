@@ -43,10 +43,10 @@ export const AIChatbot = () => {
                   <h3 className="font-bold text-sm text-white flex items-center gap-1.5">
                     Shiksha AI Co-Pilot <Sparkles size={14} className="text-cyan-400" />
                   </h3>
-                  <p className="text-[10px] text-indigo-200">24/7 Academic Assistant</p>
+                  <p className="text-[10px] text-indigo-100 font-medium">24/7 Academic Assistant</p>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-slate-300 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
+              <button onClick={() => setIsOpen(false)} className="text-slate-200 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10">
                 <X size={18} />
               </button>
             </div>
@@ -92,7 +92,7 @@ export const AIChatbot = () => {
                   value={input}
                   onChange={handleInputChange}
                   placeholder="Ask any Physics, Chem or Math question..."
-                  className="w-full bg-slate-950 rounded-xl pl-4 pr-10 py-2.5 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 border border-slate-800"
+                  className="w-full bg-slate-950 rounded-xl pl-4 pr-10 py-2.5 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-indigo-500 border border-slate-800"
                 />
                 <button 
                   type="submit" 
