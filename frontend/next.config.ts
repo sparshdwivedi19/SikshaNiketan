@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
       },
+      // Render CDN backend uploads
+      {
+        protocol: "https",
+        hostname: "*.onrender.com",
+        pathname: "/uploads/**",
+      },
       // Local backend (development only — port 5000)
       {
         protocol: "http",

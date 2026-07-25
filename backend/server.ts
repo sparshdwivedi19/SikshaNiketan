@@ -20,17 +20,36 @@ dotenv.config();
 const app = express();
 
 // Security Middleware
-const frontendOrigin = process.env.FRONTEND_URL || "http://localhost:3000";
-const backendOrigin = `http://localhost:${process.env.PORT || 5000}`;
+const configuredFrontend = (process.env.FRONTEND_URL || "").replace(/\/$/, "");
 
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
-  contentSecurityPolicy: false, // Managed by the frontend (Next.js)
+  contentSecurityPolicy: false, // Managed by frontend (Next.js)
 }));
+
 app.use(cors({
-  origin: frontendOrigin,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, server-to-server, curl)
+    if (!origin) return callback(null, true);
+
+    const normalizedOrigin = origin.replace(/\/$/, "");
+
+    // Allow localhost, configured FRONTEND_URL, or any vercel.app deployment
+    if (
+      normalizedOrigin.includes("localhost") ||
+      (configuredFrontend && normalizedOrigin === configuredFrontend) ||
+      /\.vercel\.app$/.test(normalizedOrigin) ||
+      process.env.NODE_ENV !== "production"
+    ) {
+      return callback(null, true);
+    }
+
+    // Default permission
+    return callback(null, true);
+  },
   credentials: true,
 }));
+
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -60,14 +79,26 @@ connectDB();
 // Serve static files (uploaded thumbnails & videos)
 // /uploads/images/<file> → public/uploads/images/<file>
 // /uploads/videos/<file> → public/uploads/videos/<file>
-app.use("/uploads", (_req: Request, res: Response, next: express.NextFunction) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL || "http://localhost:3000");
+app.use("/uploads", (req: Request, res: Response, next: express.NextFunction) => {
+  const origin = req.headers.origin || "*";
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
 }, express.static(path.join(__dirname, "public", "uploads")));
 
 // Also serve everything else in /public as a fallback
 app.use(express.static(path.join(__dirname, "public")));
+
+// Root Route & Health Check
+app.get("/", (_req: Request, res: Response) => {
+  res.status(200).json({
+    status: "success",
+    message: "Shiksha Niketan API is live and operational!",
+    health: "/api/v1/health",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Routes
 app.use("/api/v1/auth", authLimiter, authRoutes);
