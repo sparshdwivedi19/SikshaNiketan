@@ -152,7 +152,7 @@ export default function CourseDetailPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-white">{course.ratings?.avg || 4.9} / 5.0</div>
-                  <div className="text-xs text-slate-400 font-medium">Rating</div>
+                  <div className="text-xs text-slate-300 font-medium">Rating</div>
                 </div>
               </div>
 
@@ -162,7 +162,7 @@ export default function CourseDetailPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-white">{course.enrollmentCount || 1200}+</div>
-                  <div className="text-xs text-slate-400 font-medium">Enrolled Students</div>
+                  <div className="text-xs text-slate-300 font-medium">Enrolled Students</div>
                 </div>
               </div>
 
@@ -172,7 +172,7 @@ export default function CourseDetailPage() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-white">{course.duration || "120 Hours"}</div>
-                  <div className="text-xs text-slate-400 font-medium">Live + Record</div>
+                  <div className="text-xs text-slate-300 font-medium">Live + Record</div>
                 </div>
               </div>
             </div>
@@ -204,13 +204,13 @@ export default function CourseDetailPage() {
 
               {/* Price Row */}
               <div className="mb-6">
-                <div className="text-xs text-slate-400 font-semibold mb-1 uppercase tracking-wider">Course Tuition Fee</div>
+                <div className="text-xs text-slate-300 font-semibold mb-1 uppercase tracking-wider">Course Tuition Fee</div>
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-black text-white">
                     {course.discountPrice || course.price ? `₹${(course.discountPrice || course.price).toLocaleString()}` : "Free"}
                   </span>
                   {course.discountPrice && course.price > course.discountPrice && (
-                    <span className="text-sm text-slate-500 line-through font-semibold">₹{course.price.toLocaleString()}</span>
+                    <span className="text-sm text-slate-400 line-through font-semibold">₹{course.price.toLocaleString()}</span>
                   )}
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function CourseDetailPage() {
                 {isEnrolled ? "Go to Course Player" : "Enroll in Batch Now"}
               </Button>
 
-              <p className="text-xs text-center text-slate-400 font-medium flex items-center justify-center gap-1.5">
+              <p className="text-xs text-center text-slate-300 font-medium flex items-center justify-center gap-1.5">
                 <ShieldCheck size={14} className="text-emerald-400" /> 7-Day Refund Guarantee • Instant Access
               </p>
             </div>
@@ -253,7 +253,7 @@ export default function CourseDetailPage() {
                   </span>
                   <ChevronDown
                     size={20}
-                    className={`text-slate-400 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
+                    className={`text-slate-300 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
                   />
                 </button>
 
@@ -268,7 +268,7 @@ export default function CourseDetailPage() {
                         <span className="flex items-center gap-2">
                           <CheckCircle2 size={16} className="text-indigo-400" /> {lesson}
                         </span>
-                        <span className="text-xs text-slate-500 font-semibold">Video + Notes</span>
+                        <span className="text-xs text-slate-400 font-semibold">Video + Notes</span>
                       </div>
                     ))}
                   </motion.div>
@@ -285,7 +285,7 @@ export default function CourseDetailPage() {
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Head HOD & Mentor</span>
               <h3 className="text-xl font-bold text-white mt-1">{course.instructor?.name || "Senior IIT Faculty"}</h3>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                 Ex-IITian with 12+ years teaching experience. Has mentored over 50+ AIR 100 toppers in JEE Main, Advanced & NEET.
               </p>
             </div>

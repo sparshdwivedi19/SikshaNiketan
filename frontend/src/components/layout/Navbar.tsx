@@ -130,7 +130,7 @@ export const Navbar = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="text-slate-400 hover:text-rose-400 transition-colors p-1.5 rounded-lg hover:bg-white/5"
+                    className="text-slate-300 hover:text-rose-400 transition-colors p-1.5 rounded-lg hover:bg-white/10"
                     title="Logout"
                   >
                     <LogOut size={16} />

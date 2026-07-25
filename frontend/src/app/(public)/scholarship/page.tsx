@@ -101,7 +101,7 @@ export default function ScholarshipPage() {
             </Button>
           </motion.div>
 
-          <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400">
+          <div className="mt-6 flex items-center justify-center gap-2 text-xs font-semibold text-slate-300">
             <Clock size={14} className="text-amber-400" /> Next Online Exam Slot: Sunday, 10:00 AM IST
           </div>
         </section>
@@ -114,7 +114,7 @@ export default function ScholarshipPage() {
             </div>
             <div>
               <h3 className="text-xl md:text-2xl font-black text-white">Interactive Scholarship Estimator</h3>
-              <p className="text-xs text-slate-400 font-medium">Slide your expected SNAT score percentage to see your guaranteed waiver tier.</p>
+              <p className="text-xs text-slate-300 font-medium">Slide your expected SNAT score percentage to see your guaranteed waiver tier.</p>
             </div>
           </div>
 
@@ -136,7 +136,7 @@ export default function ScholarshipPage() {
 
             <div className="p-6 rounded-2xl bg-slate-950/80 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
-                <span className="text-xs uppercase tracking-wider text-slate-400 font-bold">Estimated Scholarship Waiver</span>
+                <span className="text-xs uppercase tracking-wider text-slate-300 font-bold">Estimated Scholarship Waiver</span>
                 <h4 className="text-xl font-bold text-white mt-1">{currentTier.label}</h4>
               </div>
               <div className={`text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTier.color}`}>
@@ -170,7 +170,7 @@ export default function ScholarshipPage() {
                 {b.icon}
               </div>
               <h3 className="text-xl font-black text-white mb-2">{b.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{b.desc}</p>
+              <p className="text-slate-300 text-sm leading-relaxed">{b.desc}</p>
             </div>
           ))}
         </section>
@@ -188,7 +188,7 @@ export default function ScholarshipPage() {
                 onClick={() => setShowModal(false)}
                 className="absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
               >
-                <X size={20} className="text-slate-400" />
+                <X size={20} className="text-slate-300" />
               </button>
 
               {submitted ? (
@@ -207,7 +207,7 @@ export default function ScholarshipPage() {
               ) : (
                 <>
                   <h3 className="text-2xl font-black text-white mb-1">Register for SNAT 2026</h3>
-                  <p className="text-slate-400 text-xs mb-6 font-medium">Free registration • Takes only 60 seconds</p>
+                  <p className="text-slate-300 text-xs mb-6 font-medium">Free registration • Takes only 60 seconds</p>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">

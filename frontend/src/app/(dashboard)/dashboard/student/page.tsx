@@ -135,7 +135,7 @@ export default function StudentDashboard() {
                   <div>
                     <span className="text-[10px] uppercase font-bold text-indigo-400">Class 11 Physics</span>
                     <h4 className="text-lg font-bold text-white">Rotational Dynamics — Lecture 04</h4>
-                    <p className="text-xs text-slate-400 mt-1">Progress: 65% Completed • 18 mins remaining</p>
+                    <p className="text-xs text-slate-300 mt-1">Progress: 65% Completed • 18 mins remaining</p>
                   </div>
                 </div>
 
@@ -180,7 +180,7 @@ export default function StudentDashboard() {
                 <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/10">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">JEE Main Full Mock 06</span>
-                    <span className="text-[10px] text-slate-400 font-semibold">Sunday, 10 AM</span>
+                    <span className="text-[10px] text-slate-300 font-semibold">Sunday, 10 AM</span>
                   </div>
                   <p className="text-xs text-slate-300">Physics, Chemistry, Maths • 300 Marks</p>
                 </div>

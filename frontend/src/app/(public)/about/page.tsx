@@ -62,7 +62,7 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white mb-1">{m.title}</h3>
-                  <p className="text-slate-400 text-sm">{m.desc}</p>
+                  <p className="text-slate-300 text-sm">{m.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -73,7 +73,7 @@ export default function AboutPage() {
         <section className="max-w-6xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl md:text-4xl font-black font-heading text-white">The Core Pillars</h2>
-            <p className="text-slate-400 text-sm mt-2">What sets Shiksha Niketan apart from traditional coaching institutes</p>
+            <p className="text-slate-300 text-sm mt-2">What sets Shiksha Niketan apart from traditional coaching institutes</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -82,7 +82,7 @@ export default function AboutPage() {
                 <Award size={26} />
               </div>
               <h3 className="text-xl font-black text-white mb-3">Uncompromised Pedagogy</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 Curriculum crafted exclusively by top AIR rankers, revised annually to mirror actual NTA difficulty.
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function AboutPage() {
                 <ShieldCheck size={26} />
               </div>
               <h3 className="text-xl font-black text-white mb-3">AI Diagnostic Precision</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 Real-time mistake analysis so students eliminate recurring conceptual weak spots before exam day.
               </p>
             </div>
@@ -102,7 +102,7 @@ export default function AboutPage() {
                 <HeartHandshake size={26} />
               </div>
               <h3 className="text-xl font-black text-white mb-3">Affordability For All</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
+              <p className="text-slate-300 text-sm leading-relaxed">
                 Merit-based scholarships up to 100% so financial constraints never block brilliant minds.
               </p>
             </div>

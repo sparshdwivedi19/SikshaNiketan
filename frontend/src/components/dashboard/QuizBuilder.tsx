@@ -267,17 +267,17 @@ export const QuizBuilder = ({ courseId, lessonId, backUrl }: QuizBuilderProps) =
       {showModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <Card className="w-full max-w-2xl max-h-[90vh] flex flex-col my-auto shadow-2xl">
-            <div className="p-5 border-b font-bold text-lg sticky top-0 bg-white dark:bg-background-secondary z-10 flex justify-between">
+            <div className="p-5 border-b font-bold text-lg sticky top-0 bg-white dark:bg-background-secondary text-slate-900 dark:text-white z-10 flex justify-between">
               {editingQuestionId ? "Edit Question" : "Add New Question"}
-              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-black">✕</button>
+              <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors">✕</button>
             </div>
             
             <div className="p-6 overflow-y-auto space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-semibold mb-1 block">Question Type</label>
+                  <label className="text-sm font-semibold mb-1 block text-slate-800 dark:text-slate-200">Question Type</label>
                   <select 
-                    className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 h-11 text-sm focus:ring-2 focus:ring-brand-500"
+                    className="w-full bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl px-4 h-11 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500"
                     value={qForm.type}
                     onChange={(e) => {
                       const type = e.target.value;

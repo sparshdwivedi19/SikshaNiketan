@@ -461,7 +461,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-1 text-xs text-amber-400 font-bold bg-amber-400/10 px-2.5 py-1 rounded-full border border-amber-400/20">
                       <Star size={14} className="fill-amber-400" />
                       <span>{course.rating}</span>
-                      <span className="text-slate-400">({course.enrolled})</span>
+                      <span className="text-slate-300">({course.enrolled})</span>
                     </div>
                   </div>
 
@@ -483,7 +483,7 @@ export default function HomePage() {
                 <div className="p-6 bg-slate-950/60 border-t border-white/10 flex items-center justify-between">
                   <div>
                     <span className="text-2xl font-black text-white">{course.price}</span>
-                    <span className="text-xs text-slate-400 line-through ml-2 font-medium">{course.originalPrice}</span>
+                    <span className="text-xs text-slate-300 line-through ml-2 font-medium">{course.originalPrice}</span>
                   </div>
                   <Link href="/courses">
                     <Button variant="primary" size="sm" rightIcon={<ArrowRight size={16} />}>

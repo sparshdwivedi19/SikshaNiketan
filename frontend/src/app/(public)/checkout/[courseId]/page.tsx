@@ -153,7 +153,7 @@ export default function CheckoutPage() {
 
               <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/10 mb-6">
                 <h4 className="font-bold text-base text-white mb-1">JEE Main & Advanced Pinnacle 2027</h4>
-                <p className="text-xs text-slate-400">Live Lectures + CBT Test Series + AI Co-Pilot</p>
+                <p className="text-xs text-slate-300">Live Lectures + CBT Test Series + AI Co-Pilot</p>
               </div>
 
               {/* Coupon Form */}
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
                 {isProcessing ? "Processing Securely..." : `Proceed to Pay ₹${total.toLocaleString()}`}
               </Button>
 
-              <div className="flex items-center justify-center gap-2 text-xs text-slate-400 mt-4 font-semibold">
+              <div className="flex items-center justify-center gap-2 text-xs text-slate-300 mt-4 font-semibold">
                 <ShieldCheck size={16} className="text-emerald-400" /> 256-Bit SSL Encrypted Payment
               </div>
             </div>

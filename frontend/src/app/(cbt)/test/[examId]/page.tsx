@@ -160,7 +160,7 @@ export default function CBTPage({ params }: { params: Promise<{ examId: string }
           </div>
           <div>
             <h1 className="text-base font-black text-white leading-tight">{test.title}</h1>
-            <p className="text-xs text-slate-400 font-medium">NTA Official Pattern CBT Simulator</p>
+            <p className="text-xs text-slate-300 font-medium">NTA Official Pattern CBT Simulator</p>
           </div>
         </div>
 
@@ -181,7 +181,7 @@ export default function CBTPage({ params }: { params: Promise<{ examId: string }
                 <span className="text-xs font-black uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
                   Question {(test.questions.findIndex((q: any) => q._id === activeQuestionId) + 1)} of {test.questions.length}
                 </span>
-                <span className="text-xs text-slate-400 font-semibold">+4 Marks / -1 Negative</span>
+                <span className="text-xs text-slate-300 font-semibold">+4 Marks / -1 Negative</span>
               </div>
 
               <h2 className="text-lg md:text-xl font-bold text-white mb-6 leading-relaxed">
@@ -202,7 +202,7 @@ export default function CBTPage({ params }: { params: Promise<{ examId: string }
                   >
                     <span className="flex items-center gap-3">
                       <span className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs ${
-                        activeOption === idx ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-400"
+                        activeOption === idx ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-300"
                       }`}>
                         {String.fromCharCode(65 + idx)}
                       </span>
@@ -214,7 +214,7 @@ export default function CBTPage({ params }: { params: Promise<{ examId: string }
               </div>
             </div>
           ) : (
-            <p className="text-slate-400">Select a question from the palette.</p>
+            <p className="text-slate-300">Select a question from the palette.</p>
           )}
 
           {/* Bottom Control Bar */}

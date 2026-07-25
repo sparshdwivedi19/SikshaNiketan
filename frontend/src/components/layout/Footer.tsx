@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-slate-950 border-t border-slate-800/80 pt-20 pb-10 text-slate-400 overflow-hidden">
+    <footer className="relative bg-slate-950 border-t border-slate-800/80 pt-20 pb-10 text-slate-300 overflow-hidden">
       {/* Background Glow Overlay */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-indigo-600/10 blur-[120px] pointer-events-none" />
 

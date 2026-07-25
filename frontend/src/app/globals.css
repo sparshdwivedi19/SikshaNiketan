@@ -66,6 +66,23 @@
   --font-heading: var(--font-outfit), system-ui, sans-serif;
 }
 
+/* ── Semantic Text Utilities ── */
+@utility text-primary {
+  color: var(--color-foreground-primary);
+}
+@utility text-secondary {
+  color: var(--color-foreground-secondary);
+}
+@utility text-muted {
+  color: #64748b;
+}
+@utility text-disabled {
+  color: #94a3b8;
+}
+@utility text-inverse {
+  color: #ffffff;
+}
+
 /* ── Dark mode overrides ── */
 @media (prefers-color-scheme: dark) {
   @theme {

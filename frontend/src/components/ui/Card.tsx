@@ -25,10 +25,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     const baseStyles = "rounded-2xl transition-all duration-300 relative group overflow-hidden";
 
     const variants = {
-      default: "bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-slate-900/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/40",
-      glass: "glass-card hover:border-indigo-500/40 hover:shadow-neon-indigo/20",
+      default: "bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-slate-900/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/40 text-slate-900 dark:text-slate-100",
+      glass: "glass-card hover:border-indigo-500/40 hover:shadow-neon-indigo/20 text-slate-900 dark:text-slate-100",
       glassDark: "glass-card-dark hover:border-indigo-500/40 hover:shadow-neon-indigo/30 text-white",
-      outline: "bg-transparent border border-indigo-500/20 hover:border-indigo-500/50 backdrop-blur-sm",
+      outline: "bg-transparent border border-indigo-500/20 hover:border-indigo-500/50 backdrop-blur-sm text-slate-900 dark:text-slate-100",
     };
 
     const paddings = {

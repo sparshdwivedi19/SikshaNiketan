@@ -89,7 +89,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
     return (
       <div className="min-h-screen pt-28 text-white flex flex-col items-center justify-center">
         <div className="w-14 h-14 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin mb-4" />
-        <p className="text-slate-400 text-sm font-semibold">Opening Theater Player...</p>
+        <p className="text-slate-300 text-sm font-semibold">Opening Theater Player...</p>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         {/* Top Breadcrumb Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
-          <Link href="/dashboard/student/courses" className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">
+          <Link href="/dashboard/student/courses" className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors">
             <ArrowLeft size={18} /> Back to My Courses
           </Link>
           <span className="text-xs font-bold text-indigo-300 bg-indigo-500/10 px-3.5 py-1 rounded-full border border-indigo-500/20">
@@ -125,7 +125,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
                 <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-tr from-slate-950 via-indigo-950/40 to-slate-950 text-center">
                   <PlayCircle size={64} className="text-indigo-400 mb-4 animate-pulse" />
                   <h3 className="text-2xl font-black text-white mb-2">{activeLesson?.title || "Select a Lesson"}</h3>
-                  <p className="text-slate-400 text-xs max-w-sm">Interactive HD video stream with transcript and smart note taking.</p>
+                  <p className="text-slate-300 text-xs max-w-sm">Interactive HD video stream with transcript and smart note taking.</p>
                 </div>
               )}
             </div>
@@ -133,14 +133,14 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
             {/* Video Meta Details */}
             <div className="p-6 rounded-3xl bg-slate-900/90 border border-white/10 shadow-xl backdrop-blur-xl">
               <h2 className="text-2xl font-black text-white mb-2">{activeLesson?.title || "Rotational Dynamics — Lecture 04"}</h2>
-              <p className="text-xs text-slate-400 font-semibold mb-4">Module: {activeLesson?.moduleTitle || "Physics Core"}</p>
+              <p className="text-xs text-slate-300 font-semibold mb-4">Module: {activeLesson?.moduleTitle || "Physics Core"}</p>
 
               {/* Doubt / Note Switcher Tabs */}
               <div className="flex items-center gap-2 border-t border-white/10 pt-4">
                 <button
                   onClick={() => setActiveTab("curriculum")}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                    activeTab === "curriculum" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+                    activeTab === "curriculum" ? "bg-indigo-600 text-white" : "text-slate-300 hover:text-white"
                   }`}
                 >
                   Lesson Details
@@ -148,7 +148,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
                 <button
                   onClick={() => setActiveTab("doubts")}
                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                    activeTab === "doubts" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+                    activeTab === "doubts" ? "bg-indigo-600 text-white" : "text-slate-300 hover:text-white"
                   }`}
                 >
                   <BrainCircuit size={14} className="text-cyan-400" /> Ask AI Assistant
@@ -162,7 +162,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
                     placeholder="Have a doubt in this lecture? Ask our AI assistant or faculty..."
                     value={doubtText}
                     onChange={(e) => setDoubtText(e.target.value)}
-                    className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
+                    className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-400 focus:outline-none focus:border-indigo-500"
                   />
                   <Button variant="primary" size="sm" type="submit" className="rounded-xl font-bold" rightIcon={<Send size={14} />}>
                     Submit Doubt
@@ -200,7 +200,7 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
                             className={`w-full p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between text-left transition-all ${
                               activeLesson?._id === lesson._id
                                 ? "bg-indigo-600/30 border border-indigo-500/40 text-white"
-                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                                : "text-slate-300 hover:text-white hover:bg-white/5"
                             }`}
                           >
                             <span className="flex items-center gap-2 truncate">

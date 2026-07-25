@@ -98,12 +98,12 @@ export default function TestResultPage({ params }: { params: Promise<{ examId: s
           </div>
           
           <div className="p-6 rounded-3xl bg-slate-900/90 border border-white/15 flex flex-col justify-center shadow-2xl backdrop-blur-2xl">
-            <span className="text-xs text-slate-400 font-bold uppercase">Total Marks</span>
-            <div className="text-3xl font-black text-white mt-1">{attempt.obtainedMarks} <span className="text-lg text-slate-500 font-normal">/ {attempt.totalMarks}</span></div>
+            <span className="text-xs text-slate-300 font-bold uppercase">Total Marks</span>
+            <div className="text-3xl font-black text-white mt-1">{attempt.obtainedMarks} <span className="text-lg text-slate-400 font-normal">/ {attempt.totalMarks}</span></div>
           </div>
 
           <div className="p-6 rounded-3xl bg-slate-900/90 border border-white/15 flex flex-col justify-center shadow-2xl backdrop-blur-2xl md:col-span-2">
-            <span className="text-xs text-slate-400 font-bold uppercase mb-3 block">Breakdown</span>
+            <span className="text-xs text-slate-300 font-bold uppercase mb-3 block">Breakdown</span>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
                 <div className="text-2xl font-black text-emerald-400">{correct}</div>
@@ -114,8 +114,8 @@ export default function TestResultPage({ params }: { params: Promise<{ examId: s
                 <div className="text-[10px] font-bold uppercase text-rose-300">Incorrect</div>
               </div>
               <div className="p-3 rounded-2xl bg-slate-950/80 border border-white/10">
-                <div className="text-2xl font-black text-slate-400">{unattempted}</div>
-                <div className="text-[10px] font-bold uppercase text-slate-500">Left</div>
+                <div className="text-2xl font-black text-slate-300">{unattempted}</div>
+                <div className="text-[10px] font-bold uppercase text-slate-400">Left</div>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function TestResultPage({ params }: { params: Promise<{ examId: s
                     Q{idx + 1}
                   </span>
                   {isUnattempted ? (
-                    <span className="text-xs font-bold text-slate-400 bg-slate-800 px-3 py-1 rounded-full">Unattempted</span>
+                    <span className="text-xs font-bold text-slate-300 bg-slate-800 px-3 py-1 rounded-full">Unattempted</span>
                   ) : isCorrect ? (
                     <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full flex items-center gap-1">
                       <CheckCircle size={14} /> Correct (+{q.marks})

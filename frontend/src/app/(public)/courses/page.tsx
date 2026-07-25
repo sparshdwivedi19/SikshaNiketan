@@ -203,7 +203,7 @@ export default function CoursesPage() {
                         {course.discountPrice || course.price ? `₹${(course.discountPrice || course.price).toLocaleString()}` : "Free"}
                       </span>
                       {course.discountPrice && course.price > course.discountPrice && (
-                        <span className="text-xs text-slate-400 line-through ml-2">₹{course.price.toLocaleString()}</span>
+                        <span className="text-xs text-slate-300 line-through ml-2">₹{course.price.toLocaleString()}</span>
                       )}
                     </div>
 

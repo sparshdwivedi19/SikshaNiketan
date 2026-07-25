@@ -53,7 +53,7 @@ export const GlobalSearch = () => {
         </div>
         <input
           type="text"
-          className="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-gray-800 rounded-full leading-5 bg-gray-50 dark:bg-background-secondary text-gray-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white dark:focus:bg-background sm:text-sm transition-colors"
+          className="block w-full pl-10 pr-3 py-2 border border-gray-200 dark:border-gray-800 rounded-full leading-5 bg-gray-50 dark:bg-background-secondary text-gray-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white dark:focus:bg-background sm:text-sm transition-colors"
           placeholder="Search for courses, lessons..."
           value={query}
           onChange={handleSearch}
@@ -71,7 +71,7 @@ export const GlobalSearch = () => {
             className="absolute z-50 mt-2 w-full bg-white dark:bg-background-secondary rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden"
           >
             <div className="p-2">
-              <div className="px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+              <div className="px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Top Results
               </div>
               <ul className="flex flex-col gap-1">
@@ -83,8 +83,8 @@ export const GlobalSearch = () => {
                           {result.icon}
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium text-slate-900 dark:text-white line-clamp-1">{result.title}</span>
-                          <span className="text-xs text-slate-500 dark:text-slate-300">{result.type}</span>
+                          <span className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-1">{result.title}</span>
+                          <span className="text-xs text-slate-600 dark:text-slate-300">{result.type}</span>
                         </div>
                       </div>
                       <ChevronRight size={16} className="text-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity" />

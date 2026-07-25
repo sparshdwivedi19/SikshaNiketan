@@ -102,11 +102,11 @@ export default function TutorsPage() {
           {/* Search Bar */}
           <div className="max-w-xl mx-auto bg-slate-900/80 p-2.5 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-xl flex items-center gap-2">
             <div className="flex-1 flex items-center px-3">
-              <Search size={20} className="text-slate-400 mr-3 shrink-0" />
+              <Search size={20} className="text-slate-300 mr-3 shrink-0" />
               <input 
                 type="text" 
                 placeholder="Search by subject, exam or tutor name..." 
-                className="w-full bg-transparent focus:outline-none text-white text-sm font-medium placeholder:text-slate-500"
+                className="w-full bg-transparent focus:outline-none text-white text-sm font-medium placeholder:text-slate-300"
                 value={subjectQuery}
                 onChange={(e) => setSubjectQuery(e.target.value)}
               />
@@ -120,7 +120,7 @@ export default function TutorsPage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-black font-heading text-white">Verified Tutors Marketplace</h2>
-              <p className="text-slate-400 text-xs font-medium">Click any tutor to reserve a 1-on-1 free demo class</p>
+              <p className="text-slate-300 text-xs font-medium">Click any tutor to reserve a 1-on-1 free demo class</p>
             </div>
           </div>
 
@@ -152,14 +152,14 @@ export default function TutorsPage() {
 
                     <div className="space-y-2 text-xs text-slate-300 font-medium mb-6">
                       <p className="flex items-center gap-2 text-white font-bold"><GraduationCap size={14} className="text-indigo-400" /> {tutor.subject}</p>
-                      <p className="flex items-center gap-2"><MapPin size={14} className="text-slate-400" /> {tutor.location}</p>
-                      <p className="flex items-center gap-2"><Clock size={14} className="text-slate-400" /> {tutor.experience}</p>
+                      <p className="flex items-center gap-2"><MapPin size={14} className="text-slate-300" /> {tutor.location}</p>
+                      <p className="flex items-center gap-2"><Clock size={14} className="text-slate-300" /> {tutor.experience}</p>
                     </div>
                   </div>
 
                   <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] uppercase font-bold text-slate-400">Hourly Rate</span>
+                      <span className="text-[10px] uppercase font-bold text-slate-300">Hourly Rate</span>
                       <p className="text-lg font-black text-white">{tutor.rate}</p>
                     </div>
                     <Button 
@@ -183,7 +183,7 @@ export default function TutorsPage() {
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl" onClick={() => setSelectedTutor(null)} />
             <div className="relative glass-card-dark rounded-3xl shadow-2xl max-w-md w-full p-8 z-10 border border-white/15 text-white">
               <button onClick={() => setSelectedTutor(null)} className="absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/10">
-                <X size={20} className="text-slate-400" />
+                <X size={20} className="text-slate-300" />
               </button>
 
               {bookingSuccess ? (
