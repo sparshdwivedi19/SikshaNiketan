@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui/Button";
-import { Menu, X, GraduationCap, ArrowRight, LayoutDashboard, LogOut, BookOpen } from "lucide-react";
+import { Menu, X, GraduationCap, ArrowRight, LayoutDashboard, LogOut, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlobalSearch } from "@/components/ui/GlobalSearch";
 import { useAuthStore } from "@/store/authStore";
@@ -17,6 +17,7 @@ const navLinks = [
   { name: "Courses", path: "/courses" },
   { name: "Scholarship", path: "/scholarship" },
   { name: "Tutors", path: "/tutors" },
+  { name: "About", path: "/about" },
 ];
 
 const getDashboardPath = (role: string) => {
@@ -50,28 +51,37 @@ export const Navbar = () => {
     <>
       <header
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-300",
-          isScrolled
-            ? "bg-brand-900/95 backdrop-blur-xl border-b border-white/10 py-3 shadow-xl"
-            : "bg-brand-900 border-b border-white/5 py-4"
+          "fixed top-0 inset-x-0 z-50 transition-all duration-500 flex justify-center px-4",
+          isScrolled ? "py-3" : "py-5"
         )}
       >
-        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-accent-300 flex items-center justify-center text-brand-900 shadow-md group-hover:scale-105 transition-transform">
-              <GraduationCap size={20} />
+        <div
+          className={cn(
+            "w-full max-w-7xl mx-auto flex items-center justify-between px-5 py-2.5 rounded-2xl transition-all duration-300",
+            isScrolled
+              ? "bg-slate-900/80 dark:bg-slate-950/85 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.37)]"
+              : "bg-slate-900/60 dark:bg-slate-950/60 backdrop-blur-xl border border-white/10 shadow-lg"
+          )}
+        >
+          {/* Brand Logo */}
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[1.5px] shadow-neon-indigo group-hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-slate-950 rounded-[10.5px] flex items-center justify-center text-indigo-400 group-hover:text-white transition-colors">
+                <GraduationCap size={22} className="animate-pulse" />
+              </div>
             </div>
-            <div className="hidden sm:block">
-              <span className="text-lg font-bold font-heading tracking-tight">
-                <span className="text-white">Shiksha</span>
-                <span className="text-accent-300">Niketan</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-black font-heading tracking-tight text-white flex items-center gap-1">
+                Shiksha<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Niketan</span>
+              </span>
+              <span className="text-[10px] text-indigo-300/70 uppercase tracking-widest font-semibold -mt-1 hidden sm:block">
+                EdTech Platform
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1.5 bg-slate-950/40 p-1.5 rounded-xl border border-white/5">
             {navLinks.map((link) => {
               const isActive = pathname === link.path;
               return (
@@ -79,12 +89,17 @@ export const Navbar = () => {
                   key={link.path}
                   href={link.path}
                   className={cn(
-                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150",
-                    isActive
-                      ? "bg-white/10 text-[#f5f5f5]"
-                      : "text-[#f5f5f5] hover:text-white hover:bg-white/8"
+                    "relative px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200",
+                    isActive ? "text-white" : "text-slate-300 hover:text-white"
                   )}
                 >
+                  {isActive && (
+                    <motion.div
+                      layoutId="navbar-pill"
+                      className="absolute inset-0 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 rounded-lg -z-10 shadow-sm"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
                   {link.name}
                 </Link>
               );
@@ -94,53 +109,57 @@ export const Navbar = () => {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
             <GlobalSearch />
+
             {isAuthenticated && user ? (
-              <>
+              <div className="flex items-center gap-3">
                 <Link href={getDashboardPath(user.role)}>
                   <Button
-                    variant="ghost"
+                    variant="primary"
                     size="sm"
-                    className="text-white/80 hover:text-white hover:bg-white/10 border-0"
-                    leftIcon={<LayoutDashboard size={15} />}
+                    className="gap-2"
+                    leftIcon={<LayoutDashboard size={16} />}
                   >
                     Dashboard
                   </Button>
                 </Link>
-                <div className="flex items-center gap-2 pl-2 border-l border-white/15">
-                  <div className="w-8 h-8 rounded-full bg-accent-300 flex items-center justify-center text-brand-900 font-bold text-sm shrink-0">
-                    {user.name?.charAt(0).toUpperCase() || "U"}
+                <div className="flex items-center gap-2.5 pl-3 border-l border-white/10">
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 p-[1px] shadow-sm">
+                    <div className="w-full h-full bg-slate-900 rounded-[11px] flex items-center justify-center text-white font-bold text-sm">
+                      {user.name?.charAt(0).toUpperCase() || "U"}
+                    </div>
                   </div>
-                  <span className="text-sm text-white/80 font-medium max-w-[80px] truncate hidden lg:block">
-                    {user.name?.split(" ")[0]}
-                  </span>
                   <button
                     onClick={handleLogout}
-                    className="text-white/50 hover:text-red-400 transition-colors p-1 ml-1"
+                    className="text-slate-400 hover:text-rose-400 transition-colors p-1.5 rounded-lg hover:bg-white/5"
                     title="Logout"
                   >
-                    <LogOut size={15} />
+                    <LogOut size={16} />
                   </button>
                 </div>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="flex items-center gap-2">
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="bg-[#fdfd95] text-brand-900 hover:text-brand-900 hover:bg-[#fdfd95] border-0">
-                    Log in
+                  <Button variant="ghost" size="sm" className="text-slate-200 hover:text-white">
+                    Sign In
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm" className="bg-accent-300 text-brand-900 hover:bg-accent-400 font-semibold shadow-md border-0" rightIcon={<ArrowRight size={15} />}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    rightIcon={<ArrowRight size={15} />}
+                  >
                     Get Started
                   </Button>
                 </Link>
-              </>
+              </div>
             )}
           </div>
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="md:hidden text-white p-2 rounded-xl bg-slate-800/60 border border-white/10 hover:bg-white/10 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -149,74 +168,74 @@ export const Navbar = () => {
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-brand-950 pt-20 px-4 pb-8 flex flex-col md:hidden"
+            className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-2xl pt-24 px-6 pb-8 flex flex-col md:hidden"
           >
-            <nav className="flex flex-col gap-1 mt-4">
+            <nav className="flex flex-col gap-2 mt-4">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   href={link.path}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 text-base font-medium p-3 rounded-xl hover:bg-white/8 transition-colors",
+                    "flex items-center justify-between text-lg font-semibold p-3.5 rounded-xl border border-transparent transition-all",
                     pathname === link.path
-                      ? "text-accent-300 bg-white/10"
-                      : "text-white/80"
+                      ? "text-white bg-indigo-600/20 border-indigo-500/30"
+                      : "text-slate-300 hover:text-white hover:bg-white/5"
                   )}
                 >
-                  <BookOpen size={18} className="shrink-0" />
-                  {link.name}
+                  <span>{link.name}</span>
+                  {pathname === link.path && <Sparkles size={16} className="text-indigo-400" />}
                 </Link>
               ))}
             </nav>
 
-            <div className="mt-auto flex flex-col gap-3">
+            <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-white/10">
               {isAuthenticated && user ? (
                 <>
-                  <div className="flex items-center gap-3 p-3 bg-white/8 rounded-xl">
-                    <div className="w-10 h-10 rounded-full bg-accent-300 flex items-center justify-center text-brand-900 font-bold">
+                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/10">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-base">
                       {user.name?.charAt(0).toUpperCase() || "U"}
                     </div>
                     <div>
                       <p className="text-white font-semibold text-sm">{user.name}</p>
-                      <p className="text-white/50 text-xs capitalize">{user.role}</p>
+                      <p className="text-indigo-300 text-xs capitalize">{user.role} Account</p>
                     </div>
                   </div>
                   <Link href={getDashboardPath(user.role)} onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full bg-accent-300 text-brand-900 hover:bg-accent-400 font-semibold" leftIcon={<LayoutDashboard size={16} />}>
-                      My Dashboard
+                    <Button variant="primary" className="w-full" leftIcon={<LayoutDashboard size={16} />}>
+                      Go to Dashboard
                     </Button>
                   </Link>
                   <Button
-                    variant="outline"
-                    className="w-full text-red-400 border-red-900/50 hover:bg-red-900/20"
+                    variant="danger"
+                    className="w-full"
                     onClick={handleLogout}
                     leftIcon={<LogOut size={16} />}
                   >
-                    Logout
+                    Sign Out
                   </Button>
                 </>
               ) : (
-                <>
+                <div className="flex flex-col gap-2.5">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" className="w-full text-white border-white/20 hover:bg-white/10">
-                      Log in
+                    <Button variant="outline" className="w-full text-white border-white/20">
+                      Sign In
                     </Button>
                   </Link>
                   <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full bg-accent-300 text-brand-900 hover:bg-accent-400 font-semibold">
-                      Get Started Free
+                    <Button variant="primary" className="w-full">
+                      Create Account
                     </Button>
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </motion.div>
@@ -225,3 +244,4 @@ export const Navbar = () => {
     </>
   );
 };
+

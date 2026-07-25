@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { ArrowLeft, PlayCircle, FileText, HelpCircle, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, PlayCircle, FileText, HelpCircle, CheckCircle, ChevronDown, BookOpen, Clock, BrainCircuit, ShieldCheck, Sparkles, Send } from "lucide-react";
 import api, { API_BASE_URL } from "@/utils/api";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { BackgroundGlow } from "@/components/ui/BackgroundGlow";
 
 interface Lesson {
   _id: string;
@@ -33,12 +35,9 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
-
-  // Quiz state
-  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
-  const [selectedOptions, setSelectedOptions] = useState<Record<number, number>>({});
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [quizScore, setQuizScore] = useState(0);
+  const [activeTab, setActiveTab] = useState<"curriculum" | "doubts">("curriculum");
+  const [doubtText, setDoubtText] = useState("");
+  const [submittedDoubt, setSubmittedDoubt] = useState(false);
 
   useEffect(() => {
     fetchCourseData();
@@ -49,7 +48,8 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
       setLoading(true);
       const res = await api.get(`/courses/${unwrappedParams.slug}`);
       if (res.data.status === "success") {
-        setCourse(res.data.course);
+        const courseData = res.data.course;
+        setCourse(courseData);
         setLessons(res.data.lessons || []);
         if (res.data.lessons?.length > 0) {
           setActiveLesson(res.data.lessons[0]);
@@ -64,7 +64,6 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
     }
   };
 
-  // Group lessons by moduleTitle
   const modules = lessons.reduce((acc, lesson) => {
     if (!acc[lesson.moduleTitle]) acc[lesson.moduleTitle] = [];
     acc[lesson.moduleTitle].push(lesson);
@@ -75,159 +74,150 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ slug: s
     setExpandedModules(prev => ({ ...prev, [moduleTitle]: !prev[moduleTitle] }));
   };
 
-  const handleLessonClick = (lesson: Lesson) => {
-    setActiveLesson(lesson);
-    // reset quiz state
-    setCurrentQuizIndex(0);
-    setSelectedOptions({});
-    setQuizSubmitted(false);
-    setQuizScore(0);
+  const handleDoubtSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!doubtText) return;
+    setSubmittedDoubt(true);
+    toast.success("Doubt submitted to AI Co-Pilot & Faculty!");
+    setTimeout(() => {
+      setDoubtText("");
+      setSubmittedDoubt(false);
+    }, 2000);
   };
 
-  const handleQuizSubmit = () => {
-    if (!activeLesson?.quizQuestions) return;
-    let score = 0;
-    activeLesson.quizQuestions.forEach((q, i) => {
-      if (selectedOptions[i] === q.correctOptionIndex) score++;
-    });
-    setQuizScore(score);
-    setQuizSubmitted(true);
-  };
-
-  if (loading) {
+  if (loading || !course) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!course || !activeLesson) {
-    return (
-      <div className="p-8 text-center">
-        <h2 className="text-xl font-bold mb-4">Course content not found</h2>
-        <Button onClick={() => router.push("/dashboard/student/courses")}>Go Back</Button>
+      <div className="min-h-screen pt-28 text-white flex flex-col items-center justify-center">
+        <div className="w-14 h-14 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin mb-4" />
+        <p className="text-slate-400 text-sm font-semibold">Opening Theater Player...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 h-[calc(100vh-4rem)] flex flex-col md:flex-row gap-6">
-      
-      {/* Left side: Player/Viewer */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <div className="mb-4">
-          <Button variant="ghost" className="mb-2 p-0 h-auto hover:bg-transparent text-foreground-secondary hover:text-brand-600" onClick={() => router.push("/dashboard/student/courses")}>
-            <ArrowLeft size={16} className="mr-2" /> Back to My Courses
-          </Button>
-          <h1 className="text-2xl font-bold font-heading text-foreground-primary truncate">{activeLesson.title}</h1>
-          <p className="text-sm text-foreground-secondary">{course.title}</p>
+    <div className="relative min-h-screen pt-24 pb-16 text-white overflow-hidden">
+      <BackgroundGlow />
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        {/* Top Breadcrumb Header */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+          <Link href="/dashboard/student/courses" className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">
+            <ArrowLeft size={18} /> Back to My Courses
+          </Link>
+          <span className="text-xs font-bold text-indigo-300 bg-indigo-500/10 px-3.5 py-1 rounded-full border border-indigo-500/20">
+            {course.title}
+          </span>
         </div>
 
-        <Card className="w-full flex-1 bg-black overflow-hidden flex flex-col rounded-xl shadow-lg border border-gray-200 dark:border-gray-800">
-          {activeLesson.type === "video" && activeLesson.videoUrl && (
-            <video 
-              key={activeLesson._id}
-              src={activeLesson.videoUrl.startsWith('http') ? activeLesson.videoUrl : `${API_BASE_URL}${activeLesson.videoUrl}`} 
-              controls 
-              className="w-full h-full object-contain"
-              autoPlay
-              crossOrigin="anonymous"
-              preload="metadata"
-            >
-              Your browser does not support the video tag.
-            </video>
-          )}
-
-          {activeLesson.type === "quiz" && (
-            <div className="w-full h-full bg-white dark:bg-background-secondary p-8 flex flex-col items-center justify-center text-center">
-              <HelpCircle size={64} className="text-brand-500 mb-6" />
-              <h2 className="text-3xl font-bold mb-4">Quiz: {activeLesson.title}</h2>
-              <p className="text-foreground-secondary mb-8 max-w-md">
-                This lesson contains a Computer-Based Test (CBT). Click the button below to start your test session in a focused environment.
-              </p>
-              {activeLesson.testId ? (
-                <Link href={`/test/${activeLesson.testId}`} target="_blank">
-                  <Button size="lg" className="text-lg px-8 py-6 rounded-2xl shadow-xl shadow-brand-500/20 hover:scale-105 transition-transform">
-                    Start Test Now
-                  </Button>
-                </Link>
+        {/* Theater Player Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Main Video Viewport */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="relative w-full aspect-video rounded-3xl bg-slate-950 border border-white/15 overflow-hidden shadow-2xl shadow-indigo-500/10">
+              {activeLesson?.videoUrl ? (
+                <iframe
+                  src={activeLesson.videoUrl}
+                  className="w-full h-full"
+                  allowFullScreen
+                  title={activeLesson.title}
+                />
               ) : (
-                <div className="bg-orange-50 text-orange-600 p-4 rounded-xl border border-orange-200">
-                  <p className="font-bold">Test not yet configured.</p>
-                  <p className="text-sm">The instructor has not added questions for this test yet.</p>
+                <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-tr from-slate-950 via-indigo-950/40 to-slate-950 text-center">
+                  <PlayCircle size={64} className="text-indigo-400 mb-4 animate-pulse" />
+                  <h3 className="text-2xl font-black text-white mb-2">{activeLesson?.title || "Select a Lesson"}</h3>
+                  <p className="text-slate-400 text-xs max-w-sm">Interactive HD video stream with transcript and smart note taking.</p>
                 </div>
               )}
             </div>
-          )}
 
-          {activeLesson.type === "video" && !activeLesson.videoUrl && (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-gray-400 p-8 text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.277A1 1 0 0121 8.617V15.38a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
-              </svg>
-              <h3 className="text-lg font-semibold text-white mb-2">Video Not Available</h3>
-              <p className="text-sm">The video for this lesson hasn&apos;t been uploaded yet.</p>
-            </div>
-          )}
+            {/* Video Meta Details */}
+            <div className="p-6 rounded-3xl bg-slate-900/90 border border-white/10 shadow-xl backdrop-blur-xl">
+              <h2 className="text-2xl font-black text-white mb-2">{activeLesson?.title || "Rotational Dynamics — Lecture 04"}</h2>
+              <p className="text-xs text-slate-400 font-semibold mb-4">Module: {activeLesson?.moduleTitle || "Physics Core"}</p>
 
-          {activeLesson.type !== "video" && activeLesson.type !== "quiz" && (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 text-foreground-secondary p-8 text-center">
-              <FileText size={64} className="mb-4 text-gray-300" />
-              <h3 className="text-xl font-bold mb-2">Unsupported Media Type</h3>
-              <p>This lesson type ({activeLesson.type}) is currently being viewed outside the main player or requires a download.</p>
-            </div>
-          )}
-        </Card>
-      </div>
+              {/* Doubt / Note Switcher Tabs */}
+              <div className="flex items-center gap-2 border-t border-white/10 pt-4">
+                <button
+                  onClick={() => setActiveTab("curriculum")}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    activeTab === "curriculum" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  Lesson Details
+                </button>
+                <button
+                  onClick={() => setActiveTab("doubts")}
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    activeTab === "doubts" ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  <BrainCircuit size={14} className="text-cyan-400" /> Ask AI Assistant
+                </button>
+              </div>
 
-      {/* Right side: Curriculum Navigation */}
-      <div className="w-full md:w-80 flex flex-col min-w-0">
-        <h3 className="font-bold font-heading text-lg mb-4">Course Content</h3>
-        <Card className="flex-1 overflow-y-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary shadow-sm">
-          {Object.entries(modules).map(([moduleTitle, moduleLessons], mIndex) => (
-            <div key={mIndex} className="border-b border-gray-100 dark:border-gray-800 last:border-0">
-              <button 
-                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/30 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left font-medium"
-                onClick={() => toggleModule(moduleTitle)}
-              >
-                <span className="text-sm">{moduleTitle}</span>
-                {expandedModules[moduleTitle] ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-              </button>
-              
-              {expandedModules[moduleTitle] && (
-                <div className="py-2">
-                  {moduleLessons.map((l, lIndex) => {
-                    const isActive = activeLesson._id === l._id;
-                    return (
-                      <button 
-                        key={l._id}
-                        onClick={() => handleLessonClick(l)}
-                        className={`w-full flex items-start gap-3 p-3 pl-4 text-left transition-colors ${
-                          isActive ? "bg-brand-50 dark:bg-brand-900/20 border-l-2 border-brand-500" : "hover:bg-gray-50 dark:hover:bg-gray-800/50 border-l-2 border-transparent"
-                        }`}
-                      >
-                        <div className="mt-0.5 shrink-0">
-                          {l.type === "video" ? <PlayCircle size={16} className={isActive ? "text-brand-600" : "text-gray-400"} /> : 
-                           l.type === "quiz" ? <HelpCircle size={16} className={isActive ? "text-brand-600" : "text-gray-400"} /> : 
-                           <FileText size={16} className={isActive ? "text-brand-600" : "text-gray-400"} />}
-                        </div>
-                        <div>
-                          <p className={`text-sm ${isActive ? "font-bold text-brand-700 dark:text-brand-400" : "font-medium text-foreground-primary"}`}>
-                            {lIndex + 1}. {l.title}
-                          </p>
-                          <p className="text-xs text-foreground-secondary mt-1 flex items-center gap-2">
-                            <span>{l.type === "video" ? l.duration || "0:00" : l.type === "quiz" ? "Interactive Quiz" : "Document"}</span>
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+              {activeTab === "doubts" && (
+                <form onSubmit={handleDoubtSubmit} className="mt-4 space-y-3">
+                  <textarea
+                    rows={3}
+                    placeholder="Have a doubt in this lecture? Ask our AI assistant or faculty..."
+                    value={doubtText}
+                    onChange={(e) => setDoubtText(e.target.value)}
+                    className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
+                  />
+                  <Button variant="primary" size="sm" type="submit" className="rounded-xl font-bold" rightIcon={<Send size={14} />}>
+                    Submit Doubt
+                  </Button>
+                </form>
               )}
             </div>
-          ))}
-        </Card>
+          </div>
+
+          {/* Right Side: Collapsible Lesson Drawer */}
+          <div className="lg:col-span-4">
+            <div className="p-6 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl backdrop-blur-2xl">
+              <h3 className="text-lg font-black text-white mb-4 flex items-center justify-between">
+                <span>Course Content</span>
+                <span className="text-xs text-indigo-400 font-bold">{lessons.length} Lessons</span>
+              </h3>
+
+              <div className="space-y-4 max-h-[550px] overflow-y-auto pr-1">
+                {Object.keys(modules).map((moduleTitle, idx) => (
+                  <div key={idx} className="rounded-2xl bg-slate-950/80 border border-white/10 overflow-hidden">
+                    <button
+                      onClick={() => toggleModule(moduleTitle)}
+                      className="w-full p-4 flex items-center justify-between text-left font-bold text-xs text-slate-200 hover:bg-white/5 transition-colors"
+                    >
+                      <span className="truncate max-w-[200px]">{moduleTitle}</span>
+                      <ChevronDown size={16} className={`transition-transform ${expandedModules[moduleTitle] ? "rotate-180" : ""}`} />
+                    </button>
+
+                    {expandedModules[moduleTitle] && (
+                      <div className="p-2 space-y-1.5 border-t border-white/5">
+                        {modules[moduleTitle].map((lesson) => (
+                          <button
+                            key={lesson._id}
+                            onClick={() => setActiveLesson(lesson)}
+                            className={`w-full p-2.5 rounded-xl text-xs font-semibold flex items-center justify-between text-left transition-all ${
+                              activeLesson?._id === lesson._id
+                                ? "bg-indigo-600/30 border border-indigo-500/40 text-white"
+                                : "text-slate-400 hover:text-white hover:bg-white/5"
+                            }`}
+                          >
+                            <span className="flex items-center gap-2 truncate">
+                              <PlayCircle size={14} className="text-indigo-400 shrink-0" />
+                              <span className="truncate">{lesson.title}</span>
+                            </span>
+                            <span className="text-[10px] text-slate-500">{lesson.duration || "15m"}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

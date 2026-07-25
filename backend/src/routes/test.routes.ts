@@ -7,7 +7,10 @@ import {
   updateTestSettings,
   addQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
+  createCourseTest,
+  getCourseTests,
+  deleteTest
 } from "../controllers/test.controller";
 import { 
   startAttempt,
@@ -20,8 +23,13 @@ import {
 const router = Router();
 
 // Test Management (Faculty/Admin)
+router.post("/course/:courseId", protect, requireRole("instructor", "admin"), createCourseTest);
 router.post("/lesson/:courseId/:lessonId", protect, requireRole("instructor", "admin"), createOrGetTest);
 router.put("/:testId", protect, requireRole("instructor", "admin"), updateTestSettings);
+router.delete("/:testId", protect, requireRole("instructor", "admin"), deleteTest);
+
+// Get tests for a course
+router.get("/course/:courseId", protect, getCourseTests);
 
 // Question Management (Faculty/Admin)
 router.post("/:testId/questions", protect, requireRole("instructor", "admin"), addQuestion);

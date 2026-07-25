@@ -49,4 +49,6 @@ const testAttemptSchema = new Schema<ITestAttempt>(
   { timestamps: true }
 );
 
+testAttemptSchema.index({ testId: 1, studentId: 1 });
+
 export const TestAttempt = mongoose.model<ITestAttempt>("TestAttempt", testAttemptSchema);

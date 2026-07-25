@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Plus, Search, Edit2, Trash2, Eye, RefreshCw } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, Eye, RefreshCw, FileText } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import api from "@/utils/api";
@@ -140,12 +140,17 @@ export default function InstructorCourses() {
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link href={`/courses/${course.slug}`} target="_blank">
+                        <Link href={`/courses/${course.slug}`} target="_blank" title="View Course">
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-600">
                             <Eye size={16} />
                           </Button>
                         </Link>
-                        <Link href={`/instructor/courses/create?edit=${course._id}`}>
+                        <Link href={`/instructor/courses/${course._id}/tests`} title="Manage Tests">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-purple-600">
+                            <FileText size={16} />
+                          </Button>
+                        </Link>
+                        <Link href={`/instructor/courses/create?edit=${course._id}`} title="Edit Course">
                           <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-brand-600">
                             <Edit2 size={16} />
                           </Button>

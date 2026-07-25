@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Mail, Lock, LogIn } from "lucide-react";
+import { Mail, Lock, LogIn, ArrowRight, ShieldCheck } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import api from "@/utils/api";
 
@@ -44,9 +44,9 @@ export default function LoginPage() {
     } catch (err: any) {
       console.error("Login Error:", err);
       if (err.response) {
-        setError(err.response.data.message || "Invalid credentials.");
+        setError(err.response.data.message || "Invalid email or password.");
       } else if (err.request) {
-        setError("Network Error: Could not connect to the backend server. Is it running?");
+        setError("Network Connection Error: Server unreachable.");
       } else {
         setError("Login failed: " + err.message);
       }
@@ -55,53 +55,67 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full text-white">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold font-heading text-foreground-primary mb-2">Welcome Back</h2>
-        <p className="text-foreground-secondary">Enter your credentials to access your account.</p>
+        <h2 className="text-3xl font-black font-heading text-white mb-2">Welcome Back</h2>
+        <p className="text-slate-400 text-sm font-medium">Enter your credentials to access your portal.</p>
       </div>
 
       <form onSubmit={handleLogin} className="flex flex-col gap-5">
         {error && (
-          <div className="p-3 rounded-xl bg-red-50 text-red-600 border border-red-100 text-sm">
-            {error}
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center gap-2">
+            <ShieldCheck size={16} className="shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
-        <Input
-          label="Email Address"
-          type="email"
-          placeholder="student@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          leftIcon={<Mail size={18} />}
-          required
-        />
-
-        <div className="flex flex-col gap-1.5">
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Email Address</label>
           <Input
-            label="Password"
+            type="email"
+            placeholder="student@shikshaniketan.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            leftIcon={<Mail size={18} className="text-indigo-400" />}
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-12 rounded-xl focus:border-indigo-500"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Password</label>
+            <Link href="/forgot-password" className="text-xs text-indigo-400 font-semibold hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+          <Input
             type="password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            leftIcon={<Lock size={18} />}
+            leftIcon={<Lock size={18} className="text-indigo-400" />}
+            className="bg-slate-900/80 border-slate-800 text-white placeholder:text-slate-500 h-12 rounded-xl focus:border-indigo-500"
             required
           />
-          <Link href="/forgot-password" className="text-sm text-brand-600 font-medium self-end hover:underline">
-            Forgot password?
-          </Link>
         </div>
 
-        <Button type="submit" size="lg" className="w-full mt-2" isLoading={isLoading} rightIcon={!isLoading && <LogIn size={18} />}>
-          Log In
+        <Button
+          type="submit"
+          size="lg"
+          variant="primary"
+          className="w-full h-12 rounded-xl mt-2 font-bold text-base"
+          isLoading={isLoading}
+          rightIcon={!isLoading && <ArrowRight size={18} />}
+        >
+          Sign In
         </Button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-foreground-secondary">
-        Don't have an account?{" "}
-        <Link href="/register" className="text-brand-700 font-bold hover:underline">
-          Sign up now
+      <div className="mt-8 pt-6 border-t border-white/10 text-center text-sm text-slate-400 font-medium">
+        New to Shiksha Niketan?{" "}
+        <Link href="/register" className="text-indigo-400 font-bold hover:underline">
+          Create Account
         </Link>
       </div>
     </div>

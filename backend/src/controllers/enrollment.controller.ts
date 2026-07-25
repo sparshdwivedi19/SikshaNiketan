@@ -1,35 +1,48 @@
 import { Response } from "express";
+import mongoose from "mongoose";
 import { Enrollment } from "../models/Enrollment";
 import { Course } from "../models/Course";
 import { AuthRequest } from "../middleware/auth.middleware";
 
 // POST /api/v1/enrollments — Enroll the logged-in user in a course
 export const enrollInCourse = async (req: AuthRequest, res: Response): Promise<void> => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { courseId } = req.body;
     const userId = req.user!.id;
 
     // Check course exists
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId).session(session);
     if (!course) {
+      await session.abortTransaction();
+      session.endSession();
       res.status(404).json({ status: "error", message: "Course not found." });
       return;
     }
 
     // Check if already enrolled
-    const existing = await Enrollment.findOne({ user: userId, course: courseId });
+    const existing = await Enrollment.findOne({ user: userId, course: courseId }).session(session);
     if (existing) {
+      await session.abortTransaction();
+      session.endSession();
       res.status(400).json({ status: "error", message: "You are already enrolled in this course." });
       return;
     }
 
-    const enrollment = await Enrollment.create({ user: userId, course: courseId });
+    const enrollment = await Enrollment.create([{ user: userId, course: courseId }], { session });
 
     // Increment course enrollment count
-    await Course.findByIdAndUpdate(courseId, { $inc: { enrollmentCount: 1 } });
+    await Course.findByIdAndUpdate(courseId, { $inc: { enrollmentCount: 1 } }, { session });
 
-    res.status(201).json({ status: "success", enrollment });
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(201).json({ status: "success", enrollment: enrollment[0] });
   } catch (error: any) {
+    await session.abortTransaction();
+    session.endSession();
     res.status(500).json({ status: "error", message: error.message });
   }
 };

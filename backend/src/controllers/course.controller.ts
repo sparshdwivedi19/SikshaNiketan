@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Course } from "../models/Course";
 import { Lesson } from "../models/Lesson";
 import { AuthRequest } from "../middleware/auth.middleware";
+import mongoose from "mongoose";
 
 // GET /api/v1/courses — Get all published courses (or all for admin)
 export const getAllCourses = async (req: Request, res: Response): Promise<void> => {
@@ -79,16 +80,27 @@ export const updateCourse = async (req: AuthRequest, res: Response): Promise<voi
 
 // DELETE /api/v1/courses/:id — Delete a course and its lessons
 export const deleteCourse = async (req: AuthRequest, res: Response): Promise<void> => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { id } = req.params;
-    const course = await Course.findByIdAndDelete(id);
+    const course = await Course.findByIdAndDelete(id).session(session);
     if (!course) {
+      await session.abortTransaction();
+      session.endSession();
       res.status(404).json({ status: "error", message: "Course not found." });
       return;
     }
-    await Lesson.deleteMany({ courseId: id });
+    await Lesson.deleteMany({ courseId: id }).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
     res.status(200).json({ status: "success", message: "Course and all related lessons deleted successfully." });
   } catch (error: any) {
+    await session.abortTransaction();
+    session.endSession();
     res.status(400).json({ status: "error", message: error.message });
   }
 };

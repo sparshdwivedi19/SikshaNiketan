@@ -11,6 +11,7 @@ import {
 import { useAuthStore } from "@/store/authStore";
 import { AIChatbot } from "@/components/ui/AIChatbot";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -43,14 +44,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Link
         href={href}
         onClick={() => setSidebarOpen(false)}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
+        className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all group overflow-hidden ${
           isActive
-            ? "bg-brand-800 text-[#312e81] font-semibold shadow-sm"
-            : "text-foreground-secondary hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:text-brand-700 dark:hover:text-brand-300"
+            ? "text-[#312e81] font-semibold"
+            : "text-brand-200 hover:text-white"
         }`}
       >
-        <span className={isActive ? "text-accent-300" : "opacity-60"}>{icon}</span>
-        {label}
+        {isActive && (
+          <motion.div
+            layoutId="activeNavBackground"
+            className="absolute inset-0 bg-brand-800 rounded-xl"
+            initial={false}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          />
+        )}
+        <span className={`relative z-10 transition-colors ${isActive ? "text-accent-600" : "opacity-60 group-hover:opacity-100"}`}>{icon}</span>
+        <span className="relative z-10">{label}</span>
       </Link>
     );
   };

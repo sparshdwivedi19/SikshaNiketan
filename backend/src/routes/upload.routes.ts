@@ -10,8 +10,8 @@ const router = Router();
 // ─────────────────────────────────────────────────────────
 // Ensure upload directories exist (local dev only)
 // ─────────────────────────────────────────────────────────
-const videosDir = path.join(process.cwd(), "public", "uploads", "videos");
-const imagesDir = path.join(process.cwd(), "public", "uploads", "images");
+const videosDir = path.join(__dirname, "../../public", "uploads", "videos");
+const imagesDir = path.join(__dirname, "../../public", "uploads", "images");
 
 if (!fs.existsSync(videosDir)) fs.mkdirSync(videosDir, { recursive: true });
 if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });

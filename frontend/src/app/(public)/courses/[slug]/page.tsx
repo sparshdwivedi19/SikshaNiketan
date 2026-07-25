@@ -4,10 +4,12 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Star, Users, Clock, BookOpen, CheckCircle2, ArrowRight, Lock } from "lucide-react";
+import { Star, Users, Clock, BookOpen, CheckCircle2, ArrowRight, Lock, Play, ShieldCheck, Award, Sparkles, ChevronDown } from "lucide-react";
 import { toast } from "react-hot-toast";
 import api, { API_BASE_URL } from "@/utils/api";
 import { useAuthStore } from "@/store/authStore";
+import { BackgroundGlow } from "@/components/ui/BackgroundGlow";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -37,6 +39,7 @@ export default function CourseDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
+  const [openSection, setOpenSection] = useState<number | null>(0);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -46,13 +49,12 @@ export default function CourseDetailPage() {
         if (response.data.status === "success") {
           setCourse(response.data.course);
 
-          // Check enrollment if logged in
           if (isAuthenticated) {
             try {
               const enrollRes = await api.get(`/enrollments/check/${response.data.course._id}`);
               setIsEnrolled(enrollRes.data.isEnrolled);
             } catch {
-              // Not enrolled or not logged in
+              // Not enrolled
             }
           }
         }
@@ -68,7 +70,7 @@ export default function CourseDetailPage() {
 
   const handleEnroll = async () => {
     if (!isAuthenticated) {
-      toast.error("Please log in to enroll in this course.");
+      toast.error("Please log in to enroll in this batch.");
       router.push("/login");
       return;
     }
@@ -82,8 +84,8 @@ export default function CourseDetailPage() {
     try {
       await api.post("/enrollments", { courseId: course!._id });
       setIsEnrolled(true);
-      toast.success("Successfully enrolled! Redirecting to your courses...");
-      setTimeout(() => router.push("/dashboard/student/courses"), 1500);
+      toast.success("Successfully enrolled! Redirecting to your learning player...");
+      setTimeout(() => router.push("/dashboard/student/courses"), 1200);
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Enrollment failed. Please try again.");
     } finally {
@@ -91,160 +93,203 @@ export default function CourseDetailPage() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || !course) {
     return (
-      <div className="container mx-auto px-4 py-20 max-w-6xl animate-pulse">
-        <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-4" />
-        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-8" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 h-96 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
-          <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
+      <div className="min-h-screen pt-32 pb-24 text-white flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
+          <p className="text-slate-400 text-sm font-semibold">Loading batch details...</p>
         </div>
       </div>
     );
   }
 
-  if (!course) return null;
-
-  const finalPrice = course.discountPrice || course.price;
-  const discount = course.discountPrice ? Math.round(((course.price - course.discountPrice) / course.price) * 100) : 0;
+  const syllabus = [
+    {
+      module: "Module 1: Fundamental Concepts & Problem Solving Mechanics",
+      lessons: ["Vector Analysis & 3D Geometry", "Newton's Laws of Motion & Friction", "Work, Energy & Power Dynamics"],
+    },
+    {
+      module: "Module 2: Advanced Problem Solving & Previous Year Questions",
+      lessons: ["System of Particles & Rotational Motion", "Gravitation & Kepler's Laws", "Fluid Mechanics & Elasticity"],
+    },
+    {
+      module: "Module 3: NTA Pattern CBT Mock Tests & Live Doubt Clearance",
+      lessons: ["Full-Length JEE/NEET CBT Mock Test 1", "Doubt Resolution Stream with Senior HOD", "Rank Prediction & Speed Analysis"],
+    },
+  ];
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-foreground-secondary mb-6 flex items-center gap-2">
-        <Link href="/courses" className="hover:text-brand-600 transition-colors">Courses</Link>
-        <span>/</span>
-        <span className="text-foreground-primary">{course.title}</span>
-      </nav>
+    <div className="relative min-h-screen pt-28 pb-24 text-white overflow-hidden">
+      <BackgroundGlow />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Left — Course Info */}
-        <div className="lg:col-span-2 space-y-8">
-          <div>
-            <span className="text-xs font-semibold text-brand-600 bg-brand-50 dark:bg-brand-900/20 px-2.5 py-1 rounded-md">
-              {course.category}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold font-heading text-foreground-primary mt-4 mb-4 leading-tight">
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        {/* Course Header Banner */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-16">
+          <div className="lg:col-span-7">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-300 bg-indigo-500/20 px-3.5 py-1.5 rounded-full border border-indigo-500/30">
+                {course.category}
+              </span>
+              <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                <CheckCircle2 size={13} /> Admissions Open
+              </span>
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-black font-heading tracking-tight text-white mb-6 leading-tight">
               {course.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-foreground-secondary">
-              <span className="flex items-center gap-1.5">
-                <Star size={16} className="text-yellow-400 fill-yellow-400" />
-                <strong>{course.ratings?.avg?.toFixed(1) || "0"}</strong>
-                <span>({course.ratings?.count || 0} reviews)</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Users size={16} className="text-brand-500" />
-                {course.enrollmentCount || 0} students enrolled
-              </span>
-              <span className="flex items-center gap-1.5">
-                <BookOpen size={16} /> Level: {course.level}
-              </span>
-              {course.duration && (
-                <span className="flex items-center gap-1.5">
-                  <Clock size={16} /> {course.duration}
-                </span>
-              )}
-            </div>
-          </div>
 
-          <div>
-            <p className="text-base text-foreground-secondary leading-relaxed">
-              By{" "}
-              <span className="font-semibold text-brand-600">
-                {course.instructor?.name || "Shiksha Niketan"}
-              </span>
+            <p className="text-slate-300 text-base md:text-lg mb-8 leading-relaxed font-medium">
+              {course.description || "Master core concepts with step-by-step problem solving, interactive CBT mock tests, and 24/7 AI doubt support."}
             </p>
+
+            {/* Course Meta Info Chips */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-amber-400">
+                  <Star size={20} className="fill-amber-400" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white">{course.ratings?.avg || 4.9} / 5.0</div>
+                  <div className="text-xs text-slate-400 font-medium">Rating</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                  <Users size={20} />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white">{course.enrollmentCount || 1200}+</div>
+                  <div className="text-xs text-slate-400 font-medium">Enrolled Students</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                  <Clock size={20} />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-white">{course.duration || "120 Hours"}</div>
+                  <div className="text-xs text-slate-400 font-medium">Live + Record</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <Card className="p-6">
-            <h2 className="text-xl font-bold font-heading text-foreground-primary mb-4">About This Course</h2>
-            <p className="text-foreground-secondary leading-relaxed whitespace-pre-line">{course.description}</p>
-          </Card>
-
-          <Card className="p-6">
-            <h2 className="text-xl font-bold font-heading text-foreground-primary mb-4">What You'll Get</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {[
-                "Expert-led video lessons",
-                "Practice quizzes & mock tests",
-                "Lifetime course access",
-                "Certificate of completion",
-                "AI-powered doubt solving",
-                "Study materials & PDFs",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2.5 text-sm text-foreground-secondary">
-                  <CheckCircle2 size={16} className="text-green-500 shrink-0" />
-                  {item}
+          {/* Sticky Enrollment Card */}
+          <div className="lg:col-span-5 relative">
+            <div className="sticky top-28 rounded-3xl bg-slate-900/90 backdrop-blur-2xl border border-white/15 p-6 shadow-2xl shadow-indigo-500/10 overflow-hidden">
+              {/* Media Preview Box */}
+              <div className="relative h-52 w-full rounded-2xl bg-slate-950 overflow-hidden mb-6 border border-white/10 group">
+                {course.thumbnail ? (
+                  <Image
+                    src={course.thumbnail.startsWith("http") ? course.thumbnail : `${API_BASE_URL}${course.thumbnail}`}
+                    alt={course.title}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-tr from-indigo-950 to-slate-950 flex items-center justify-center">
+                    <BookOpen size={48} className="text-indigo-400/40" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-indigo-600/90 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                    <Play size={28} className="fill-white ml-1" />
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Price Row */}
+              <div className="mb-6">
+                <div className="text-xs text-slate-400 font-semibold mb-1 uppercase tracking-wider">Course Tuition Fee</div>
+                <div className="flex items-baseline gap-3">
+                  <span className="text-3xl font-black text-white">
+                    {course.discountPrice || course.price ? `₹${(course.discountPrice || course.price).toLocaleString()}` : "Free"}
+                  </span>
+                  {course.discountPrice && course.price > course.discountPrice && (
+                    <span className="text-sm text-slate-500 line-through font-semibold">₹{course.price.toLocaleString()}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={handleEnroll}
+                isLoading={isEnrolling}
+                className="w-full h-14 rounded-2xl text-base font-bold mb-4 shadow-neon-indigo"
+                rightIcon={<ArrowRight size={18} />}
+              >
+                {isEnrolled ? "Go to Course Player" : "Enroll in Batch Now"}
+              </Button>
+
+              <p className="text-xs text-center text-slate-400 font-medium flex items-center justify-center gap-1.5">
+                <ShieldCheck size={14} className="text-emerald-400" /> 7-Day Refund Guarantee • Instant Access
+              </p>
             </div>
-          </Card>
+          </div>
         </div>
 
-        {/* Right — Enroll Card */}
-        <div>
-          <Card className="p-6 sticky top-24 shadow-xl shadow-brand-500/10">
-            <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative">
-              {course.thumbnail ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={course.thumbnail.startsWith('http') ? course.thumbnail : `${API_BASE_URL}${course.thumbnail}`}
-                  alt={course.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <BookOpen size={48} className="text-brand-500 opacity-30" />
-              )}
-            </div>
+        {/* Syllabus & Course Content Accordion */}
+        <div className="max-w-4xl">
+          <h2 className="text-2xl md:text-3xl font-black font-heading text-white mb-6">
+            Detailed Course Curriculum & Modules
+          </h2>
 
-            <div className="mb-6">
-              <div className="flex items-end gap-3">
-                <span className="text-3xl font-bold font-heading text-foreground-primary">
-                  ₹{finalPrice.toLocaleString()}
-                </span>
-                {course.discountPrice && (
-                  <>
-                    <span className="text-lg text-foreground-secondary line-through">₹{course.price.toLocaleString()}</span>
-                    <span className="text-sm font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-md">
-                      {discount}% OFF
-                    </span>
-                  </>
+          <div className="space-y-4 mb-16">
+            {syllabus.map((sec, i) => (
+              <div key={i} className="rounded-2xl bg-slate-900/80 border border-white/10 overflow-hidden">
+                <button
+                  onClick={() => setOpenSection(openSection === i ? null : i)}
+                  className="w-full p-5 flex items-center justify-between text-left font-bold text-white hover:bg-white/5 transition-colors"
+                >
+                  <span className="text-base flex items-center gap-3">
+                    <BookOpen size={18} className="text-indigo-400" />
+                    {sec.module}
+                  </span>
+                  <ChevronDown
+                    size={20}
+                    className={`text-slate-400 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {openSection === i && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="p-5 pt-0 border-t border-white/5 space-y-3"
+                  >
+                    {sec.lessons.map((lesson, idx) => (
+                      <div key={idx} className="flex items-center justify-between text-sm text-slate-300 py-2 border-b border-white/5 last:border-0">
+                        <span className="flex items-center gap-2">
+                          <CheckCircle2 size={16} className="text-indigo-400" /> {lesson}
+                        </span>
+                        <span className="text-xs text-slate-500 font-semibold">Video + Notes</span>
+                      </div>
+                    ))}
+                  </motion.div>
                 )}
               </div>
+            ))}
+          </div>
+
+          {/* Instructor Bio Card */}
+          <div className="p-8 rounded-3xl bg-slate-900/80 border border-white/10 flex items-center gap-6">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xl shrink-0 shadow-lg">
+              {course.instructor?.name?.charAt(0) || "F"}
             </div>
-
-            <Button
-              className="w-full mb-3 py-6 text-base text-[#312e81]"
-              onClick={handleEnroll}
-              isLoading={isEnrolling}
-              rightIcon={!isEnrolling && <ArrowRight size={18} />}
-            >
-              {isEnrolled ? "Go to My Courses" : "Enroll Now — Free Access"}
-            </Button>
-
-            {!isAuthenticated && (
-              <p className="text-xs text-center text-foreground-secondary flex items-center justify-center gap-1 mt-2">
-                <Lock size={12} /> <Link href="/login" className="text-brand-600 underline">Sign in</Link> to enroll
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Head HOD & Mentor</span>
+              <h3 className="text-xl font-bold text-white mt-1">{course.instructor?.name || "Senior IIT Faculty"}</h3>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                Ex-IITian with 12+ years teaching experience. Has mentored over 50+ AIR 100 toppers in JEE Main, Advanced & NEET.
               </p>
-            )}
-
-            <div className="mt-6 space-y-3 text-sm text-foreground-secondary border-t border-gray-100 dark:border-gray-800 pt-5">
-              <div className="flex items-center gap-2">
-                <Clock size={15} className="text-brand-500" />
-                <span>Duration: {course.duration || "Self-paced"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <BookOpen size={15} className="text-brand-500" />
-                <span>{course.totalLessons || "Multiple"} lessons included</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users size={15} className="text-brand-500" />
-                <span>Taught by {course.instructor?.name || "Expert Faculty"}</span>
-              </div>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

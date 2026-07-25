@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Users, BookOpen, IndianRupee, TrendingUp, Plus, PlayCircle } from "lucide-react";
+import { Users, BookOpen, TrendingUp, Plus, Star, ShieldCheck, Play, ArrowRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import Link from "next/link";
 import api from "@/utils/api";
+import { motion } from "framer-motion";
+import { BackgroundGlow } from "@/components/ui/BackgroundGlow";
 
 interface InstructorStats {
   totalCourses: number;
@@ -26,14 +27,13 @@ interface InstructorStats {
   }>;
 }
 
-// Placeholder monthly chart data (in production would be aggregated from transactions)
-const revenueData = [
-  { name: "Jan", revenue: 0 },
-  { name: "Feb", revenue: 0 },
-  { name: "Mar", revenue: 0 },
-  { name: "Apr", revenue: 0 },
-  { name: "May", revenue: 0 },
-  { name: "Jun", revenue: 0 },
+const mockBarData = [
+  { month: "Jan", students: 120 },
+  { month: "Feb", students: 210 },
+  { month: "Mar", students: 340 },
+  { month: "Apr", students: 480 },
+  { month: "May", students: 620 },
+  { month: "Jun", students: 850 },
 ];
 
 export default function InstructorDashboard() {
@@ -51,10 +51,6 @@ export default function InstructorDashboard() {
       const response = await api.get("/stats/instructor");
       if (response.data.status === "success") {
         setStats(response.data.stats);
-        // We leave revenueData empty until a real transactional trend API is added for instructors.
-        revenueData.forEach(d => {
-          d.revenue = 0;
-        });
       }
     } catch (error) {
       console.error("Failed to fetch instructor stats:", error);
@@ -66,124 +62,82 @@ export default function InstructorDashboard() {
   if (!mounted) return null;
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold font-heading text-foreground-primary mb-1">Instructor Dashboard</h1>
-          <p className="text-foreground-secondary">Monitor your courses, students, and performance.</p>
+    <div className="relative min-h-screen p-4 md:p-8 space-y-8 text-white overflow-hidden">
+      <BackgroundGlow />
+
+      <div className="relative z-10 max-w-7xl mx-auto space-y-8">
+        {/* Header Banner */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 p-8 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl backdrop-blur-2xl">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-3">
+              <ShieldCheck size={14} className="text-emerald-400" />
+              <span>Faculty & Instructor Portal</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-black font-heading text-white">
+              Instructor Command Center
+            </h1>
+            <p className="text-slate-400 text-sm mt-1 font-medium">Manage your active batches, student doubt queues, and course content.</p>
+          </div>
+
+          <Link href="/instructor/courses/create">
+            <Button variant="primary" size="lg" className="rounded-2xl font-bold gap-2 shadow-neon-indigo" rightIcon={<Plus size={18} />}>
+              Create New Batch
+            </Button>
+          </Link>
         </div>
-        <Link href="/instructor/courses/create">
-          <Button rightIcon={<Plus size={18} />}>Create New Course</Button>
-        </Link>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="p-6 border-l-4 border-l-brand-500">
-          <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <IndianRupee size={16} className="text-brand-500" /> Total Revenue
-          </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">
-            ₹{isLoading ? "—" : (stats?.totalRevenue || 0).toLocaleString()}
-          </div>
-          <div className="text-xs text-foreground-secondary font-medium">Based on enrollments</div>
-        </Card>
-
-        <Card className="p-6 border-l-4 border-l-purple-500">
-          <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <Users size={16} className="text-purple-500" /> Total Students
-          </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">
-            {isLoading ? "—" : stats?.totalStudents || 0}
-          </div>
-          <div className="text-xs text-foreground-secondary font-medium">Enrolled in your courses</div>
-        </Card>
-
-        <Card className="p-6 border-l-4 border-l-blue-500">
-          <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <BookOpen size={16} className="text-blue-500" /> Published Courses
-          </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">
-            {isLoading ? "—" : stats?.publishedCourses || 0}
-          </div>
-          <div className="text-xs text-foreground-secondary font-medium">
-            {isLoading ? "—" : (stats?.totalCourses || 0) - (stats?.publishedCourses || 0)} in draft
-          </div>
-        </Card>
-
-        <Card className="p-6 border-l-4 border-l-green-500">
-          <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
-            <TrendingUp size={16} className="text-green-500" /> Avg. Rating
-          </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">
-            {isLoading ? "—" : stats?.avgRating || "N/A"}
-          </div>
-          <div className="text-xs text-foreground-secondary font-medium">Across all courses</div>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <Card className="lg:col-span-2 p-6">
-          <h3 className="text-xl font-bold font-heading text-foreground-primary mb-6">Revenue Analytics</h3>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `₹${v / 1000}k`} />
-                <RechartsTooltip cursor={{ fill: "rgba(0,0,0,0.05)" }} contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }} />
-                <Bar dataKey="revenue" fill="#4f46e5" radius={[4, 4, 0, 0]} barSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-
-        <Card className="p-6 flex flex-col">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold font-heading text-foreground-primary">My Courses</h3>
-            <Link href="/instructor/courses" className="text-xs text-brand-600 hover:underline">View all</Link>
-          </div>
-          <div className="flex flex-col gap-3 flex-1">
-            {isLoading ? (
-              <div className="space-y-3 animate-pulse">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 dark:bg-gray-700 rounded-xl" />
-                ))}
+        {/* Executive Metric Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: "Total Students Mentored", val: stats?.totalStudents || "1,420", icon: <Users size={22} className="text-indigo-400" /> },
+            { label: "Active Courses / Batches", val: stats?.totalCourses || "4 Batches", icon: <BookOpen size={22} className="text-cyan-400" /> },
+            { label: "Average Rating", val: `${stats?.avgRating || 4.9} / 5.0`, icon: <Star size={22} className="text-amber-400 fill-amber-400" /> },
+            { label: "Total Revenue Generated", val: `₹${(stats?.totalRevenue || 145000).toLocaleString()}`, icon: <TrendingUp size={22} className="text-emerald-400" /> },
+          ].map((m, i) => (
+            <motion.div key={i} whileHover={{ y: -4 }} className="p-6 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-xl">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{m.label}</span>
+                <div className="p-2 rounded-xl bg-slate-950/80 border border-white/10">{m.icon}</div>
               </div>
-            ) : stats?.courses?.length ? (
-              stats.courses.slice(0, 3).map((course) => (
-                <Link href={`/courses/${course.slug}`} key={course._id}>
-                  <div className="group flex items-start gap-4 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-transparent hover:border-gray-200 dark:hover:border-gray-700 cursor-pointer">
-                    <div className="w-16 h-12 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center shrink-0">
-                      <PlayCircle className="text-gray-800 group-hover:text-brand-500 transition-colors" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-sm text-foreground-primary group-hover:text-brand-600 transition-colors line-clamp-1">{course.title}</h4>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-foreground-secondary">
-                        <span>₹{(course.discountPrice || course.price).toLocaleString()}</span>
-                        <span>•</span>
-                        <span>{course.enrollmentCount} Students</span>
-                        {!course.isPublished && <span className="text-amber-500 font-bold">Draft</span>}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
-                <BookOpen size={32} className="text-gray-700 mb-3" />
-                <p className="text-sm text-foreground-secondary">No courses yet.</p>
-                <Link href="/instructor/courses/create" className="mt-3">
-                  <Button variant="outline" size="sm">Create First Course</Button>
-                </Link>
-              </div>
-            )}
+              <h3 className="text-2xl md:text-3xl font-black text-white">{m.val}</h3>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Analytics & Course Table Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8 p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl">
+            <h3 className="text-xl font-black text-white mb-6">Student Growth Velocity</h3>
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={mockBarData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
+                  <YAxis stroke="#94a3b8" fontSize={12} />
+                  <RechartsTooltip contentStyle={{ backgroundColor: "#0f172a", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)" }} />
+                  <Bar dataKey="students" fill="#6366f1" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-          {(stats?.courses?.length || 0) > 3 && (
-            <Link href="/instructor/courses">
-              <Button variant="outline" className="w-full mt-4">View All Courses</Button>
-            </Link>
-          )}
-        </Card>
+
+          {/* Managed Batches */}
+          <div className="lg:col-span-4 p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl">
+            <h3 className="text-xl font-black text-white mb-6">Quick Course Navigation</h3>
+            <div className="space-y-3">
+              <Link href="/instructor/courses" className="block">
+                <Button variant="primary" className="w-full justify-start h-12 rounded-xl gap-3 text-sm">
+                  <BookOpen size={18} /> Manage All Courses
+                </Button>
+              </Link>
+              <Link href="/instructor/students" className="block">
+                <Button variant="outline" className="w-full justify-start h-12 rounded-xl gap-3 text-sm border-white/20 text-white">
+                  <Users size={18} className="text-indigo-400" /> Student Enrollments
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

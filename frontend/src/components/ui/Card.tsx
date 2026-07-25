@@ -22,13 +22,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     },
     ref
   ) => {
-    const baseStyles = "rounded-2xl overflow-hidden transition-all duration-200";
+    const baseStyles = "rounded-2xl transition-all duration-300 relative group overflow-hidden";
 
     const variants = {
-      default: "bg-white dark:bg-surface border border-gray-100 dark:border-brand-900/60 shadow-[0_1px_4px_rgba(13,27,62,0.06),0_4px_16px_rgba(13,27,62,0.04)]",
-      glass: "glass shadow-xl",
-      glassDark: "glass-dark shadow-xl",
-      outline: "bg-transparent border-2 border-brand-100 dark:border-brand-800",
+      default: "bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-slate-900/5 hover:border-indigo-500/30 dark:hover:border-indigo-500/40",
+      glass: "glass-card hover:border-indigo-500/40 hover:shadow-neon-indigo/20",
+      glassDark: "glass-card-dark hover:border-indigo-500/40 hover:shadow-neon-indigo/30 text-white",
+      outline: "bg-transparent border border-indigo-500/20 hover:border-indigo-500/50 backdrop-blur-sm",
     };
 
     const paddings = {

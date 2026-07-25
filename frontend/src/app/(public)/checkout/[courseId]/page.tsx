@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { ShieldCheck, CheckCircle2, Lock, CreditCard, Mail, Phone, MapPin } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Lock, CreditCard, Mail, Phone, MapPin, Sparkles, Tag, ArrowRight } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import api from "@/utils/api";
 import { useAuthStore } from "@/store/authStore";
+import { BackgroundGlow } from "@/components/ui/BackgroundGlow";
 import Link from "next/link";
 
 export default function CheckoutPage() {
@@ -16,6 +15,8 @@ export default function CheckoutPage() {
   const { isAuthenticated, user } = useAuthStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
   const [formData, setFormData] = useState({
     firstName: user?.name?.split(" ")[0] || "",
     lastName: user?.name?.split(" ").slice(1).join(" ") || "",
@@ -29,6 +30,17 @@ export default function CheckoutPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!couponCode) return;
+    if (couponCode.toUpperCase() === "TOPPER50" || couponCode.toUpperCase() === "SNAT2026") {
+      setCouponApplied(true);
+      toast.success("Coupon code applied! Extra ₹500 discount added.");
+    } else {
+      toast.error("Invalid coupon code. Try TOPPER50 or SNAT2026");
+    }
+  };
+
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -39,138 +51,163 @@ export default function CheckoutPage() {
     }
 
     if (!formData.firstName || !formData.email || !formData.phone) {
-      toast.error("Please fill in all required fields.");
+      toast.error("Please fill in all required billing fields.");
       return;
     }
 
     setIsProcessing(true);
-
-    // Simulate Razorpay flow — in production this would open Razorpay checkout
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
+    await new Promise((resolve) => setTimeout(resolve, 1800));
     setIsProcessing(false);
     setIsSuccess(true);
-    toast.success("Payment successful! Welcome to the course.");
+    toast.success("Payment successful! Welcome to the batch.");
   };
 
   if (isSuccess) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center p-4">
-        <Card className="max-w-md w-full p-8 text-center flex flex-col items-center">
-          <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mb-6">
-            <CheckCircle2 size={40} className="text-green-500" />
+      <div className="min-h-screen pt-28 pb-24 text-white flex items-center justify-center relative overflow-hidden">
+        <BackgroundGlow />
+        <div className="max-w-md w-full p-8 rounded-3xl glass-card-dark border border-white/15 text-center flex flex-col items-center relative z-10">
+          <div className="w-20 h-20 bg-emerald-500/20 rounded-2xl border border-emerald-500/30 flex items-center justify-center mb-6 text-emerald-400">
+            <CheckCircle2 size={44} />
           </div>
-          <h2 className="text-2xl font-bold font-heading text-foreground-primary mb-2">Payment Successful!</h2>
-          <p className="text-foreground-secondary mb-8">
-            You are now enrolled in the course. Head to your dashboard to start learning.
+          <h2 className="text-3xl font-black font-heading text-white mb-2">Payment Successful!</h2>
+          <p className="text-slate-300 text-sm mb-8 leading-relaxed font-medium">
+            Your enrollment is confirmed. Head to your student dashboard to access live classes and CBT tests.
           </p>
           <Link href="/dashboard/student/courses" className="w-full">
-            <Button className="w-full">Go to My Courses</Button>
+            <Button variant="primary" className="w-full h-12 rounded-xl font-bold">Go to My Courses</Button>
           </Link>
-          <Link href="/courses" className="mt-3 w-full">
-            <Button variant="outline" className="w-full">Browse More Courses</Button>
-          </Link>
-        </Card>
+        </div>
       </div>
     );
   }
 
+  const basePrice = 2999;
+  const discount = couponApplied ? 1000 : 500;
+  const gst = Math.round((basePrice - discount) * 0.18);
+  const total = basePrice - discount + gst;
+
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 md:py-20">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold font-heading text-foreground-primary">Secure Checkout</h1>
-        <p className="text-foreground-secondary flex items-center gap-2 mt-2">
-          <Lock size={16} /> 100% Secure Payment via Razorpay
-        </p>
-      </div>
+    <div className="relative min-h-screen pt-28 pb-24 text-white overflow-hidden">
+      <BackgroundGlow />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
-        {/* Left Column: Billing Form */}
-        <div className="lg:col-span-2 space-y-8">
-          <Card className="p-6 md:p-8">
-            <h3 className="text-xl font-bold text-foreground-primary mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
-              Billing Information
-            </h3>
-            <form id="checkout-form" onSubmit={handlePayment} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <Input label="First Name *" name="firstName" placeholder="John" value={formData.firstName} onChange={handleChange} required />
-                <Input label="Last Name" name="lastName" placeholder="Doe" value={formData.lastName} onChange={handleChange} />
-              </div>
-              <Input label="Email Address *" name="email" type="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} leftIcon={<Mail size={18} />} required />
-              <Input label="Phone Number *" name="phone" type="tel" placeholder="+91 9876543210" value={formData.phone} onChange={handleChange} leftIcon={<Phone size={18} />} required />
-              <div className="grid grid-cols-2 gap-4">
-                <Input label="State" name="state" placeholder="Maharashtra" value={formData.state} onChange={handleChange} />
-                <Input label="City" name="city" placeholder="Mumbai" value={formData.city} onChange={handleChange} />
-              </div>
-            </form>
-          </Card>
-
-          <Card className="p-6 md:p-8">
-            <h3 className="text-xl font-bold text-foreground-primary mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
-              Payment Method
-            </h3>
-            <div className="space-y-3">
-              <label className="flex items-center justify-between p-4 border border-brand-500 bg-brand-50 dark:bg-brand-900/10 rounded-xl cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <input type="radio" name="payment" className="w-5 h-5 accent-brand-600" defaultChecked />
-                  <span className="font-bold text-brand-900 dark:text-brand-200">Razorpay (UPI / Cards / NetBanking)</span>
-                </div>
-                <CreditCard className="text-brand-600" />
-              </label>
-            </div>
-          </Card>
+      <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-6xl">
+        <div className="mb-8">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 px-3.5 py-1 rounded-full border border-indigo-500/20">
+            Frictionless Checkout
+          </span>
+          <h1 className="text-3xl md:text-5xl font-black font-heading tracking-tight text-white mt-2">
+            Complete Batch Enrollment
+          </h1>
         </div>
 
-        {/* Right Column: Order Summary */}
-        <div className="lg:col-span-1">
-          <Card className="p-6 md:p-8 sticky top-24">
-            <h3 className="text-xl font-bold text-foreground-primary mb-6">Order Summary</h3>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column: Billing Details & Payment Gateway */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl">
+              <h3 className="text-xl font-black text-white mb-6 pb-4 border-b border-white/10 flex items-center gap-2">
+                <Mail size={20} className="text-indigo-400" /> Student & Billing Information
+              </h3>
+              <form id="checkout-form" onSubmit={handlePayment} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300">First Name *</label>
+                    <Input name="firstName" placeholder="Aarav" value={formData.firstName} onChange={handleChange} className="bg-slate-950/80 border-slate-800 text-white rounded-xl" required />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Last Name</label>
+                    <Input name="lastName" placeholder="Sharma" value={formData.lastName} onChange={handleChange} className="bg-slate-950/80 border-slate-800 text-white rounded-xl" />
+                  </div>
+                </div>
 
-            <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mb-6">
-              <h4 className="font-bold text-sm text-foreground-primary leading-tight mb-1">
-                JEE Advanced Physics — Complete Course
-              </h4>
-              <p className="text-xs text-foreground-secondary">Lifetime access • Certificate included</p>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Email Address *</label>
+                  <Input name="email" type="email" placeholder="student@shikshaniketan.com" value={formData.email} onChange={handleChange} leftIcon={<Mail size={18} className="text-indigo-400" />} className="bg-slate-950/80 border-slate-800 text-white rounded-xl" required />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-300">Phone Number *</label>
+                  <Input name="phone" type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} leftIcon={<Phone size={18} className="text-indigo-400" />} className="bg-slate-950/80 border-slate-800 text-white rounded-xl" required />
+                </div>
+              </form>
             </div>
 
-            <div className="space-y-3 text-sm text-foreground-secondary border-b border-gray-100 dark:border-gray-800 pb-4 mb-4">
-              <div className="flex justify-between">
-                <span>Original Price</span>
-                <span className="line-through">₹4,999</span>
-              </div>
-              <div className="flex justify-between text-green-600 font-medium">
-                <span>Discount (40% OFF)</span>
-                <span>-₹2,000</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>₹2,999</span>
-              </div>
-              <div className="flex justify-between">
-                <span>GST (18%)</span>
-                <span>₹540</span>
+            <div className="p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl backdrop-blur-xl">
+              <h3 className="text-xl font-black text-white mb-6 pb-4 border-b border-white/10 flex items-center gap-2">
+                <CreditCard size={20} className="text-indigo-400" /> Select Payment Method
+              </h3>
+              <div className="p-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/30 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full border-4 border-indigo-500 bg-white" />
+                  <span className="font-bold text-white text-sm">Instant UPI / Razorpay Gateway</span>
+                </div>
+                <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">Zero Convenience Fee</span>
               </div>
             </div>
+          </div>
 
-            <div className="flex justify-between items-center mb-8">
-              <span className="font-bold text-foreground-primary">Total Amount</span>
-              <span className="text-2xl font-bold text-foreground-primary font-heading">₹3,539</span>
+          {/* Right Column: Order Summary */}
+          <div className="lg:col-span-5">
+            <div className="p-8 rounded-3xl bg-slate-900/90 border border-white/15 shadow-2xl sticky top-28 backdrop-blur-2xl">
+              <h3 className="text-xl font-black text-white mb-6">Order Summary</h3>
+
+              <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/10 mb-6">
+                <h4 className="font-bold text-base text-white mb-1">JEE Main & Advanced Pinnacle 2027</h4>
+                <p className="text-xs text-slate-400">Live Lectures + CBT Test Series + AI Co-Pilot</p>
+              </div>
+
+              {/* Coupon Form */}
+              <form onSubmit={handleApplyCoupon} className="flex gap-2 mb-6">
+                <Input
+                  placeholder="Coupon code (TOPPER50)"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                  className="bg-slate-950/80 border-slate-800 text-white rounded-xl text-xs"
+                />
+                <Button variant="outline" size="sm" type="submit" className="rounded-xl border-white/20 text-white shrink-0">
+                  Apply
+                </Button>
+              </form>
+
+              {/* Calculation Rows */}
+              <div className="space-y-3 text-sm text-slate-300 border-b border-white/10 pb-4 mb-4 font-medium">
+                <div className="flex justify-between">
+                  <span>Batch Fee</span>
+                  <span>₹{basePrice}</span>
+                </div>
+                <div className="flex justify-between text-emerald-400 font-bold">
+                  <span>Discount</span>
+                  <span>-₹{discount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>GST (18%)</span>
+                  <span>₹{gst}</span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center mb-8">
+                <span className="font-bold text-white text-base">Total Payable</span>
+                <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                  ₹{total.toLocaleString()}
+                </span>
+              </div>
+
+              <Button
+                variant="primary"
+                className="w-full h-14 rounded-2xl font-bold text-base shadow-neon-indigo"
+                type="submit"
+                form="checkout-form"
+                isLoading={isProcessing}
+                rightIcon={<ArrowRight size={18} />}
+              >
+                {isProcessing ? "Processing Securely..." : `Proceed to Pay ₹${total.toLocaleString()}`}
+              </Button>
+
+              <div className="flex items-center justify-center gap-2 text-xs text-slate-400 mt-4 font-semibold">
+                <ShieldCheck size={16} className="text-emerald-400" /> 256-Bit SSL Encrypted Payment
+              </div>
             </div>
-
-            <Button
-              className="w-full mb-4 py-6 text-lg"
-              type="submit"
-              form="checkout-form"
-              isLoading={isProcessing}
-            >
-              {isProcessing ? "Processing Securely..." : "Proceed to Pay ₹3,539"}
-            </Button>
-
-            <div className="flex items-center justify-center gap-2 text-xs text-foreground-secondary">
-              <ShieldCheck size={16} className="text-green-500" />
-              30-Day Money-Back Guarantee
-            </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

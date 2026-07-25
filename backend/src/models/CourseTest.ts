@@ -1,21 +1,28 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export type QuestionType = "mcq-single" | "mcq-multiple" | "numerical" | "truefalse" | "subjective";
+export type TestType = "unit" | "chapter" | "mock" | "practice" | "assignment" | "lesson_quiz";
 
 export interface ICourseTest extends Document {
   courseId: mongoose.Types.ObjectId;
-  lessonId: mongoose.Types.ObjectId;
+  lessonId?: mongoose.Types.ObjectId; // Optional for course-level tests
+  testType: TestType;
   title: string;
   description?: string;
+  instructions?: string;
   durationMinutes: number;
+  startDate?: Date;
+  endDate?: Date;
+  attemptsAllowed: number; // 0 for unlimited
   passingMarks?: number;
+  randomizeQuestions: boolean;
   isPublished: boolean;
   questions: {
     _id?: mongoose.Types.ObjectId;
     type: QuestionType;
     text: string;
     options?: { id: string; text: string; }[];
-    correctAnswer: string | string[]; // Single string for mcq-single/numerical/truefalse, array for mcq-multiple
+    correctAnswer: string | string[];
     marks: number;
     negativeMarks: number;
     explanation?: string;
@@ -30,11 +37,21 @@ export interface ICourseTest extends Document {
 const courseTestSchema = new Schema<ICourseTest>(
   {
     courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
-    lessonId: { type: Schema.Types.ObjectId, ref: "Lesson", required: true },
+    lessonId: { type: Schema.Types.ObjectId, ref: "Lesson" }, // Now optional
+    testType: { 
+      type: String, 
+      enum: ["unit", "chapter", "mock", "practice", "assignment", "lesson_quiz"],
+      default: "lesson_quiz"
+    },
     title: { type: String, required: true },
     description: { type: String },
+    instructions: { type: String },
     durationMinutes: { type: Number, required: true, default: 60 },
+    startDate: { type: Date },
+    endDate: { type: Date },
+    attemptsAllowed: { type: Number, default: 0 }, // 0 = unlimited
     passingMarks: { type: Number },
+    randomizeQuestions: { type: Boolean, default: false },
     isPublished: { type: Boolean, default: false },
     questions: [
       {
@@ -50,7 +67,7 @@ const courseTestSchema = new Schema<ICourseTest>(
             text: { type: String, required: true }
           }
         ],
-        correctAnswer: { type: Schema.Types.Mixed, required: true }, // Mixed because it can be string or string array
+        correctAnswer: { type: Schema.Types.Mixed, required: true },
         marks: { type: Number, required: true, default: 4 },
         negativeMarks: { type: Number, required: true, default: 0 },
         explanation: { type: String },

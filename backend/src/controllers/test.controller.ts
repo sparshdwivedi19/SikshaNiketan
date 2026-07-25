@@ -9,27 +9,133 @@ import { Course } from "../models/Course";
 // TESTS
 // ─────────────────────────────────────────────────────────
 
-// Create a new test or get existing for a lesson
-export const createOrGetTest = async (req: AuthRequest, res: Response): Promise<void> => {
+// Create a standalone test for a course (e.g. Unit Test, Mock Test)
+export const createCourseTest = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { courseId, lessonId } = req.params;
+    const { courseId } = req.params;
+    const { title, description, instructions, durationMinutes, testType, startDate, endDate, attemptsAllowed, passingMarks, randomizeQuestions } = req.body;
 
-    // Check if user owns the course
     const course = await Course.findOne({ _id: courseId, instructor: req.user?.id });
     if (!course && req.user?.role !== "admin") {
       res.status(403).json({ status: "error", message: "Not authorized to manage this course" });
       return;
     }
 
-    const lesson = await Lesson.findOne({ _id: lessonId, courseId });
+    const test = new CourseTest({
+      courseId,
+      title,
+      description,
+      instructions,
+      durationMinutes,
+      testType: testType || "mock",
+      startDate,
+      endDate,
+      attemptsAllowed: attemptsAllowed || 0,
+      passingMarks,
+      randomizeQuestions: randomizeQuestions || false,
+      isPublished: false,
+      questions: []
+    });
+
+    await test.save();
+    res.status(201).json({ status: "success", test });
+  } catch (error: any) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+// Get all tests for a course
+export const getCourseTests = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { courseId } = req.params;
+    let query: any = { courseId };
+
+    // If student, only show published tests
+    if (req.user?.role === "student") {
+      query.isPublished = true;
+    }
+
+    const tests = await CourseTest.find(query).sort({ createdAt: -1 });
+
+    if (req.user?.role === "student") {
+      const sanitizedTests = tests.map(test => {
+        const obj = test.toObject();
+        obj.questions.forEach(q => {
+          delete (q as any).correctAnswer;
+          delete (q as any).explanation;
+        });
+        return obj;
+      });
+      res.status(200).json({ status: "success", tests: sanitizedTests });
+      return;
+    }
+
+    res.status(200).json({ status: "success", tests });
+  } catch (error: any) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+// Delete a test
+export const deleteTest = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { testId } = req.params;
+
+    const test = await CourseTest.findById(testId);
+    if (!test) {
+      res.status(404).json({ status: "error", message: "Test not found" });
+      return;
+    }
+
+    const course = await Course.findById(test.courseId);
+    if (!course || (course.instructor.toString() !== req.user?.id.toString() && req.user?.role !== "admin")) {
+      res.status(403).json({ status: "error", message: "Not authorized" });
+      return;
+    }
+
+    await CourseTest.findByIdAndDelete(testId);
+    
+    // Also remove reference from lesson if it was a lesson quiz
+    if (test.lessonId) {
+      await Lesson.findByIdAndUpdate(test.lessonId, { $unset: { testId: "" } });
+    }
+
+    res.status(200).json({ status: "success", message: "Test deleted successfully" });
+  } catch (error: any) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+// Create a new test or get existing for a lesson
+export const createOrGetTest = async (req: AuthRequest, res: Response): Promise<void> => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { courseId, lessonId } = req.params;
+
+    // Check if user owns the course
+    const course = await Course.findOne({ _id: courseId, instructor: req.user?.id }).session(session);
+    if (!course && req.user?.role !== "admin") {
+      await session.abortTransaction();
+      session.endSession();
+      res.status(403).json({ status: "error", message: "Not authorized to manage this course" });
+      return;
+    }
+
+    const lesson = await Lesson.findOne({ _id: lessonId, courseId }).session(session);
     if (!lesson) {
+      await session.abortTransaction();
+      session.endSession();
       res.status(404).json({ status: "error", message: "Lesson not found" });
       return;
     }
 
     // See if test already exists
-    let test = await CourseTest.findOne({ courseId, lessonId });
+    let test = await CourseTest.findOne({ courseId, lessonId }).session(session);
     if (test) {
+      await session.abortTransaction();
+      session.endSession();
       res.status(200).json({ status: "success", test });
       return;
     }
@@ -43,15 +149,19 @@ export const createOrGetTest = async (req: AuthRequest, res: Response): Promise<
       isPublished: false,
       questions: []
     });
-    
-    await test.save();
+    await test.save({ session });
 
     // Link test to lesson
     lesson.testId = test._id as mongoose.Types.ObjectId;
-    await lesson.save();
+    await lesson.save({ session });
+
+    await session.commitTransaction();
+    session.endSession();
 
     res.status(201).json({ status: "success", test });
   } catch (error: any) {
+    await session.abortTransaction();
+    session.endSession();
     res.status(500).json({ status: "error", message: error.message });
   }
 };
@@ -143,6 +253,12 @@ export const updateTestSettings = async (req: AuthRequest, res: Response): Promi
     if (durationMinutes) test.durationMinutes = durationMinutes;
     if (passingMarks !== undefined) test.passingMarks = passingMarks;
     if (isPublished !== undefined) test.isPublished = isPublished;
+    if (req.body.testType !== undefined) test.testType = req.body.testType;
+    if (req.body.startDate !== undefined) test.startDate = req.body.startDate;
+    if (req.body.endDate !== undefined) test.endDate = req.body.endDate;
+    if (req.body.attemptsAllowed !== undefined) test.attemptsAllowed = req.body.attemptsAllowed;
+    if (req.body.randomizeQuestions !== undefined) test.randomizeQuestions = req.body.randomizeQuestions;
+    if (req.body.instructions !== undefined) test.instructions = req.body.instructions;
 
     await test.save();
     res.status(200).json({ status: "success", test });

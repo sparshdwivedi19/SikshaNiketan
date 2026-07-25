@@ -33,30 +33,30 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap select-none";
 
     const variants = {
-      // Deep navy primary button
+      // Electric Indigo & Purple primary button with glow
       primary:
-        "bg-brand-800 text-[#312e81] hover:bg-accent-400 active:bg-brand-950 shadow-sm hover:shadow-md",
-      // Soft accent — pastel yellow with dark text
+        "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white hover:brightness-110 shadow-neon-indigo hover:shadow-[0_8px_30px_rgba(99,102,241,0.45)] font-semibold active:scale-[0.98]",
+      // Golden Amber accent
       accent:
-        "bg-accent-300 text-white hover:bg-brand-900 active:bg-accent-500 shadow-sm font-semibold",
-      // Subtle tinted secondary
+        "bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:brightness-110 shadow-[0_4px_20px_rgba(245,158,11,0.35)] font-bold active:scale-[0.98]",
+      // Tinted secondary
       secondary:
-        "bg-brand-50 text-brand-800 hover:bg-brand-100 active:bg-brand-200 border border-brand-100",
-      // Bordered outline
+        "bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700/60 font-medium",
+      // Glass outline
       outline:
-        "border-2 border-brand-700 bg-transparent hover:bg-brand-50 dark:hover:bg-brand-900/20 text-brand-900 dark:text-brand-200 dark:border-brand-600",
-      // Ghost — minimal
+        "border border-indigo-500/40 bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 font-medium backdrop-blur-md",
+      // Ghost
       ghost:
-        "bg-transparent hover:bg-brand-50 dark:hover:bg-brand-900/20 text-brand-700 dark:text-brand-300",
+        "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-medium",
       // Danger
       danger:
-        "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 shadow-sm",
+        "bg-gradient-to-r from-rose-600 to-red-600 text-white shadow-[0_4px_16px_rgba(225,29,72,0.35)] hover:brightness-110 font-semibold",
     };
 
     const sizes = {
-      sm: "h-9 px-4 text-sm gap-1.5",
-      md: "h-11 px-6 text-sm gap-2",
-      lg: "h-13 px-8 text-base gap-2.5",
+      sm: "h-9 px-4 text-xs tracking-wide gap-1.5",
+      md: "h-11 px-5 text-sm font-medium gap-2",
+      lg: "h-12 px-7 text-base font-semibold gap-2.5",
     };
 
     const compClass = cn(baseStyles, variants[variant], sizes[size], className);

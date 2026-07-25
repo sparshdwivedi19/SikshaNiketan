@@ -1,56 +1,80 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Brand: Modern Indigo ── */
-  --color-brand-50:  #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #fdfd95;
-  --color-brand-900: #312e81;
-  --color-brand-950: #1e1b4b;
+  /* ── Brand Palette: Deep Midnight & Obsidian Navy ── */
+  --color-brand-50: #f0f4f8;
+  --color-brand-100: #d9e2ec;
+  --color-brand-200: #bcccdc;
+  --color-brand-300: #9fb3c8;
+  --color-brand-400: #829ab1;
+  --color-brand-500: #627d98;
+  --color-brand-600: #486581;
+  --color-brand-700: #334e68;
+  --color-brand-800: #1e293b;
+  --color-brand-900: #0f172a;
+  --color-brand-950: #030712;
 
-  /* ── Accent: Vibrant Sky Blue ── */
-  --color-accent-50:  #f0f9ff;
-  --color-accent-100: #e0f2fe;
-  --color-accent-200: #bae6fd;
-  --color-accent-300: #fdfd95;
-  --color-accent-400: #38bdf8;
-  --color-accent-500: #fdfd96;
-  --color-accent-600: #0284c7;
-  --color-accent-700: #0369a1;
+  /* ── Accent Palette: Electric Indigo & Violet Glow ── */
+  --color-accent-50: #eef2ff;
+  --color-accent-100: #e0e7ff;
+  --color-accent-200: #c7d2fe;
+  --color-accent-300: #a5b4fc;
+  --color-accent-400: #818cf8;
+  --color-accent-500: #6366f1;
+  --color-accent-600: #4f46e5;
+  --color-accent-700: #4338ca;
+  --color-accent-800: #3730a3;
+  --color-accent-900: #312e81;
 
-  /* ── Backgrounds: Pure White & Slate ── */
-  --color-background-primary:   #f8fafc;
+  /* ── Electric Purple & Neon Cyan ── */
+  --color-violet-400: #a78bfa;
+  --color-violet-500: #8b5cf6;
+  --color-violet-600: #7c3aed;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+
+  /* ── Warning / Gold ── */
+  --color-yellow-300: #fde047;
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+
+  /* ── Success: Emerald ── */
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+
+  /* ── Danger: Rose Red ── */
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+
+  /* ── Backgrounds & Surfaces ── */
+  --color-background-primary: #f8fafc;
   --color-background-secondary: #f1f5f9;
-  --color-surface:              #ffffff;
-  --color-surface-hover:        #f1f5f9;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
   --color-white: #ffffff;
-  --color-amber-800: #fdfd95;
 
-  /* ── Text: Crisp Slate/Black ── */
-  --color-foreground-primary:   #0f172a;  /* Very dark slate */
-  --color-foreground-secondary: #475569;  /* Muted slate */
-  --color-gray-700: lab(65 -1.51 -15.04);
+  /* ── Text Colors ── */
+  --color-foreground-primary: #0f172a;
+  --color-foreground-secondary: #475569;
 
   /* ── Typography ── */
-  --font-sans:    var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-heading: var(--font-outfit), system-ui, sans-serif;
 }
 
 /* ── Dark mode overrides ── */
 @media (prefers-color-scheme: dark) {
   @theme {
-    --color-background-primary:   #0c1a3b;
-    --color-background-secondary: #0f2050;
-    --color-surface:              #142566;
-    --color-surface-hover:        #1a2f7a;
-    --color-foreground-primary:   #7a86a5;  /* bright near-white */
-    --color-foreground-secondary: #94a3b8;  /* muted slate */
+    --color-background-primary: #030712;
+    --color-background-secondary: #0b0f19;
+    --color-surface: #111827;
+    --color-surface-hover: #1f2937;
+    --color-foreground-primary: #f9fafb;
+    --color-foreground-secondary: #9ca3af;
   }
 }
 
@@ -60,30 +84,16 @@
   --foreground: #0f172a;
 }
 
-/* ── Dark Mode Variables (OS Preference) ── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c1a3b;
-    --foreground: #f1f5f9;
-    --color-background-primary: #0c1a3b;
-    --color-background-secondary: #0f2050;
-    --color-surface: #142566;
-    --color-surface-hover: #1a2f7a;
-    --color-foreground-primary: #cfdcff;
-    --color-foreground-secondary: #94a3b8;
-  }
-}
-
-/* ── Dark Mode Variables (Manual Toggle via .dark class) ── */
+/* ── Dark Mode Variables ── */
 .dark, [data-theme="dark"] {
-  --background: #0c1a3b;
-  --foreground: #f1f5f9;
-  --color-background-primary: #0c1a3b;
-  --color-background-secondary: #0f2050;
-  --color-surface: #142566;
-  --color-surface-hover: #1a2f7a;
-  --color-foreground-primary: #f1f5ff;
-  --color-foreground-secondary: #94a3b8;
+  --background: #030712;
+  --foreground: #f9fafb;
+  --color-background-primary: #030712;
+  --color-background-secondary: #0b0f19;
+  --color-surface: #111827;
+  --color-surface-hover: #1f2937;
+  --color-foreground-primary: #f9fafb;
+  --color-foreground-secondary: #9ca3af;
 }
 
 /* ── Base Styles ── */
@@ -93,69 +103,131 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ── Utility: Glassmorphism ── */
 @utility glass {
   background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 @utility glass-dark {
-  background: rgba(10, 31, 102, 0.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ── Utility: Gradient Text ── */
+@utility glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+@utility glass-card-dark {
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+@utility glass-pill {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+}
+
+/* ── Utility: Text Gradients ── */
 @utility text-gradient {
-  background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-brand-400) 100%);
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-@utility text-gradient-accent {
-  background: linear-gradient(135deg, var(--color-accent-600) 0%, var(--color-accent-400) 100%);
+@utility text-gradient-indigo {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4338ca 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ── Utility: Premium card shadow ── */
+@utility text-gradient-cyan {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(135deg, #fef08a 0%, #facc15 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Utility: Glowing Shadow & Borders ── */
+@utility shadow-neon-indigo {
+  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.35);
+}
+
+@utility shadow-neon-cyan {
+  box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.35);
+}
+
+@utility shadow-neon-purple {
+  box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.35);
+}
+
 @utility card-shadow {
-  box-shadow: 0 1px 3px rgba(13, 27, 62, 0.06), 0 4px 16px rgba(13, 27, 62, 0.04);
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
 }
 
 /* ── Custom Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-brand-200);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 999px;
 }
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-thumb { background: var(--color-brand-800); }
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
 }
 
-/* ── Smooth animations ── */
-.animate-in {
-  animation: fadeIn 0.25s ease-out both;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── Keyframe Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
 }
 
-/* ── Hide Edge password reveal ── */
-input::-ms-reveal,
-input::-ms-clear { display: none; }
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
 
 /* ── Focus ring ── */
 *:focus-visible {
-  outline: 2px solid var(--color-brand-400);
+  outline: 2px solid #6366f1;
   outline-offset: 2px;
 }
+

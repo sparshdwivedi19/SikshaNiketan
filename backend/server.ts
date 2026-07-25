@@ -64,10 +64,10 @@ app.use("/uploads", (_req: Request, res: Response, next: express.NextFunction) =
   res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL || "http://localhost:3000");
   res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
   next();
-}, express.static(path.join(process.cwd(), "public", "uploads")));
+}, express.static(path.join(__dirname, "public", "uploads")));
 
 // Also serve everything else in /public as a fallback
-app.use(express.static(path.join(process.cwd(), "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/api/v1/auth", authLimiter, authRoutes);
