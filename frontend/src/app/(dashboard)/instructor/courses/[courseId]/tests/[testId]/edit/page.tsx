@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { ArrowLeft, Plus, Trash2, CheckCircle2, AlertCircle, Save } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, CheckCircle2, AlertCircle, Save, Edit2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import api from "@/utils/api";

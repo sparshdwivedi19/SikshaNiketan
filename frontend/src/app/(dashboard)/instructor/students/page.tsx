@@ -69,15 +69,15 @@ export default function InstructorStudentsPage() {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <Card className="p-5 border-l-4 border-l-brand-500">
           <div className="flex items-center gap-2 text-foreground-secondary text-sm mb-2"><Users size={16} className="text-brand-500" /> Total Students</div>
-          <div className="text-3xl font-bold text-foreground-primary">{enrollments.length}</div>
+          <div className="text-3xl font-bold text-navy-black">{enrollments.length}</div>
         </Card>
         <Card className="p-5 border-l-4 border-l-green-500">
           <div className="flex items-center gap-2 text-foreground-secondary text-sm mb-2"><CheckCircle2 size={16} className="text-green-500" /> Active</div>
-          <div className="text-3xl font-bold text-foreground-primary">{enrollments.length}</div>
+          <div className="text-3xl font-bold text-navy-black">{enrollments.length}</div>
         </Card>
         <Card className="p-5 border-l-4 border-l-purple-500">
           <div className="flex items-center gap-2 text-foreground-secondary text-sm mb-2"><BookOpen size={16} className="text-purple-500" /> Courses Taught</div>
-          <div className="text-3xl font-bold text-foreground-primary">1</div>
+          <div className="text-3xl font-bold text-navy-black">1</div>
         </Card>
       </div>
 

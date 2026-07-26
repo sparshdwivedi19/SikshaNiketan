@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 
 export const Footer = () => {
   return (
-    <footer className="relative bg-slate-950 border-t border-slate-800/80 pt-20 pb-10 text-slate-300 overflow-hidden">
+    <footer className="relative bg-[#485869]/80 backdrop-blur-xl border-t border-white/10 pt-20 pb-10 text-slate-200 overflow-hidden">
       {/* Background Glow Overlay */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-indigo-600/10 blur-[120px] pointer-events-none" />
 
@@ -16,7 +16,7 @@ export const Footer = () => {
           <div className="flex flex-col gap-6 lg:col-span-2">
             <Link href="/" className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 p-[1px] shadow-neon-indigo">
-                <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center text-indigo-400">
+                <div className="w-full h-full bg-[#3d4b5a] rounded-[11px] flex items-center justify-center text-indigo-400">
                   <GraduationCap size={22} />
                 </div>
               </div>

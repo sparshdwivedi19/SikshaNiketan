@@ -34,7 +34,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={isPassword ? (showPassword ? "text" : "password") : type}
             placeholder={placeholder || " "}
             className={cn(
-              "peer w-full h-14 rounded-xl border border-gray-200 dark:border-brand-800 bg-surface dark:bg-background-secondary px-3.5 pt-5 pb-1 text-sm text-slate-900 dark:text-white font-medium placeholder:text-slate-500 dark:placeholder:text-slate-400 transition-all duration-200",
+              "peer w-full h-14 rounded-xl border border-gray-200 dark:border-brand-800 bg-surface dark:bg-background-secondary px-3.5 pt-5 pb-1 text-sm text-white font-medium placeholder:text-slate-500 dark:placeholder:text-slate-400 transition-all duration-200",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:border-transparent",
               "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-background-secondary",
               leftIcon && "pl-11",

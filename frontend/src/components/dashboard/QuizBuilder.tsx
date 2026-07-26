@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { ArrowLeft, Plus, Save, Trash2, GripVertical, Settings, ExternalLink } from "lucide-react";
+import { ArrowLeft, Plus, Save, Trash2, GripVertical, Settings, ExternalLink, PenTool } from "lucide-react";
 import Link from "next/link";
 import api from "@/utils/api";
 import { toast } from "react-hot-toast";

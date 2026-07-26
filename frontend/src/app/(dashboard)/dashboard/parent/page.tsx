@@ -51,7 +51,7 @@ export default function ParentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
             <Clock size={16} className="text-green-500" /> Attendance
           </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">94%</div>
+          <div className="text-3xl font-bold text-navy-black mb-1">94%</div>
           <div className="text-xs text-foreground-secondary font-medium">Excellent</div>
         </Card>
         
@@ -59,7 +59,7 @@ export default function ParentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
             <Activity size={16} className="text-blue-500" /> Avg Test Score
           </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">72%</div>
+          <div className="text-3xl font-bold text-navy-black mb-1">72%</div>
           <div className="text-xs text-green-500 font-medium">+5% this month</div>
         </Card>
 
@@ -67,7 +67,7 @@ export default function ParentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
             <GraduationCap size={16} className="text-purple-500" /> Batch Rank
           </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">12<span className="text-lg text-gray-800">/350</span></div>
+          <div className="text-3xl font-bold text-navy-black mb-1">12<span className="text-lg text-gray-800">/350</span></div>
           <div className="text-xs text-foreground-secondary font-medium">Top 5%</div>
         </Card>
 
@@ -75,7 +75,7 @@ export default function ParentDashboard() {
           <div className="flex items-center gap-2 text-foreground-secondary font-medium text-sm mb-2">
             <Award size={16} className="text-amber-500" /> Upcoming Fees
           </div>
-          <div className="text-3xl font-bold text-foreground-primary mb-1">₹4,500</div>
+          <div className="text-3xl font-bold text-navy-black mb-1">₹4,500</div>
           <div className="text-xs text-red-500 font-medium">Due in 5 days</div>
         </Card>
       </div>

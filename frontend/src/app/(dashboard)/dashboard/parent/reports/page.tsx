@@ -25,17 +25,17 @@ export default function ParentReportsPage() {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <Card className="p-5 border-l-4 border-l-green-500">
           <div className="text-sm text-foreground-secondary mb-1 flex items-center gap-1"><TrendingUp size={14} className="text-green-500" /> Average Score</div>
-          <div className="text-3xl font-bold text-foreground-primary">81.5%</div>
+          <div className="text-3xl font-bold text-navy-black">81.5%</div>
           <div className="text-xs text-green-500 font-medium mt-1">+6% vs last term</div>
         </Card>
         <Card className="p-5 border-l-4 border-l-brand-500">
           <div className="text-sm text-foreground-secondary mb-1 flex items-center gap-1"><Award size={14} className="text-brand-500" /> Best Rank</div>
-          <div className="text-3xl font-bold text-foreground-primary">8/5000</div>
+          <div className="text-3xl font-bold text-navy-black">8/5000</div>
           <div className="text-xs text-foreground-secondary font-medium mt-1">NLST Scholarship Test</div>
         </Card>
         <Card className="p-5 border-l-4 border-l-purple-500">
           <div className="text-sm text-foreground-secondary mb-1 flex items-center gap-1"><FileText size={14} className="text-purple-500" /> Tests Taken</div>
-          <div className="text-3xl font-bold text-foreground-primary">{reports.length}</div>
+          <div className="text-3xl font-bold text-navy-black">{reports.length}</div>
           <div className="text-xs text-foreground-secondary font-medium mt-1">This semester</div>
         </Card>
       </div>
